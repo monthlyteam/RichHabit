@@ -311,5 +311,6 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
 }
 
 //이모티콘 아래 글자크기 키웠을때 BottomOverflow 고쳐야함
+//옆에 Stack헀더니 TopRight BerderRadius 어디감?
 
 
