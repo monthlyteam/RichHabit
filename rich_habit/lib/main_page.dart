@@ -13,7 +13,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
 
   final _buyOrNot = GlobalKey<NavigatorState>();
   final _compoundInterest = GlobalKey<NavigatorState>();
@@ -33,6 +33,13 @@ class _MainPageState extends State<MainPage> {
           index: _selectedIndex,
           children: <Widget>[
             Navigator(
+              key: _home,
+              onGenerateRoute: (route) => MaterialPageRoute(
+                settings: route,
+                builder: (context) => Home(),
+              ),
+            ),
+            Navigator(
               key: _buyOrNot,
               onGenerateRoute: (route) => MaterialPageRoute(
                 settings: route,
@@ -44,13 +51,6 @@ class _MainPageState extends State<MainPage> {
               onGenerateRoute: (route) => MaterialPageRoute(
                 settings: route,
                 builder: (context) => CompoundInterest(),
-              ),
-            ),
-            Navigator(
-              key: _home,
-              onGenerateRoute: (route) => MaterialPageRoute(
-                settings: route,
-                builder: (context) => Home(),
               ),
             ),
             Navigator(
@@ -70,63 +70,146 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: kWhiteIvoryColor,
-        elevation: 0.0,
-        items: [
-          new BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.question_answer,
-              size: 24.0,
-              color: _selectedIndex == 0 ? kSelectedColor : kPurpleColor,
-            ),
-            title: Text("Buy or Not"),
-          ),
-          new BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.insert_chart,
-              size: 24.0,
-              color: _selectedIndex == 1 ? kSelectedColor : kPurpleColor,
-            ),
-            title: Text("Compound Interest"),
-          ),
-          new BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.monetization_on,
-              size: 24.0,
-              color: _selectedIndex == 2 ? kSelectedColor : kPurpleColor,
-            ),
-            title: Text("Home"),
-          ),
-          new BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.chrome_reader_mode,
-              size: 24.0,
-              color: _selectedIndex == 3 ? kSelectedColor : kPurpleColor,
-            ),
-            title: Text("Invest"),
-          ),
-          new BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
-              size: 24.0,
-              color: _selectedIndex == 4 ? kSelectedColor : kPurpleColor,
-            ),
-            title: Text("Profile"),
-          ),
+      bottomNavigationBar: Container(
+        /*
+        decoration: BoxDecoration(
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Color(0xff585a79).withOpacity(0.2),
+                blurRadius: 10,
+                offset: Offset(0, -3)),
+          ],
+        ),
+
+         */
+        child: _buildBottomBar(context),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: _buildFab(context),
+    );
+  }
+
+  Widget _buildFab(BuildContext context) {
+    return Container(
+      height: 70.0,
+      width: 70.0,
+      /*
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Color(0xff585a79).withOpacity(0.2),
+              blurRadius: 10,
+              offset: Offset(0, -3)),
         ],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedFontSize: 0.0,
-        unselectedFontSize: 0.0,
-        onTap: (val) => _onTap(val, context),
+      ),
+
+       */
+      child: FloatingActionButton(
+        backgroundColor: kWhiteIvoryColor,
+        onPressed: () {
+          _onTap(0);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: <BoxShadow>[
+                _selectedIndex == 0
+                    ? BoxShadow(
+                        color: Color(0xffffeb50),
+                        blurRadius: 20,
+                        offset: Offset(0, 8))
+                    : BoxShadow(color: Color(0xffffffff).withOpacity(1.0)),
+              ],
+            ),
+            child: Image.asset("images/coin_2.png"),
+          ),
+        ),
+        elevation: 0.0,
+        highlightElevation: 0.0,
       ),
     );
   }
 
-  void _onTap(int val, BuildContext context) {
+  Widget _buildBottomBar(BuildContext context) {
+    final double height = 60.0;
+    final double iconSize = 24.0;
+    var barItem = [
+      FABBottomAppBarItem(iconData: Icons.question_answer),
+      FABBottomAppBarItem(iconData: Icons.insert_chart),
+      FABBottomAppBarItem(
+        iconData: Icons.chrome_reader_mode,
+      ),
+      FABBottomAppBarItem(
+        iconData: Icons.person,
+      ),
+    ];
+    Widget _buildTabItem({
+      FABBottomAppBarItem item,
+      int index,
+    }) {
+      Color color =
+          _selectedIndex == (index + 1) ? kSelectedColor : kPurpleColor;
+      return Expanded(
+        child: SizedBox(
+          height: height,
+          child: InkWell(
+            onTap: () {
+              _onTap(index + 1);
+              setState(() {
+                _selectedIndex = index + 1;
+              });
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(item.iconData, color: color, size: iconSize),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    List<Widget> items = List.generate(barItem.length, (int index) {
+      return _buildTabItem(
+        item: barItem[index],
+        index: index,
+      );
+    });
+
+    Widget _buildMiddleTabItem() {
+      return Expanded(
+        child: SizedBox(
+          height: height,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: iconSize),
+            ],
+          ),
+        ),
+      );
+    }
+
+    items.insert(items.length >> 1, _buildMiddleTabItem());
+
+    return BottomAppBar(
+      elevation: 0.0,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: items,
+      ),
+      color: kWhiteIvoryColor,
+    );
+  }
+
+  void _onTap(int val) {
     if (_selectedIndex == val) {
       switch (val) {
         case 0:
@@ -154,4 +237,10 @@ class _MainPageState extends State<MainPage> {
       }
     }
   }
+}
+
+class FABBottomAppBarItem {
+  FABBottomAppBarItem({this.iconData, this.text});
+  IconData iconData;
+  String text;
 }
