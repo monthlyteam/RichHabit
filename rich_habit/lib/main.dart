@@ -87,14 +87,14 @@ class _InitPageState extends State<InitPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: kIvoryColor,
+        backgroundColor: kWhiteIvoryColor,
         elevation: 0.0,
         items: [
           new BottomNavigationBarItem(
             icon: new Icon(
               Icons.question_answer,
               size: 24.0,
-              color: _selectedIndex == 0 ? Colors.red : kPurpleColor,
+              color: _selectedIndex == 0 ? kSelectedColor : kPurpleColor,
             ),
             title: Text("Buy or Not"),
           ),
@@ -102,7 +102,7 @@ class _InitPageState extends State<InitPage> {
             icon: new Icon(
               Icons.insert_chart,
               size: 24.0,
-              color: _selectedIndex == 1 ? Colors.red : kPurpleColor,
+              color: _selectedIndex == 1 ? kSelectedColor : kPurpleColor,
             ),
             title: Text("Compound Interest"),
           ),
@@ -110,7 +110,7 @@ class _InitPageState extends State<InitPage> {
             icon: new Icon(
               Icons.monetization_on,
               size: 24.0,
-              color: _selectedIndex == 2 ? Colors.red : kPurpleColor,
+              color: _selectedIndex == 2 ? kSelectedColor : kPurpleColor,
             ),
             title: Text("Home"),
           ),
@@ -118,7 +118,7 @@ class _InitPageState extends State<InitPage> {
             icon: new Icon(
               Icons.chrome_reader_mode,
               size: 24.0,
-              color: _selectedIndex == 3 ? Colors.red : kPurpleColor,
+              color: _selectedIndex == 3 ? kSelectedColor : kPurpleColor,
             ),
             title: Text("Invest"),
           ),
@@ -126,7 +126,7 @@ class _InitPageState extends State<InitPage> {
             icon: new Icon(
               Icons.person,
               size: 24.0,
-              color: _selectedIndex == 4 ? Colors.red : kPurpleColor,
+              color: _selectedIndex == 4 ? kSelectedColor : kPurpleColor,
             ),
             title: Text("Profile"),
           ),
