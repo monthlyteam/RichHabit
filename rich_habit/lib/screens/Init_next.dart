@@ -8,7 +8,7 @@ class InitNext extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-    );
+        children:List<Text>.generate(selectedItem.length, (index) => Text(selectedItem[index])));
   }
 }
 

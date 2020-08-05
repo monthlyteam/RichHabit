@@ -10,29 +10,6 @@ import 'package:richhabit/screens/Init_next.dart';
 import 'dart:math';
 
 import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-import '../constants.dart';
-
 
 
 class Init extends StatefulWidget {
@@ -63,7 +40,7 @@ class InitState extends State<Init>{
     icons.add(new SvgPicture.asset('images/icon/smoking.svg'));
     icons.add(new SvgPicture.asset('images/icon/beer.svg'));
 //    icons.add(new SvgPicture.asset('images/icon/plus.svg',color: kPurpleColor));
-    TextStyle txtstyle = TextStyle(fontSize: 10, color: kPurpleColor, fontWeight: FontWeight.w600);
+    TextStyle txtstyle = TextStyle(fontSize: 15, color: kPurpleColor, fontWeight: FontWeight.w600);
     icons_name.add(Text("음주",style: txtstyle));
     icons_name.add(Text("음주",style: txtstyle));
     icons_name.add(Text("커피",style: txtstyle));
@@ -123,7 +100,7 @@ class InitState extends State<Init>{
                     shrinkWrap: true,
                     slivers: <Widget>[
                       SliverPersistentHeader(
-                        pinned : false,
+                        pinned : true,
                         floating: true,
                         delegate: InitPageHeader(
                           minExtent : 220.0,
@@ -133,63 +110,70 @@ class InitState extends State<Init>{
                       SliverGroupBuilder(
                         decoration: BoxDecoration(
                           color: kIvoryColor,
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                          borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
                         ),
-                        padding: EdgeInsets.fromLTRB(10,20,10,70),//?뭔가이상함
                         child: SliverGrid(
                           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 300.0,
-                            mainAxisSpacing: 20.0,
+                            maxCrossAxisExtent:200.0,
+                            mainAxisSpacing: 10.0,
                             crossAxisSpacing: 20.0,
-  //                  childAspectRatio: .0,
+                            childAspectRatio: 0.9,
                           ),
                           delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
-                              return Column(
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        icons_selected[index] = !icons_selected[index];
-                                      });
-                                    },
-                                    child: Container(
-//                      padding: EdgeInsets.fromLTRB(10, 10, , bottom),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: kWhiteIvoryColor
-                                      ),
-                                      height: 160,
-                                      width: 160,
+                                  return Container(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: Column(
+                                      children: <Widget>[
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              icons_selected[index] =
+                                              !icons_selected[index];
+                                            });
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: kWhiteIvoryColor
+                                            ),
+                                            height: 160,
+                                            width: 160,
 //                      margin: EdgeInsets.fromLTRB(15,10,15,10),
-                                      alignment: Alignment.center,
+                                            alignment: Alignment.center,
 
-                                      child : Stack(
-                                        children:
-                                          icons_selected[index] ?
-                                          [Center(child:
+                                            child: Stack(
+                                              children:
+                                              icons_selected[index] ?
+                                              [Center(child:
                                               icons[index]),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.black.withOpacity(0.5),
-                                                ),
-                                                height:160,
-                                                width: 160
-                                              )]
-                                          : [Center(child: icons[index])],
-                                      ),
+                                                Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.black
+                                                          .withOpacity(0.5),
+                                                    ),
+                                                    height: 160,
+                                                    width: 160
+                                                )
+                                              ]
+                                                  : [
+                                                Center(child: icons[index])
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 10,),
+                                        icons_name[index],
+                                      ],
                                     ),
-                                  ),
-                                  icons_name[index],
-                                ],
-                              );
+                                  );
                             },
                             childCount: icons_name.length,
                           ),
                         ),
                       ),
-  //            Sliver
+                      SliverAppBar(backgroundColor: kIvoryColor)
                     ],
                   ),
                   Positioned(
@@ -259,23 +243,23 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-
+    Color txtColor = kWhiteIvoryColor.withOpacity(headerOpacity(shrinkOffset));
     return Container(
         padding: EdgeInsets.only(left: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 50),
-            GestureDetector(child:Icon(Icons.arrow_back_ios, color: kWhiteIvoryColor,size: 20), onTap: (){
+            GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
               //가장 처음화면으로 돌아가기
             }),
             SizedBox(height: 20,),
-            Text("습관 입력하기",style: TextStyle(fontSize: kTitleFontSize, color: kWhiteIvoryColor,fontWeight: FontWeight.bold)),
+            Text("습관 입력하기",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
             SizedBox(height: 11,),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(1)),
-                color: kWhiteIvoryColor
+                color: txtColor
               ),
               height: 3,
               width: 33,
@@ -283,7 +267,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
             SizedBox(height: 11),
             Container(
               width: 280,
-              child: Text("평소에 습관적으로 지출 하던 항목들을 전부 체크해주세요.",style: TextStyle(fontSize: 17,color: kWhiteIvoryColor,fontWeight: FontWeight.w300))
+              child: Text("평소에 습관적으로 지출 하던 항목들을 전부 체크해주세요.",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
             ),
           ],
         ),
