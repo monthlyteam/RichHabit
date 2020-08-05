@@ -114,10 +114,11 @@ class InitState extends State<Init>{
                         ),
                         child: SliverGrid(
                           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent:200.0,
+                            maxCrossAxisExtent:size.width/2,
                             mainAxisSpacing: 10.0,
-                            crossAxisSpacing: 20.0,
-                            childAspectRatio: 160/(190+15), // 가로/세로
+                            crossAxisSpacing:20.0,
+//                            childAspectRatio: size.width-40/(190+15), // 가로/세로
+                            childAspectRatio: 0.9, // 가로/세로
                           ),
                           delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
@@ -277,8 +278,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
   }
 
   double headerOpacity(double shrinkOffset){
-//    return 1.0 - max(0.0,shrinkOffset) / maxExtent;
-    return 1-max(0.0,shrinkOffset) / maxExtent;
+    return max(0,1-shrinkOffset / (maxExtent-minExtent+70));
   }
 
   @override
