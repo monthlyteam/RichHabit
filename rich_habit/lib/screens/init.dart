@@ -118,7 +118,7 @@ class InitState extends State<Init>{
                             mainAxisSpacing: 10.0,
                             crossAxisSpacing:20.0,
 //                            childAspectRatio: size.width-40/(190+15), // 가로/세로
-                            childAspectRatio: 0.9, // 가로/세로
+                            childAspectRatio: 0.85, // 가로/세로
                           ),
                           delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
