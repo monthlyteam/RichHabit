@@ -33,7 +33,6 @@ class InvestDetail extends StatelessWidget {
           future: rootBundle.loadString(mdpath),
           builder: (context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data);
               return SafeArea(
                 child: Container(
                     color: kIvoryColor,

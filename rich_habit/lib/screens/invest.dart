@@ -17,7 +17,7 @@ class _InvestState extends State<Invest> {
       'summary':
           '적금은 소비자가 가장 쉽게 접근할 수 있는 금융상품입니다. 각 은행에서 적금 계좌를 개설하고 매 달 돈을 만기까지 꾸준히 입금하면 이자를 챙길 수 있습니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/etf.jpg',
+      'imagepath': 'assets/images/bank.jpg',
       'mdpath': 'assets/markdowns/bank.md'
     },
     {
@@ -25,14 +25,14 @@ class _InvestState extends State<Invest> {
       'summary':
           '주식 투자는 기업의 분할된 소유권에 대해 투자하는 방법입니다. 주식은 코스피, 코스닥과 같은 주식 시장에서 거래할 수 있는데, 증권사에 계좌를 만들면 각 증권사를 통해 매매할 수 있습니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/etf.jpg',
+      'imagepath': 'assets/images/stock.jpg',
       'mdpath': 'assets/markdowns/stock.md'
     },
     {
       'title': '채권',
       'summary': '채권은 기업이나 국가에 돈을 빌려주고, 그 이자를 벌어들이는 방식입니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/etf.jpg',
+      'imagepath': 'assets/images/bond.jpg',
       'mdpath': 'assets/markdowns/bond.md'
     },
     {
@@ -40,7 +40,7 @@ class _InvestState extends State<Invest> {
       'summary':
           '펀드는 주식과 채권에 대해 간접적으로 투자하는 방법입니다. 다수의 인원으로부터 투자 자금을 모으고 그 돈으로 다시 금융 상품에 투자하여 그 수익을 각 투자자들에게 분배합니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/etf.jpg',
+      'imagepath': 'assets/images/fund.jpg',
       'mdpath': 'assets/markdowns/fund.md'
     },
     {
@@ -51,14 +51,33 @@ class _InvestState extends State<Invest> {
       'mdpath': 'assets/markdowns/etf.md'
     },
   ];
+  List showItems = [];
 
-  void _printText() {
+  void _controlText() {
     if (_textController.selection.extentOffset == -1) {
       setState(() {
         searchToggle = true;
         build(context);
       });
     }
+
+    setState(() {
+      showItems = _search(_textController.text);
+      build(context);
+    });
+  }
+
+  List<Map<String, String>> _search(String keyword) {
+    List<Map<String, String>> searchList = [];
+    if (keyword == '') {
+      return items;
+    }
+
+    items.forEach((element) {
+      if (element['title'].contains(keyword)) searchList.add(element);
+    });
+
+    return searchList;
   }
 
   @override
@@ -70,8 +89,8 @@ class _InvestState extends State<Invest> {
   @override
   void initState() {
     super.initState();
-
-    _textController.addListener(_printText);
+    showItems = items;
+    _textController.addListener(_controlText);
   }
 
   @override
@@ -139,7 +158,6 @@ class _InvestState extends State<Invest> {
                                 setState(() {
                                   build(context);
                                   searchToggle = true;
-                                  print(searchToggle);
                                 });
                               },
                             ),
@@ -168,10 +186,11 @@ class _InvestState extends State<Invest> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => InvestDetail(
-                                        title: items[index]['title'],
-                                        mdpath: items[index]['mdpath']),
+                                        title: showItems[index]['title'],
+                                        mdpath: showItems[index]['mdpath']),
                                   ),
                                 );
+                                _textController.text = '';
                               },
                               child: Container(
                                 child: Card(
@@ -180,8 +199,8 @@ class _InvestState extends State<Invest> {
                                       children: <Widget>[
                                         Container(
                                           child: Image(
-                                              image: AssetImage(
-                                                  items[index]['imagepath']),
+                                              image: AssetImage(showItems[index]
+                                                  ['imagepath']),
                                               height: 66,
                                               width: 66,
                                               fit: BoxFit.fill),
@@ -193,7 +212,7 @@ class _InvestState extends State<Invest> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              items[index]['title'],
+                                              showItems[index]['title'],
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: kPurpleColor,
@@ -204,7 +223,7 @@ class _InvestState extends State<Invest> {
                                                 padding:
                                                     EdgeInsets.only(right: 10),
                                                 child: Text(
-                                                  items[index]['summary'],
+                                                  showItems[index]['summary'],
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   maxLines: 1,
@@ -222,7 +241,7 @@ class _InvestState extends State<Invest> {
                                                   width: 20,
                                                 ),
                                                 Text(
-                                                  items[index]['author'],
+                                                  showItems[index]['author'],
                                                   style: TextStyle(
                                                     color: Colors.grey,
                                                     fontSize: kNormalFontSize,
@@ -239,7 +258,7 @@ class _InvestState extends State<Invest> {
                                   right: 20,
                                 ),
                               )),
-                          childCount: 5),
+                          childCount: showItems.length),
                     )
                   ],
                 ))));
