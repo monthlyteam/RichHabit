@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:richhabit/screens/init.dart';
-import 'package:richhabit/screens/invest.dart';
 import 'main_page.dart';
 
 void main() {
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RichHabit',
       theme: ThemeData(),
-      home: Invest(),
+      home: MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }
