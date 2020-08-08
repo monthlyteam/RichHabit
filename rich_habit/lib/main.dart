@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:richhabit/screens/init.dart';
-import 'main_page.dart';
 
 void main() {
   runApp(MyApp());
