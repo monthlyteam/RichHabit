@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 
 import '../constants.dart';
+import '../constants.dart';
 
 
 class Profile extends StatelessWidget {
@@ -104,16 +105,16 @@ class Profile extends StatelessWidget {
                 GestureDetector(
                   onTap: (){},
                   child: Container(
-                    height: 65,
+                    height: 50,
                     color: kIvoryColor,
-                    padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       children: [
-                        Text("데이터 초기화",style: TextStyle(fontSize: kSubTitleFontSize, color: Colors.red)),
+                        Text("데이터 초기화",style: TextStyle(fontSize: kSubTitleFontSize-3, color: Colors.red)),
                         Expanded(
                             child:SizedBox()
                         ),
-                        Icon(Icons.arrow_forward_ios, color: kPurpleColor,size: kTitleFontSize,),
+                        Icon(Icons.arrow_forward_ios, color: kPurpleColor,size: kSubTitleFontSize,),
                       ],
                     ),
                   ),
@@ -136,20 +137,19 @@ class Profile extends StatelessWidget {
             width: 1
           ))
         ),
-        height: 65,
-        width: 100,
-        padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+        height: 45,
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(
           children: [
-            Icon(icon, color: kPurpleColor,size: kTitleFontSize+5,),
-            SizedBox(width: 5,),
-            Text(text,style: TextStyle(fontSize: kSubTitleFontSize, color: kPurpleColor)),
+            Icon(icon, color: kPurpleColor,size: kTitleFontSize,),
+            SizedBox(width: 12),
+            Text(text,style: TextStyle(fontSize: kSubTitleFontSize-3, color: kPurpleColor)),
             Expanded(
                 child:SizedBox()
             ),
-            (subData == null)? Container(): Text(subData,style: TextStyle(fontSize: kSubTitleFontSize, color: Colors.grey,fontWeight: FontWeight.w200)),
+            (subData == null)? Container(): Text(subData,style: TextStyle(fontSize: kSubTitleFontSize-3, color: Colors.grey,fontWeight: FontWeight.w200)),
             SizedBox(width: 10,),
-            Icon(Icons.arrow_forward_ios, color: kPurpleColor,size: kTitleFontSize,)
+            Icon(Icons.arrow_forward_ios, color: kPurpleColor,size: kSubTitleFontSize,)
           ],
         ),
       ),
