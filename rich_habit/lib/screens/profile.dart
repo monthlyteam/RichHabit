@@ -94,13 +94,13 @@ class Profile extends StatelessWidget {
                 _buildContents(Icons.cached, "문의 & 피드백", () {}),
                 Container(
                   color: kPurpleColor,
-                  height: 30,
+                  height: 25,
                 ),
                 _buildContents(Icons.notifications, "알람", () {}, subData: isAlarmOn?"켜짐":"꺼짐"),
                 _buildContents(Icons.language, "언어", () {}, subData: language),
                 Container(
                   color: kPurpleColor,
-                  height: 30,
+                  height: 25,
                 ),
                 GestureDetector(
                   onTap: (){},
