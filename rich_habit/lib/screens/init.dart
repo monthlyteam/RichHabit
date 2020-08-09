@@ -24,6 +24,9 @@ class InitState extends State<Init>{
   List<SvgPicture> icons;
   List<Text> icons_name;
   List<bool> icons_selected;
+  final textFieldController = TextEditingController();
+
+  TextStyle txtstyle;
   @override
   void initState() {
     super.initState();
@@ -38,9 +41,8 @@ class InitState extends State<Init>{
     icons.add(new SvgPicture.asset('images/icon/smoking.svg'));
     icons.add(new SvgPicture.asset('images/icon/coffee.svg'));
     icons.add(new SvgPicture.asset('images/icon/smoking.svg'));
-    icons.add(new SvgPicture.asset('images/icon/beer.svg'));
-//    icons.add(new SvgPicture.asset('images/icon/plus.svg',color: kPurpleColor));
-    TextStyle txtstyle = TextStyle(fontSize: 15, color: kPurpleColor, fontWeight: FontWeight.w600);
+    icons.add(new SvgPicture.asset('images/icon/plus.svg'));
+    txtstyle = TextStyle(fontSize: 15, color: kPurpleColor, fontWeight: FontWeight.w600);
     icons_name.add(Text("음주",style: txtstyle));
     icons_name.add(Text("음주",style: txtstyle));
     icons_name.add(Text("커피",style: txtstyle));
@@ -49,7 +51,7 @@ class InitState extends State<Init>{
     icons_name.add(Text("커피",style: txtstyle));
     icons_name.add(Text("흡연",style: txtstyle));
     icons_name.add(Text("커피",style: txtstyle));
-    icons_name.add(Text("추가",style: txtstyle));
+    icons_name.add(Text("흡연",style: txtstyle));
     icons_name.add(Text("추가",style: txtstyle));
     icons_selected = List<bool>.generate(icons_name.length, (index) => false);
 //    for(var i=0;i < 3;i++){
@@ -60,18 +62,9 @@ class InitState extends State<Init>{
   Future<double> whenNotZero(Stream<double> source) async{
     await for (double value in source){
       if(value>0) return value;
-      
     }
   }
-  void flutterToast(){
-    Fluttertoast.showToast(msg: 'Flutter',
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.redAccent,
-        fontSize: 20.0,
-        textColor: Colors.white,
-        toastLength: Toast.LENGTH_SHORT
-    );
-  }
+
 
   List<String> _selectedListGenerator(List<bool> selectedList){
     List<String> list = List<String>();
@@ -83,6 +76,7 @@ class InitState extends State<Init>{
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder<double>(
       future: whenNotZero(Stream<double>.periodic(Duration(microseconds: 100),
           (x) => MediaQuery.of(context).size.width
@@ -128,15 +122,19 @@ class InitState extends State<Init>{
                                       children: <Widget>[
                                         GestureDetector(
                                           onTap: () {
-                                            setState(() {
-                                              icons_selected[index] =
-                                              !icons_selected[index];
-                                            });
+                                            if(index == icons.length-1){
+                                              _showAddDialog(context);
+                                            }else{
+                                              setState(() {
+                                                icons_selected[index] =
+                                                !icons_selected[index];
+                                              });
+                                            }
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: kWhiteIvoryColor
+                                                color: kWhiteIvoryColor,
                                             ),
                                             height: 160,
                                             width: 160,
@@ -229,7 +227,125 @@ class InitState extends State<Init>{
       }
     );
   }
+  _showAddDialog(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: kIvoryColor,
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(20.0)), //this right here
+            child: Container(
+              height: 226,
+              width: 320,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 176,
+                    padding: EdgeInsets.fromLTRB(41,15,41,13),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 80,
+                          width: 80,
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: kWhiteIvoryColor,
+                          ),
+                          child: Image.asset('images/coin_1.png',fit: BoxFit.cover,),
+                        ),
+                        SizedBox(height: 10.5,),
+                        RichText(
+                          text: TextSpan(
+                            text:'새로운 습관의 ',
+                            style: TextStyle(fontSize: 16,color: kPurpleColor),
+                            children: <TextSpan>[
+                              TextSpan(text: '이름', style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text : '을 입력해 주세요!')
+                            ]
+                          ),
+                        ),
+                        SizedBox(height: 8.5,),
+                        Container(
+                          height: 25,
+                          width: 240,
+                          child: TextField(
+                            style: TextStyle(color: kPurpleColor),
+                            controller: textFieldController,
+                            decoration: new InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: kDarkPurpleColor, width: 1.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: kPurpleColor.withOpacity(0.5), width: 1.0),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: kPurpleColor
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: (){
+                              print(textFieldController.text);
+                              textFieldController.clear();
+                              Navigator.pop(context);
+                            },
+                            child: Container(
 
+                              child : Center(child: Text("취소", style: TextStyle(fontSize: kSubTitleFontSize,fontWeight: FontWeight.bold,color: Color(0xFFDE711E)),)),
+                            ),
+                          )
+                        ),
+                        Container(
+                          height: 14,
+                          width: 4,
+                          child: VerticalDivider(
+                            width: 4,
+                            color: kIvoryColor,
+                          )
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: (){
+                            Navigator.pop(context);
+                            setState((){
+                            icons.insert(icons.length-1,new SvgPicture.asset('images/imsi.svg',fit: BoxFit.cover,));
+                            icons_name.insert(icons_name.length-1,Text(textFieldController.text,style: txtstyle));
+                            icons_selected.insert(icons_selected.length-1,true);
+                            });
+                            textFieldController.clear();
+                            },
+                            child: Center(
+                              child: Text("저장",style: TextStyle(fontSize: kSubTitleFontSize,color: kIvoryColor,fontWeight: FontWeight.bold),),
+                            )
+
+                          )
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ),
+          );
+        });
+  }
 }
 
 class InitPageHeader implements SliverPersistentHeaderDelegate{

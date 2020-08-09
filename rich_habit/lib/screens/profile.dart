@@ -7,7 +7,6 @@ import '../constants.dart';
 
 class Profile extends StatelessWidget {
 
-//  ProfileData profileData;
 
   String profileMessage;
   String name;
@@ -15,11 +14,11 @@ class Profile extends StatelessWidget {
   AssetImage profileImage;
   bool isAlarmOn;
 
+//  ProfileData profileData;
 //  Profile({this.profileData});
 
   @override
   Widget build(BuildContext context) {
-
 
     profileMessage = "절약해서 100억 한번 벌어보자";
     profileImage = AssetImage("images/example/profileImage.jpg");
@@ -126,6 +125,7 @@ class Profile extends StatelessWidget {
       ),
     );
   }
+
   _buildContents(IconData icon, String text, VoidCallback callback, {String subData}){
     return GestureDetector(
       onTap: callback,
@@ -155,4 +155,5 @@ class Profile extends StatelessWidget {
       ),
     );
   }
+
 }
