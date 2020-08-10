@@ -1,18 +1,28 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  DateTime _selTime = DateTime(2020, 7, 30);
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  DateTime current;
+  DateTime _selDay;
   Map<DateTime, List<Habit>> habits = new Map<DateTime, List<Habit>>();
+  Map<DateTime, List> _events;
+  AnimationController _animationController;
+  CalendarController _calendarController;
+
   @override
   void initState() {
-    habits[DateTime(2020, 7, 30)] = [
+    super.initState();
+    current = DateTime.now();
+    _selDay = DateTime(current.year, current.month, current.day);
+    habits[_selDay] = [
       new Habit(
           name: "양치질",
           iconURL: "assets/images/icon/smoking.svg",
@@ -30,114 +40,462 @@ class _HomeState extends State<Home> {
           goalIsWeek: false,
           goalAmount: 2)
     ];
-    super.initState();
+    habits[_selDay.subtract(Duration(days: 1))] = [
+      new Habit(
+          name: "양치질",
+          iconURL: "assets/images/icon/smoking.svg",
+          price: 0,
+          usualIsWeek: false,
+          usualAmount: 1,
+          goalIsWeek: false,
+          goalAmount: 1),
+      new Habit(
+          name: "흡연",
+          iconURL: "assets/images/icon/smoking.svg",
+          price: 4500,
+          usualIsWeek: false,
+          usualAmount: 3,
+          goalIsWeek: false,
+          goalAmount: 2)
+    ];
+    _events = {
+      _selDay.subtract(Duration(days: 10)): [1],
+      _selDay.subtract(Duration(days: 9)): [1],
+      _selDay.subtract(Duration(days: 8)): [1],
+      _selDay.subtract(Duration(days: 7)): [1],
+      _selDay.subtract(Duration(days: 6)): [1],
+      _selDay.subtract(Duration(days: 5)): [1],
+      _selDay.subtract(Duration(days: 4)): [2],
+      _selDay.subtract(Duration(days: 3)): [1],
+      _selDay.subtract(Duration(days: 2)): [2],
+      _selDay.subtract(Duration(days: 1)): [1],
+      _selDay: [0],
+    };
+
+    _calendarController = CalendarController();
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _calendarController.dispose();
+    super.dispose();
+  }
+
+  void _onDaySelected(BuildContext buildContext, DateTime day, List events) {
+    print('CALLBACK: _onDaySelected');
+    setState(() {
+      if (isNow(day)) {
+        print("같");
+        _selDay = DateTime(day.year, day.month, day.day);
+        Navigator.pop(buildContext);
+      } else if (day.isAfter(DateTime.now())) {
+        print("후");
+      } else {
+        print("전");
+        _selDay = DateTime(day.year, day.month, day.day);
+        Navigator.pop(buildContext);
+      }
+    });
+  }
+
+  void _onVisibleDaysChanged(
+      DateTime first, DateTime last, CalendarFormat format) {
+    print('CALLBACK: _onVisibleDaysChanged');
+  }
+
+  void _onCalendarCreated(
+      DateTime first, DateTime last, CalendarFormat format) {
+    print('CALLBACK: _onCalendarCreated');
   }
 
   List<Widget> _getTodayHabit() {
-    return List.generate(habits[_selTime].length, (i) {
-      Habit habit = habits[_selTime][i];
-      TextStyle textStyle = new TextStyle(color: kPurpleColor, fontSize: 15);
-      TextStyle countStyle = new TextStyle(
-          color: kPurpleColor, fontSize: 25.0, fontWeight: FontWeight.bold);
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: GestureDetector(
-          onTap: () {
-            print("눌림");
-          },
-          child: Container(
-            height: 70.0,
-            decoration: BoxDecoration(
-                color: kIvoryColor,
-                borderRadius: BorderRadius.all(Radius.circular(15.0))),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        habits[_selTime][i].nowAmount--;
-                      });
-                    },
-                    iconSize: 30.0,
-                    icon: Icon(
-                      Icons.remove_circle,
-                      color: Color(0xffFEC447),
+    try {
+      return List.generate(habits[_selDay].length, (i) {
+        Habit habit = habits[_selDay][i];
+        TextStyle textStyle = new TextStyle(color: kPurpleColor, fontSize: 15);
+        TextStyle countStyle = new TextStyle(
+            color: kPurpleColor, fontSize: 25.0, fontWeight: FontWeight.bold);
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: GestureDetector(
+            onTap: () {
+              print("눌림");
+            },
+            child: Container(
+              height: 70.0,
+              decoration: BoxDecoration(
+                  color: kIvoryColor,
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          habits[_selDay][i].nowAmount--;
+                        });
+                      },
+                      iconSize: 30.0,
+                      icon: Icon(
+                        Icons.remove_circle,
+                        color: Color(0xffFEC447),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            SvgPicture.asset(
-                              habit.iconURL,
-                              height: 25.0,
-                            ),
-                            Text(
-                              habit.name,
-                              style: TextStyle(
-                                  fontSize: 15.0, color: kPurpleColor),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                    Expanded(
+                      child: Row(
+                        children: <Widget>[
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(
-                                "현재 ",
-                                style: textStyle,
+                              SvgPicture.asset(
+                                habit.iconURL,
+                                height: 25.0,
                               ),
                               Text(
-                                "${habit.nowAmount}",
-                                style: countStyle,
+                                habit.name,
+                                style: TextStyle(
+                                    fontSize: 15.0, color: kPurpleColor),
                               ),
-                              Text(
-                                "번  /  ",
-                                style: textStyle,
-                              ),
-                              Text(
-                                "목표 ",
-                                style: textStyle,
-                              ),
-                              Text(
-                                "${habit.goalAmount}",
-                                style: countStyle,
-                              ),
-                              Text(
-                                "번",
-                                style: textStyle,
-                              )
                             ],
                           ),
-                        )
-                      ],
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  "현재 ",
+                                  style: textStyle,
+                                ),
+                                Text(
+                                  "${habit.nowAmount}",
+                                  style: countStyle,
+                                ),
+                                Text(
+                                  "번  /  ",
+                                  style: textStyle,
+                                ),
+                                Text(
+                                  "목표 ",
+                                  style: textStyle,
+                                ),
+                                Text(
+                                  "${habit.goalAmount}",
+                                  style: countStyle,
+                                ),
+                                Text(
+                                  "번",
+                                  style: textStyle,
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        habits[_selTime][i].nowAmount++;
-                      });
-                    },
-                    iconSize: 30.0,
-                    icon: Icon(
-                      Icons.add_circle,
-                      color: Color(0xffFEC447),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          habits[_selDay][i].nowAmount++;
+                        });
+                      },
+                      iconSize: 30.0,
+                      icon: Icon(
+                        Icons.add_circle,
+                        color: Color(0xffFEC447),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
+        );
+      });
+    } catch (e) {
+      return [
+        Container(
+          child: Text(
+            "입력된 값이 없습니다.",
+            style:
+                TextStyle(color: kWhiteIvoryColor, fontSize: kNormalFontSize),
+          ),
+        )
+      ];
+    }
+  }
+
+  Widget _buildTableCalendarWithBuilders(BuildContext buildContext) {
+    return AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      content: Container(
+        color: kPurpleColor,
+        width: MediaQuery.of(context).size.width,
+        child: TableCalendar(
+          initialSelectedDay: _selDay,
+          rowHeight: 70.0,
+          locale: 'ko_KR',
+          calendarController: _calendarController,
+          events: _events,
+          initialCalendarFormat: CalendarFormat.month,
+          formatAnimation: FormatAnimation.scale,
+          startingDayOfWeek: StartingDayOfWeek.monday,
+          availableGestures: AvailableGestures.horizontalSwipe,
+          availableCalendarFormats: const {
+            CalendarFormat.month: '',
+            CalendarFormat.week: '',
+          },
+          calendarStyle: CalendarStyle(
+            markersAlignment: Alignment.center,
+            outsideDaysVisible: true,
+          ),
+          headerStyle: HeaderStyle(
+            titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.white),
+            leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
+            rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
+            centerHeaderTitle: true,
+            formatButtonVisible: false,
+          ),
+          builders: CalendarBuilders(
+            dayBuilder: (context, date, list) {
+              return _buildCalText(date, Colors.white);
+            },
+            outsideDayBuilder: (context, date, list) {
+              return _buildCalText(date, Colors.grey.withOpacity(0.5));
+            },
+            outsideWeekendDayBuilder: (context, date, list) {
+              return _buildCalText(date, Colors.grey.withOpacity(0.5));
+            },
+            outsideHolidayDayBuilder: (context, date, list) {
+              return _buildCalText(date, Colors.grey.withOpacity(0.5));
+            },
+            holidayDayBuilder: (context, date, list) {
+              return _buildCalText(date, Colors.red);
+            },
+            todayDayBuilder: (context, date, _) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Divider(
+                    color: Colors.white.withOpacity(0.5),
+                    height: 0.5,
+                    thickness: 0.5,
+                  ),
+                  SizedBox(
+                    height: 2.0,
+                  ),
+                  Container(
+                    height: 20.0,
+                    width: 20.0,
+                    decoration: BoxDecoration(
+                        color: Color(0xffF58129),
+                        borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                    child: Center(
+                      child: Text(
+                        '${date.day}',
+                        style: TextStyle(fontSize: 12.0, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+            selectedDayBuilder: (context, date, _) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Divider(
+                    color: Colors.white.withOpacity(0.5),
+                    thickness: 0.5,
+                    height: 0.5,
+                  ),
+                  (isNow(date))
+                      ? Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.5)),
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 2.0,
+                                ),
+                                Container(
+                                  height: 20.0,
+                                  width: 20.0,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffF58129),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0))),
+                                  child: Center(
+                                    child: Text(
+                                      '${date.day}',
+                                      style: TextStyle(
+                                          fontSize: 12.0, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.3)),
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  "${date.day}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12.0, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ],
+              );
+            },
+            markersBuilder: (context, date, events, holidays) {
+              final children = <Widget>[];
+              if (events.isNotEmpty) {
+                print("${_calendarController.focusedDay.month.toString()}");
+                if (date.month == _calendarController.focusedDay.month) {
+                  children.add(
+                    Positioned(
+                      child: _buildEventsMarker(date, events),
+                    ),
+                  );
+                }
+              }
+              return children;
+            },
+            dowWeekdayBuilder: (context, string) {
+              return Text(
+                string,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 12.0),
+              );
+            },
+            dowWeekendBuilder: (context, string) {
+              return Text(
+                string,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.red, fontSize: 12.0),
+              );
+            },
+          ),
+          onDaySelected: (date, events) {
+            _onDaySelected(buildContext, date, events);
+          },
+          onVisibleDaysChanged: _onVisibleDaysChanged,
+          onCalendarCreated: _onCalendarCreated,
         ),
-      );
-    });
+      ),
+    );
+  }
+
+  Widget _buildCalText(DateTime date, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Divider(
+          color: Colors.white.withOpacity(0.5),
+          thickness: 0.5,
+          height: 0.5,
+        ),
+        SizedBox(
+          height: 5.0,
+        ),
+        Text(
+          "${date.day}",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 12.0, color: color),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventsMarker(DateTime date, List events) {
+    var image;
+    switch (events[0]) {
+      case 1: //완료
+        image = Image.asset('assets/images/coin_1.png');
+        break;
+      case 2: //오버
+        image = Image.asset('assets/images/coin_2.png');
+        break;
+      case 0: //안함
+        image = Image.asset('assets/images/question_mark.png');
+        break;
+      default: //이상함
+        image = Image.asset('assets/images/question_mark.png');
+        break;
+    }
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Container(
+        width: 30.0,
+        height: 30.0,
+        child: image,
+      ),
+    );
+  }
+
+  String getWeek(int weekNum) {
+    String weekStr = "";
+    switch (weekNum) {
+      case 1:
+        weekStr = "월요일";
+        break;
+      case 2:
+        weekStr = "화요일";
+        break;
+      case 3:
+        weekStr = "수요일";
+        break;
+      case 4:
+        weekStr = "목요일";
+        break;
+      case 5:
+        weekStr = "금요일";
+        break;
+      case 6:
+        weekStr = "토요일";
+        break;
+      case 7:
+        weekStr = "일요일";
+        break;
+      default:
+        weekStr = "뭐징";
+        break;
+    }
+    return weekStr;
+  }
+
+  bool isNow(DateTime dateTime) {
+    DateTime now = DateTime.now();
+    if (now.day == dateTime.day &&
+        now.month == dateTime.month &&
+        now.year == dateTime.year) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -154,7 +512,7 @@ class _HomeState extends State<Home> {
             title: Padding(
               padding: const EdgeInsets.only(left: kPadding),
               child: Text(
-                "7월 20일 월요일",
+                "${_selDay.month}월 ${_selDay.day}일 ${getWeek(_selDay.weekday)}",
                 style: TextStyle(
                     fontSize: kTitleFontSize,
                     color: kWhiteIvoryColor,
@@ -167,6 +525,10 @@ class _HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     print("오늘");
+                    setState(() {
+                      _selDay = _selDay =
+                          DateTime(current.year, current.month, current.day);
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -192,7 +554,9 @@ class _HomeState extends State<Home> {
               ),
               IconButton(
                 onPressed: () {
-                  print("cal");
+                  showDialog(
+                      context: context,
+                      builder: _buildTableCalendarWithBuilders);
                 },
                 iconSize: 25.0,
                 icon: Icon(
@@ -232,21 +596,6 @@ class _HomeState extends State<Home> {
                     Column(
                       children: _getTodayHabit(),
                     ),
-                    Column(
-                      children: _getTodayHabit(),
-                    ),
-                    Column(
-                      children: _getTodayHabit(),
-                    ),
-                    Column(
-                      children: _getTodayHabit(),
-                    ),
-                    Column(
-                      children: _getTodayHabit(),
-                    ),
-                    Column(
-                      children: _getTodayHabit(),
-                    )
                   ],
                 ),
               )
