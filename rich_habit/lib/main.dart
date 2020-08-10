@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:richhabit/noti_test.dart';
 import 'package:richhabit/screens/init.dart';
 import 'main_page.dart';
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RichHabit',
       theme: ThemeData(),
-      home: Init(),
+      home: NotiTest(),
       debugShowCheckedModeBanner: false,
     );
   }
