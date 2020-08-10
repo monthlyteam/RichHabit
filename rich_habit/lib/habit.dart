@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 
 class Habit {
+  DateTime addedTimeID; //추가한 날의 시간
+
   String name;
   String iconURL;
   double price; //습관 1회당 가격
   bool isTrigger;
-
-  int warningCount = 0; //경고 누적 수
 
   bool usualIsWeek; // 평상시 횟수 단위 Daily = false, Weekly = true
   int usualAmount; //평상시 습관 양
@@ -17,14 +17,15 @@ class Habit {
   int nowAmount = 0; // 현재 습관 양
 
   Habit({
+    @required this.addedTimeID,
     this.isTrigger = false,
     @required this.name,
     @required this.iconURL,
-    @required this.price,
-    @required this.usualIsWeek,
-    @required this.usualAmount,
-    @required this.goalIsWeek,
-    @required this.goalAmount,
+    this.price,
+    this.usualIsWeek,
+    this.usualAmount,
+    this.goalIsWeek,
+    this.goalAmount,
   });
 
   double get retention //목표 유지율
@@ -32,6 +33,9 @@ class Habit {
 
   double get saveMoney //절약 금액
       => (usualAmount - nowAmount) * price;
+
+  double get expectedSaveMoney //예상 절약 금액
+      => (usualAmount - goalAmount) * price;
 
   void addNowAmount() {
     nowAmount++;
