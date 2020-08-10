@@ -223,7 +223,7 @@ class _HomeState extends State<Home> {
                       height: kPadding,
                     ),
                     Text(
-                      "19주차",
+                      "7월 4주차",
                       style: TextStyle(
                           fontSize: 20.0,
                           color: kWhiteIvoryColor,
