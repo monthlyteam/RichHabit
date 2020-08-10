@@ -143,13 +143,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          habits[_selDay][i].nowAmount--;
+                          if (habits[_selDay][i].nowAmount > 0) {
+                            habits[_selDay][i].nowAmount--;
+                          }
                         });
                       },
                       iconSize: 30.0,
-                      icon: Icon(
-                        Icons.remove_circle,
-                        color: Color(0xffFEC447),
+                      icon: SvgPicture.asset(
+                        "assets/images/icon/remove_circle.svg",
+                        height: 30.0,
                       ),
                     ),
                     Expanded(
@@ -207,12 +209,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       onPressed: () {
                         setState(() {
                           habits[_selDay][i].nowAmount++;
+                          if (habits[_selDay][i].nowAmount >
+                              habits[_selDay][i].goalAmount) {
+                            //habit 일 경우에만 하기
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext buildContext) {
+                                  return _buildWarning(
+                                      buildContext, habits[_selDay][i]);
+                                });
+                          }
                         });
                       },
                       iconSize: 30.0,
-                      icon: Icon(
-                        Icons.add_circle,
-                        color: Color(0xffFEC447),
+                      icon: SvgPicture.asset(
+                        "assets/images/icon/plus_circle.svg",
+                        height: 30.0,
                       ),
                     ),
                   ],
@@ -235,10 +247,104 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
+  Widget _buildWarning(BuildContext buildContext, Habit habit) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 540,
+        decoration: BoxDecoration(
+            color: kIvoryColor, borderRadius: BorderRadius.circular(20.0)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: kPadding,
+            ),
+            Container(
+              height: 150,
+              width: 150,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: kWhiteIvoryColor,
+                borderRadius: BorderRadius.circular(150.0),
+              ),
+              child: SvgPicture.asset(
+                habit.iconURL,
+                height: 50.0,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              "${habit.name}",
+              style: TextStyle(
+                fontSize: 25,
+                color: kPurpleColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              width: 30.0,
+              child: Divider(
+                color: kPurpleColor,
+                thickness: 3,
+              ),
+            ),
+            SizedBox(height: 30.0),
+            Text(
+              "내가 잃어버린 복리의 힘",
+              style: TextStyle(fontSize: 16.0, color: kPurpleColor),
+            ),
+            Text(
+              "2,268,200원",
+              style: TextStyle(
+                  fontSize: kTitleFontSize,
+                  color: kPurpleColor,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 40.0),
+            Text("\"담배는 돈 뿐만 아니라 건강에도 최악!\n다음에는 꼭 목표를 지켜봐요\"",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16.0, color: kPurpleColor)),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 60.0,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: kPurpleColor,
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(buildContext);
+                      },
+                      child: Text(
+                        "다짐 후 창 닫기",
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            color: kIvoryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildTableCalendarWithBuilders(BuildContext buildContext) {
-    return AlertDialog(
-      contentPadding: EdgeInsets.all(0.0),
-      content: Container(
+    return Dialog(
+      child: Container(
         color: kPurpleColor,
         width: MediaQuery.of(context).size.width,
         child: TableCalendar(
