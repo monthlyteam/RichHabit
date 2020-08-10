@@ -18,18 +18,21 @@ class Init extends StatefulWidget {
   State createState() => InitState();
 }
 
-class InitState extends State<Init>{
+class InitState extends State<Init> with SingleTickerProviderStateMixin{
 
   Size size;
   List<SvgPicture> icons;
   List<Text> icons_name;
   List<bool> icons_selected;
   final textFieldController = TextEditingController();
-
+  AnimationController controller;
+  Animation<double> offsetAnimation;
   TextStyle txtstyle;
   @override
   void initState() {
     super.initState();
+    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this); //SingleTickerProviderSteteMixin과 연관이있는데 잘모르겠다
+
     icons = new List<SvgPicture>();
     icons_name = new List<Text>();
     icons.add(new SvgPicture.asset('images/icon/beer.svg'));
@@ -77,6 +80,12 @@ class InitState extends State<Init>{
   @override
   Widget build(BuildContext context) {
 
+    offsetAnimation = Tween(begin: 0.0, end: 10.0).chain(CurveTween(curve: Curves.elasticIn)).animate(controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        }
+      });
     return FutureBuilder<double>(
       future: whenNotZero(Stream<double>.periodic(Duration(microseconds: 100),
           (x) => MediaQuery.of(context).size.width
@@ -244,7 +253,7 @@ class InitState extends State<Init>{
                 children: [
                   Container(
                     height: 176,
-                    padding: EdgeInsets.fromLTRB(41,15,41,13),
+                    padding: EdgeInsets.fromLTRB(26,15,26,13),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -256,40 +265,53 @@ class InitState extends State<Init>{
                             shape: BoxShape.circle,
                             color: kWhiteIvoryColor,
                           ),
-                          child: SvgPicture.asset('images/custom_coin.svg',width: 50,),
+
+                          child: Center(child: SvgPicture.asset('images/custom_coin.svg',width: 44)),
                         ),
                         SizedBox(height: 10.5,),
-                        FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: RichText(
-                            text: TextSpan(
-                              text:'새로운 습관의 ',
-                              style: TextStyle(fontSize: 16,color: kPurpleColor),
-                              children: <TextSpan>[
-                                TextSpan(text: '이름', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text : '을 입력해 주세요!')
-                              ]
+                        Container(
+                          width: 234,
+//                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: RichText(
+                              text: TextSpan(
+                                text:'새로운 습관의 ',
+                                style: TextStyle(color: kPurpleColor,),
+                                children: <TextSpan>[
+                                  TextSpan(text: '이름', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  TextSpan(text : '을 입력해 주세요!')
+                                ]
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(height: 8.5,),
                         Container(
                           height: 25,
-                          width: 240,
-                          child: TextField(
-                            style: TextStyle(color: kPurpleColor),
-                            controller: textFieldController,
-                            decoration: new InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: kDarkPurpleColor, width: 1.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: kPurpleColor.withOpacity(0.5), width: 1.0),
-                              ),
-                            ),
-                          ),
+                          width: 260,
+                          child: AnimatedBuilder(
+                              animation: offsetAnimation,
+                              builder: (buildContext, child) {
+                                if (offsetAnimation.value < 0.0) print('${offsetAnimation.value + 8.0}');
+                                return Container(
+                                  padding: EdgeInsets.only(left: offsetAnimation.value + 15.0, right: 15.0 - offsetAnimation.value),
+                                  child: TextField(
+                                    style: TextStyle(color: kPurpleColor),
+                                    controller: textFieldController,
+                                    decoration: new InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: kPurpleColor, width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: kPurpleColor.withOpacity(0.5), width: 1.0),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
                         )
                       ],
                     ),
@@ -326,13 +348,18 @@ class InitState extends State<Init>{
                         Expanded(
                           child: GestureDetector(
                             onTap: (){
-                            Navigator.pop(context);
-                            setState((){
-                            icons.insert(icons.length-1,new SvgPicture.asset('images/custom_coin.svg',fit: BoxFit.cover,));
-                            icons_name.insert(icons_name.length-1,Text(textFieldController.text,style: txtstyle));
-                            icons_selected.insert(icons_selected.length-1,true);
-                            });
-                            textFieldController.clear();
+                              print(textFieldController.text);
+                              if(textFieldController.text.isNotEmpty ){
+                                Navigator.pop(context);
+                                setState((){
+                                icons.insert(icons.length-1,new SvgPicture.asset('images/custom_coin.svg',fit: BoxFit.cover,));
+                                icons_name.insert(icons_name.length-1,Text(textFieldController.text,style: txtstyle));
+                                icons_selected.insert(icons_selected.length-1,true);
+                                });
+                                textFieldController.clear();
+                              }else if(textFieldController.text.isEmpty){
+                                controller.forward(from: 0.0);
+                              }
                             },
                             child: Center(
                               child: Text("저장",style: TextStyle(fontSize: kSubTitleFontSize,color: kIvoryColor,fontWeight: FontWeight.bold),),
@@ -415,5 +442,4 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
 
 //이모티콘 아래 글자크기 키웠을때 BottomOverflow 고쳐야함
 //옆에 Stack헀더니 TopRight BerderRadius 어디감?
-
 
