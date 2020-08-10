@@ -41,8 +41,8 @@ class InitState extends State<Init>{
     icons.add(new SvgPicture.asset('images/icon/smoking.svg'));
     icons.add(new SvgPicture.asset('images/icon/coffee.svg'));
     icons.add(new SvgPicture.asset('images/icon/smoking.svg'));
-    icons.add(new SvgPicture.asset('images/icon/plus.svg'));
-    txtstyle = TextStyle(fontSize: 15, color: kPurpleColor, fontWeight: FontWeight.w600);
+    icons.add(new SvgPicture.asset('images/icon/plus.svg',color: kPurpleColor,width: 100,));
+    txtstyle = TextStyle(color: kPurpleColor, fontWeight: FontWeight.w600);
     icons_name.add(Text("음주",style: txtstyle));
     icons_name.add(Text("음주",style: txtstyle));
     icons_name.add(Text("커피",style: txtstyle));
@@ -163,7 +163,7 @@ class InitState extends State<Init>{
                                           ),
                                         ),
                                         SizedBox(height: 10,),
-                                        icons_name[index],
+                                        FittedBox(fit:BoxFit.fitHeight,child: icons_name[index]),
                                       ],
                                     ),
                                   );
@@ -212,7 +212,7 @@ class InitState extends State<Init>{
                         width: size.width,
                         height: 80,
                         child: Center(
-                          child: Text("다 체크 했어요!  →",style: TextStyle(fontSize: kTitleFontSize,color: kWhiteIvoryColor,fontWeight: FontWeight.w600)),
+                          child: Text("다 체크 했어요!  →",style: TextStyle(fontSize: 20,color: kWhiteIvoryColor,fontWeight: FontWeight.w600)),
                         ),
                       ),
                     ),
@@ -251,22 +251,25 @@ class InitState extends State<Init>{
                         Container(
                           height: 80,
                           width: 80,
-                          padding: EdgeInsets.all(15),
+                          padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: kWhiteIvoryColor,
                           ),
-                          child: Image.asset('images/coin_1.png',fit: BoxFit.cover,),
+                          child: SvgPicture.asset('images/custom_coin.svg',width: 50,),
                         ),
                         SizedBox(height: 10.5,),
-                        RichText(
-                          text: TextSpan(
-                            text:'새로운 습관의 ',
-                            style: TextStyle(fontSize: 16,color: kPurpleColor),
-                            children: <TextSpan>[
-                              TextSpan(text: '이름', style: TextStyle(fontWeight: FontWeight.bold)),
-                              TextSpan(text : '을 입력해 주세요!')
-                            ]
+                        FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: RichText(
+                            text: TextSpan(
+                              text:'새로운 습관의 ',
+                              style: TextStyle(fontSize: 16,color: kPurpleColor),
+                              children: <TextSpan>[
+                                TextSpan(text: '이름', style: TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(text : '을 입력해 주세요!')
+                              ]
+                            ),
                           ),
                         ),
                         SizedBox(height: 8.5,),
@@ -325,7 +328,7 @@ class InitState extends State<Init>{
                             onTap: (){
                             Navigator.pop(context);
                             setState((){
-                            icons.insert(icons.length-1,new SvgPicture.asset('images/imsi.svg',fit: BoxFit.cover,));
+                            icons.insert(icons.length-1,new SvgPicture.asset('images/custom_coin.svg',fit: BoxFit.cover,));
                             icons_name.insert(icons_name.length-1,Text(textFieldController.text,style: txtstyle));
                             icons_selected.insert(icons_selected.length-1,true);
                             });
