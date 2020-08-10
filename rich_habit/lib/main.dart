@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RichHabit',
       theme: ThemeData(),
-      home: Init(),
+      home: MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }
