@@ -20,6 +20,7 @@ class InvestDetail extends StatelessWidget {
                   TextStyle(color: kPurpleColor, fontSize: kSubTitleFontSize),
             ),
             backgroundColor: kIvoryColor,
+            brightness: Brightness.light,
             elevation: 0.0,
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),

@@ -96,6 +96,7 @@ class _InvestState extends State<Invest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: kPurpleColor,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
             child: Container(
