@@ -85,6 +85,8 @@ class HabitProvider with ChangeNotifier {
 
       for (int i = 0; i > thisWeek; i++) {}
     }
+
+    notifyListeners();
   }
 
   //이번달 예상 절약 금액(전부 null이면 전체)
@@ -153,6 +155,7 @@ class HabitProvider with ChangeNotifier {
     return sum;
   }
 
+  //해당 DateTime key값이 없으면 '물음표' 로 간주
   void onWarning() {
     if (warningCount.containsKey(nowDate)) {
       warningCount[nowDate][0]++;
