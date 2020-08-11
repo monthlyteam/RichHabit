@@ -17,4 +17,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
     );
   }
+
+  Future<double> whenNotZero(Stream<double> source) async{
+    await for (double value in source){
+      if(value>0) return value;
+    }
+  }
 }

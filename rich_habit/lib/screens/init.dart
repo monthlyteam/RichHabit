@@ -1,5 +1,3 @@
-//import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/rendering/sliver_persistent_header.dart';
@@ -20,7 +18,6 @@ class Init extends StatefulWidget {
 
 class InitState extends State<Init> with SingleTickerProviderStateMixin{
 
-  Size size;
   List<SvgPicture> icons;
   List<Text> icons_name;
   List<bool> icons_selected;
@@ -119,7 +116,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent:size.width/2,
                             mainAxisSpacing: 10.0,
-                            crossAxisSpacing:20.0,
+                            crossAxisSpacing:10.0,
 //                            childAspectRatio: size.width-40/(190+15), // 가로/세로
                             childAspectRatio: 0.85, // 가로/세로
                           ),
@@ -266,11 +263,11 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                             color: kWhiteIvoryColor,
                           ),
 
-                          child: Center(child: SvgPicture.asset('images/custom_coin.svg',width: 44)),
+                          child: Center(child: SvgPicture.asset('images/icon/custom_coin.svg',width: 44)),
                         ),
                         SizedBox(height: 10.5,),
                         Container(
-                          width: 234,
+                          width: 204,
 //                          padding: EdgeInsets.symmetric(horizontal: 15),
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
@@ -289,11 +286,11 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                         SizedBox(height: 8.5,),
                         Container(
                           height: 25,
-                          width: 260,
+                          width: 264,
                           child: AnimatedBuilder(
                               animation: offsetAnimation,
                               builder: (buildContext, child) {
-                                if (offsetAnimation.value < 0.0) print('${offsetAnimation.value + 8.0}');
+                                print('${offsetAnimation.value + 8.0}');
                                 return Container(
                                   padding: EdgeInsets.only(left: offsetAnimation.value + 15.0, right: 15.0 - offsetAnimation.value),
                                   child: TextField(
@@ -352,7 +349,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                               if(textFieldController.text.isNotEmpty ){
                                 Navigator.pop(context);
                                 setState((){
-                                icons.insert(icons.length-1,new SvgPicture.asset('images/custom_coin.svg',fit: BoxFit.cover,));
+                                icons.insert(icons.length-1,new SvgPicture.asset('images/icon/custom_coin.svg',fit: BoxFit.cover,));
                                 icons_name.insert(icons_name.length-1,Text(textFieldController.text,style: txtstyle));
                                 icons_selected.insert(icons_selected.length-1,true);
                                 });
