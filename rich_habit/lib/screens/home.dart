@@ -347,9 +347,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   Widget _buildTableCalendarWithBuilders(BuildContext buildContext) {
     return Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
       child: Container(
-        color: kPurpleColor,
         width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            color: kPurpleColor, borderRadius: BorderRadius.circular(20.0)),
         child: TableCalendar(
           initialSelectedDay: _selDay,
           rowHeight: 70.0,
@@ -504,7 +507,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               return Text(
                 string,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.red, fontSize: 12.0),
+                style: TextStyle(color: Color(0xffF58129), fontSize: 12.0),
               );
             },
           ),
