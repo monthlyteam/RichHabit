@@ -124,7 +124,7 @@ class _MainPageState extends State<MainPage> {
                     : BoxShadow(color: Color(0xffffffff).withOpacity(1.0)),
               ],
             ),
-            child: Image.asset("assets/images/coin_2.png"),
+            child: Image.asset("assets/images/coin_1.png"),
           ),
         ),
         elevation: 0.0,

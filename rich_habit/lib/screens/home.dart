@@ -314,16 +314,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    height: 60.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: kPurpleColor,
-                        borderRadius: BorderRadius.circular(20.0)),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(buildContext);
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(buildContext);
+                    },
+                    child: Container(
+                      height: 60.0,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: kPurpleColor,
+                          borderRadius: BorderRadius.circular(20.0)),
                       child: Text(
                         "다짐 후 창 닫기",
                         style: TextStyle(
@@ -555,8 +555,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
-        width: 30.0,
-        height: 30.0,
+        width: 25.0,
+        height: 25.0,
         child: image,
       ),
     );
