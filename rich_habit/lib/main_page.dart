@@ -23,8 +23,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: kPurpleColor));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: kPurpleColor,
+    ));
     return Scaffold(
       backgroundColor: kPurpleColor,
       body: AnnotatedRegion<SystemUiOverlayStyle>(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -20,6 +21,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    initializeDateFormatting();
+
     current = DateTime.now();
     _selDay = DateTime(current.year, current.month, current.day);
     habits[_selDay] = [
