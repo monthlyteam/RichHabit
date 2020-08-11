@@ -120,6 +120,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   List<Widget> _getTodayHabit() {
+    //매일, 매주 인자로 받기
     try {
       return List.generate(habits[_selDay].length, (i) {
         Habit habit = habits[_selDay][i];
