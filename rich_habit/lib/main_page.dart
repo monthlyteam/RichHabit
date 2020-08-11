@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: kPurpleColor));
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kPurpleColor,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
         child: IndexedStack(
