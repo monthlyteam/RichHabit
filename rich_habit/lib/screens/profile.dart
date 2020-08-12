@@ -59,7 +59,7 @@ class Profile extends StatelessWidget {
                           border: null,
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image : AssetImage("images/example/profileImage.jpg"),
+                            image : profileImage,
                             fit: BoxFit.cover,
                           )
                         )
