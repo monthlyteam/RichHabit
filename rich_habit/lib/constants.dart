@@ -11,3 +11,4 @@ const kSubTitleFontSize = 20.0;
 const kNormalFontSize = 12.0;
 
 const kPadding = 20.0;
+Size size;

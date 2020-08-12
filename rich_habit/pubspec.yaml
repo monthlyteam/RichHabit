@@ -28,7 +28,8 @@ dependencies:
   cupertino_icons: ^0.1.3
   flutter_svg: ^0.18.0
   table_calendar: ^2.2.3
-
+  flutter_group_sliver: ^0.0.2
+  fluttertoast: ^7.0.2
 
 dev_dependencies:
   flutter_test:
@@ -50,7 +51,7 @@ flutter:
     - assets/images/
     - assets/images/icon/
     - assets/markdowns/
-
+    - assets/example/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
