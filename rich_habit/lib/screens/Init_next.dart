@@ -3,16 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/main_page.dart';
+import 'package:richhabit/widget/bottom_positioned_box.dart';
 
 class InitNext extends StatelessWidget {
-  List<String> selectedItem;
 
+  final List<List<dynamic>> selectedItem;
+  PageController pageController;
   InitNext({@required this.selectedItem});
+
   @override
   Widget build(BuildContext context) {
+    pageController = new PageController();
     return Scaffold(
       backgroundColor: kIvoryColor,
-      body: Column(
+      body: Stack(
+        children: [
+          PageView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context,position){
+              return _buildPage(context,position);
+            },itemCount: selectedItem.length,
+            controller: pageController,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Stack _buildPage(BuildContext context,int index){
+    return Stack(
+      children: [
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -26,10 +47,12 @@ class InitNext extends StatelessWidget {
                         color: kIvoryColor
                       ),
                       child: Center(child: Icon(Icons.arrow_back_ios, color: kPurpleColor,size: 20))), onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainPage()));
-              }
+                    if(index==0){
+                      Navigator.of(context).pop();
+                    }else{
+                      pageController.animateToPage(pageController.page.toInt()-1, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+                    }
+                }
               ),
             ),
             Center(
@@ -41,13 +64,13 @@ class InitNext extends StatelessWidget {
                   color: kWhiteIvoryColor
                 ),
                 child: Center(
-                  child: SvgPicture.asset('assets/images/icon/custom_coin.svg',width: 70,), //습관정보 받아서 유동적으로 바뀌어야함
+                  child: selectedItem[index][1],
                 ),
               ),
             ),
             SizedBox(height: 10,),
             Center(
-              child: Text("흡연",style: TextStyle(fontSize: 25,color: kPurpleColor,fontWeight: FontWeight.bold),),
+              child: Text(selectedItem[index][0],style: TextStyle(fontSize: 25,color: kPurpleColor,fontWeight: FontWeight.bold),),
             ),
             SizedBox(height: 9.5,),
             Center(
@@ -87,7 +110,23 @@ class InitNext extends StatelessWidget {
             )
           ],
         ),
+        (index == selectedItem.length-1)?
+          BottomPositionedBox("완료",(){
+//            if(){
+//              입력안된 인덱스 있으면 거기로 점프
+//            }else if(){
+//              입력안된 인덱스 없으면 provider로 값 넘겨줌
+//            }
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+          })
+          :BottomPositionedBox("다음",(){
+            pageController.animateToPage(pageController.page.toInt()+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
+        })
+      ],
     );
+  }
+
+  Future<void> _changePage() {
 
   }
 }

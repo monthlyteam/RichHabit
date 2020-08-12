@@ -5,6 +5,7 @@ import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/screens/Init_next.dart';
+import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'dart:math';
 
 import '../constants.dart';
@@ -18,45 +19,49 @@ class Init extends StatefulWidget {
 
 class InitState extends State<Init> with SingleTickerProviderStateMixin{
 
-  List<SvgPicture> icons;
-  List<Text> icons_name;
-  List<bool> icons_selected;
+  List<List<dynamic>> habits; //[name,icon,isSelceted]
+
   final textFieldController = TextEditingController();
   AnimationController controller;
   Animation<double> offsetAnimation;
   TextStyle txtstyle;
+
   @override
   void initState() {
     super.initState();
     controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this); //SingleTickerProviderSteteMixin과 연관이있는데 잘모르겠다
 
-    icons = new List<SvgPicture>();
-    icons_name = new List<Text>();
-    icons.add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/coffee.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/coffee.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/plus_circle.svg',color: kPurpleColor,width: 100,));
+    habits = List<List<dynamic>>.generate(
+      10,(int index) => []
+    );
+
     txtstyle = TextStyle(color: kPurpleColor, fontWeight: FontWeight.w600);
-    icons_name.add(Text("음주",style: txtstyle));
-    icons_name.add(Text("음주",style: txtstyle));
-    icons_name.add(Text("커피",style: txtstyle));
-    icons_name.add(Text("커피",style: txtstyle));
-    icons_name.add(Text("음주",style: txtstyle));
-    icons_name.add(Text("커피",style: txtstyle));
-    icons_name.add(Text("흡연",style: txtstyle));
-    icons_name.add(Text("커피",style: txtstyle));
-    icons_name.add(Text("흡연",style: txtstyle));
-    icons_name.add(Text("추가",style: txtstyle));
-    icons_selected = List<bool>.generate(icons_name.length, (index) => false);
-//    for(var i=0;i < 3;i++){
-//      this.icons += Image.asset()
-//    }
+    habits[0].add("음주");
+    habits[1].add("음주");
+    habits[2].add("커피");
+    habits[3].add("커피");
+    habits[4].add("음주");
+    habits[5].add("커피");
+    habits[6].add("흡연");
+    habits[7].add("커피");
+    habits[8].add("흡연");
+    habits[9].add("추가");
+
+    habits[0].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
+    habits[1].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
+    habits[2].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
+    habits[3].add(new SvgPicture.asset('assets/images/icon/coffee.svg'));
+    habits[4].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
+    habits[5].add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
+    habits[6].add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
+    habits[7].add(new SvgPicture.asset('assets/images/icon/coffee.svg'));
+    habits[8].add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
+    habits[9].add(new SvgPicture.asset('assets/images/icon/plus_circle.svg',color: kPurpleColor,width: 100,));
+
+
+    for(var i=0;i < habits.length;i++){
+      habits[i].add(false);
+    }
   }
 
   Future<double> whenNotZero(Stream<double> source) async{
@@ -66,10 +71,10 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
   }
 
 
-  List<String> _selectedListGenerator(List<bool> selectedList){
-    List<String> list = List<String>();
-    for(var i=0;i<selectedList.length;i++){
-      if(selectedList[i]==true) list.add(icons_name[i].data);
+  List<List<dynamic>> _selectedListGenerator(List<List<dynamic>> habits){
+    List<List<dynamic>> list = List<List<dynamic>>();
+    for(var i = 0 ; i < habits.length ; i++){
+      if(habits[i][2]==true) list.add(habits[i].sublist(0,2));
     }
     return list;
   }
@@ -128,12 +133,12 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                       children: <Widget>[
                                         GestureDetector(
                                           onTap: () {
-                                            if(index == icons.length-1){
+                                            if(index == habits.length-1){
                                               _showAddDialog(context);
                                             }else{
                                               setState(() {
-                                                icons_selected[index] =
-                                                !icons_selected[index];
+                                                habits[index][2] =
+                                                !habits[index][2];
                                               });
                                             }
                                           },
@@ -149,9 +154,9 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
 
                                             child: Stack(
                                               children:
-                                              icons_selected[index] ?
+                                              habits[index][2] ?
                                               [Center(child:
-                                              icons[index]),
+                                              habits[index][1]),
                                                 Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
@@ -163,66 +168,48 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                                 )
                                               ]
                                                   : [
-                                                Center(child: icons[index])
+                                                Center(child: habits[index][1])
                                               ],
                                             ),
                                           ),
                                         ),
                                         SizedBox(height: 10,),
-                                        FittedBox(fit:BoxFit.fitHeight,child: icons_name[index]),
+                                        FittedBox(fit:BoxFit.fitHeight,child: Text(habits[index][0],style: txtstyle,)),
                                       ],
                                     ),
                                   );
                             },
-                            childCount: icons_name.length,
+                            childCount: habits.length,
                           ),
                         ),
                       ),
                       SliverAppBar(backgroundColor: kIvoryColor)
                     ],
                   ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        if(icons_selected.indexOf(true) == -1){
-                          Fluttertoast.showToast(
-                              msg: "최소 한개를 선택해주세요!",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.grey,
-                              textColor: Colors.white,
-                              fontSize: 16.0
-                          );
-                        }else{
-                          Navigator.push(
+                  BottomPositionedBox("다 체크 했어요!  →",() {
+                    bool isAnythingSelected = false;
+                    for(var i = 0; i<habits.length;i++){
+                      if(habits[i][2]==true) {
+                        isAnythingSelected = true;
+                        break;
+                      }
+                    }
+                    if(isAnythingSelected == false){
+                      Fluttertoast.showToast(
+                          msg: "최소 한개를 선택해주세요!",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
+                    }else{
+                      Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(icons_selected),)));
-                        }
-                      },
-                      child: Container(
-                        decoration:BoxDecoration(
-                          color: kPurpleColor,
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(19)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        width: size.width,
-                        height: 80,
-                        child: Center(
-                          child: Text("다 체크 했어요!  →",style: TextStyle(fontSize: 20,color: kWhiteIvoryColor,fontWeight: FontWeight.w600)),
-                        ),
-                      ),
-                    ),
-                  )
+                          MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(habits))));
+                    }
+                  })
                 ],
               ),
             );
@@ -293,19 +280,23 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                 print('${offsetAnimation.value + 8.0}');
                                 return Container(
                                   padding: EdgeInsets.only(left: offsetAnimation.value + 15.0, right: 15.0 - offsetAnimation.value),
-                                  child: TextField(
-                                    style: TextStyle(color: kPurpleColor),
-                                    controller: textFieldController,
-                                    decoration: new InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: kPurpleColor, width: 1.0),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: kPurpleColor.withOpacity(0.5), width: 1.0),
-                                      ),
+                                  child: CupertinoTextField(
+                                    decoration: new BoxDecoration(
+                                      color: Colors.white,
                                     ),
+                                    padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
+                                    style: TextStyle(color: kPurpleColor,textBaseline:null),
+                                    controller: textFieldController,
+//                                    decoration: new InputDecoration(
+//                                      fillColor: Colors.white,
+//                                      filled: true,
+//                                      focusedBorder: OutlineInputBorder(
+//                                        borderSide: BorderSide(color: kPurpleColor, width: 1.0),
+//                                      ),
+//                                      enabledBorder: OutlineInputBorder(
+//                                        borderSide: BorderSide(color: kPurpleColor.withOpacity(0.5), width: 1.0),
+//                                      ),
+//                                    ),
                                   ),
                                 );
                               }),
@@ -346,15 +337,18 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                           child: GestureDetector(
                             onTap: (){
                               print(textFieldController.text);
-                              if(textFieldController.text.isNotEmpty ){
+                              if(textFieldController.text.trim().isNotEmpty ){
                                 Navigator.pop(context);
                                 setState((){
-                                icons.insert(icons.length-1,new SvgPicture.asset('assets/images/icon/custom_coin.svg',fit: BoxFit.cover,));
-                                icons_name.insert(icons_name.length-1,Text(textFieldController.text,style: txtstyle));
-                                icons_selected.insert(icons_selected.length-1,true);
+                                  habits.insert(
+                                      habits.length-1,
+                                      [textFieldController.text,
+                                        new SvgPicture.asset('assets/images/icon/custom_coin.svg',fit: BoxFit.cover,),
+                                        true
+                                      ]);
                                 });
                                 textFieldController.clear();
-                              }else if(textFieldController.text.isEmpty){
+                              }else if(textFieldController.text.trim().isEmpty){
                                 controller.forward(from: 0.0);
                               }
                             },
