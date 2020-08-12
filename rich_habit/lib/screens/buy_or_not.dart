@@ -27,12 +27,12 @@ class _BuyOrNotState extends State<BuyOrNot> {
   List<DropdownMenuItem> _getPercent() => List.generate(20, (index) {
         return DropdownMenuItem(
           child: Container(
-            width: 50.0,
+            width: 30.0,
             child: Text(
-              "${index + 1}%",
+              "${index + 1}",
               textAlign: TextAlign.end,
               style: TextStyle(
-                  fontSize: kTitleFontSize,
+                  fontSize: 20,
                   color: kWhiteIvoryColor,
                   fontWeight: FontWeight.bold),
             ),
@@ -45,12 +45,12 @@ class _BuyOrNotState extends State<BuyOrNot> {
         return DropdownMenuItem(
           child: Container(
             alignment: Alignment.center,
-            width: 30.0,
+            width: 25.0,
             child: Text(
               "${(index + 1) * 5}",
               textAlign: TextAlign.end,
               style: TextStyle(
-                  fontSize: kTitleFontSize,
+                  fontSize: 20.0,
                   color: kWhiteIvoryColor,
                   fontWeight: FontWeight.bold),
             ),
@@ -78,12 +78,14 @@ class _BuyOrNotState extends State<BuyOrNot> {
         maintain = maintainInput * 30;
         break;
       default:
-        print("씨빨");
+        print("틀림");
         break;
     }
+    print("money : $money,main $maintain, year : $_year, per : $_percent");
     for (var i = 0; i < _year * 12; i++) {
       v = money * _percent / 100 / 12;
       money += maintain + v;
+      print("money $i : $money");
     }
     setState(() {
       _price = money;
@@ -155,7 +157,7 @@ class _BuyOrNotState extends State<BuyOrNot> {
                         ),
                       ),
                       Text(
-                        "월 복리로,  ",
+                        "% 월 복리로,  ",
                         style:
                             TextStyle(color: kWhiteIvoryColor, fontSize: 20.0),
                         textAlign: TextAlign.center,
