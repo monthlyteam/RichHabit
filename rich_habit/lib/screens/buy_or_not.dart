@@ -44,8 +44,7 @@ class _BuyOrNotState extends State<BuyOrNot> {
   List<DropdownMenuItem> _getYear() => List.generate(6, (index) {
         return DropdownMenuItem(
           child: Container(
-            alignment: Alignment.center,
-            width: 25.0,
+            width: 30.0,
             child: Text(
               "${(index + 1) * 5}",
               textAlign: TextAlign.end,
