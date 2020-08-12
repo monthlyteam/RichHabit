@@ -68,7 +68,7 @@ class InitNext extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(height: 29.5,),
-                        Text("①  평소 얼마나 자주 흡연을 하십니까?",style: TextStyle(color: kPurpleColor,fontSize: 16),),
+                        Text("①  평소 얼마나 자주 소비하십니까?",style: TextStyle(color: kPurpleColor,fontSize: 16),),
                         SizedBox(height: 5.5,),
                       ],
                     ),
