@@ -18,9 +18,18 @@ class InitNext extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 20,top: 50,bottom: 10),
               child: GestureDetector(
-                  child:Icon(Icons.arrow_back_ios, color: kPurpleColor,size: 20), onTap: (){
-                //가장 처음화면으로 돌아가기
-                }
+                  child:Container(
+                    width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: kIvoryColor
+                      ),
+                      child: Center(child: Icon(Icons.arrow_back_ios, color: kPurpleColor,size: 20))), onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainPage()));
+              }
               ),
             ),
             Center(
@@ -32,7 +41,7 @@ class InitNext extends StatelessWidget {
                   color: kWhiteIvoryColor
                 ),
                 child: Center(
-                  child: SvgPicture.asset('images/icon/custom_coin.svg',width: 70,), //습관정보 받아서 유동적으로 바뀌어야함
+                  child: SvgPicture.asset('assets/images/icon/custom_coin.svg',width: 70,), //습관정보 받아서 유동적으로 바뀌어야함
                 ),
               ),
             ),
