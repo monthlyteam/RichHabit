@@ -41,7 +41,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
     icons.add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
     icons.add(new SvgPicture.asset('assets/images/icon/coffee.svg'));
     icons.add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
-    icons.add(new SvgPicture.asset('assets/images/icon/plus.svg',color: kPurpleColor,width: 100,));
+    icons.add(new SvgPicture.asset('assets/images/icon/plus_circle.svg',color: kPurpleColor,width: 100,));
     txtstyle = TextStyle(color: kPurpleColor, fontWeight: FontWeight.w600);
     icons_name.add(Text("음주",style: txtstyle));
     icons_name.add(Text("음주",style: txtstyle));
