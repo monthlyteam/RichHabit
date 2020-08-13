@@ -1,18 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/main_page.dart';
+import 'package:richhabit/screens/home.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 
-class InitNext extends StatelessWidget {
+
+class InitNext extends StatefulWidget{
 
   final List<List<dynamic>> selectedItem;
-  PageController pageController;
+
   InitNext({@required this.selectedItem});
 
   @override
+  State createState() => _InitNextState();
+}
+
+class _InitNextState extends State<InitNext> {
+
+  List<List<dynamic>> _selectedItem;
+
+  PageController pageController;
+  List<TextEditingController> controllers = new List<TextEditingController>(3);
+
+  List<Map> habitList;
+
+  @override
+  void initState() {
+    super.initState();
+    this._selectedItem = widget.selectedItem;
+    habitList = new List<Map>(_selectedItem.length);
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     pageController = new PageController();
     return Scaffold(
       backgroundColor: kIvoryColor,
@@ -22,7 +46,7 @@ class InitNext extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context,position){
               return _buildPage(context,position);
-            },itemCount: selectedItem.length,
+            },itemCount: _selectedItem.length,
             controller: pageController,
           ),
         ],
@@ -30,7 +54,14 @@ class InitNext extends StatelessWidget {
     );
   }
 
+
   Stack _buildPage(BuildContext context,int index){
+    if(habitList[index] != null){
+      controllers[0]..text = habitList[index][''];
+      controllers[1]..text = habitList[index][''];
+      controllers[2]..text = habitList[index]['name'];
+    }
+
     return Stack(
       children: [
         Column(
@@ -64,13 +95,13 @@ class InitNext extends StatelessWidget {
                   color: kWhiteIvoryColor
                 ),
                 child: Center(
-                  child: selectedItem[index][1],
+                  child: SvgPicture.asset(_selectedItem[index][1]),
                 ),
               ),
             ),
             SizedBox(height: 10,),
             Center(
-              child: Text(selectedItem[index][0],style: TextStyle(fontSize: 25,color: kPurpleColor,fontWeight: FontWeight.bold),),
+              child: Text(_selectedItem[index][0],style: TextStyle(fontSize: 25,color: kPurpleColor,fontWeight: FontWeight.bold),),
             ),
             SizedBox(height: 9.5,),
             Center(
@@ -92,16 +123,167 @@ class InitNext extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top:Radius.circular(25)),
                   color: kWhiteIvoryColor
                 ),
-                padding: EdgeInsets.fromLTRB(20, 29.5, 20, 100),
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 100),
                 child: ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   children: [
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 29.5,),
                         Text("①  평소 얼마나 자주 소비하십니까?",style: TextStyle(color: kPurpleColor,fontSize: 16),),
                         SizedBox(height: 5.5,),
+                        Container(
+                          margin: EdgeInsets.only(left: 8),
+                          padding: EdgeInsets.only(left: 20,top: 5,bottom: 15),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              left: BorderSide(width: 1,color: kPurpleColor),
+                            )
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    child: Row(
+                                      children:[
+                                        Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,),
+                                        SizedBox(width:5.5),
+                                        Text("매일", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.bold)),
+                                      ],
+                                    ),
+                                    onTap: (){},
+                                  ),
+                                  SizedBox(width: 20.5,),
+                                  GestureDetector(
+                                    child: Row(
+                                      children:[
+                                        Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,),
+                                        SizedBox(width:5.5),
+                                        Text("매주", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.normal)),
+                                      ],
+                                    ),
+                                    onTap: (){},
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 152,
+                                    height: 23,
+                                    child: CupertinoTextField(
+
+                                      controller: controllers[0],
+                                      padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+                                      textAlign: TextAlign.end,
+                                      keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
+                                    ),
+                                  ),
+                                  SizedBox(width: 5.5,),
+                                  Text("회",style: TextStyle(color: kPurpleColor),)
+                                ],
+                              ),
+                              SizedBox(
+                                height: 19.5,
+                              ),
+                              Text("흡연 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 12),),
+                              SizedBox(height: 2.5,),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 152,
+                                    height: 23,
+                                    child: CupertinoTextField(
+                                      controller: controllers[1],
+                                      padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+                                      textAlign: TextAlign.end,
+                                      keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
+                                    ),
+                                  ),
+                                  SizedBox(width: 5.5,),
+                                  Text("원",style: TextStyle(color: kPurpleColor),)
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("② 앞으로의 목표치를 정해주세요!",style: TextStyle(color: kPurpleColor,fontSize: 16),),
+                        SizedBox(height: 5.5,),
+                        Container(
+                          margin: EdgeInsets.only(left: 8),
+                          padding: EdgeInsets.only(left: 20,top: 5,bottom: 5),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                left: BorderSide(width: 1,color: kPurpleColor),
+                              )
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    child: Row(
+                                      children:[
+                                        Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,),
+                                        SizedBox(width:5.5),
+                                        Text("매일", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.bold)),
+                                      ],
+                                    ),
+                                    onTap: (){},
+                                  ),
+                                  SizedBox(width: 20.5,),
+                                  GestureDetector(
+                                    child: Row(
+                                      children:[
+                                        Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,),
+                                        SizedBox(width:5.5),
+                                        Text("매주", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.normal)),
+                                      ],
+                                    ),
+                                    onTap: (){},
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 152,
+                                    height: 23,
+                                    child: CupertinoTextField(
+                                      controller: controllers[2],
+                                      padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+                                      textAlign: TextAlign.end,
+                                      keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
+                                    ),
+                                  ),
+                                  SizedBox(width: 5.5,),
+                                  Text("회",style: TextStyle(color: kPurpleColor),)
+                                ],
+                              ),
+                              SizedBox(height: 50),
+                              Center(
+                                  child:
+                                  Column(
+                                    children: [
+                                      Text("\"평소 습관 보다 매일 15,000원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                      Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
+                                    ],
+                                  )
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -110,16 +292,18 @@ class InitNext extends StatelessWidget {
             )
           ],
         ),
-        (index == selectedItem.length-1)?
+        (index == _selectedItem.length-1)?
           BottomPositionedBox("완료",(){
-//            if(){
-//              입력안된 인덱스 있으면 거기로 점프
-//            }else if(){
-//              입력안된 인덱스 없으면 provider로 값 넘겨줌
-//            }
+//          provider로 값 넘겨줌
             Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
           })
           :BottomPositionedBox("다음",(){
+            if(habitList[index]!=null){
+             habitList[pageController.page.toInt()] = ({"name": _selectedItem[pageController.page.toInt()][0], "iconURL": _selectedItem[pageController.page.toInt()][1], "price": int.parse(controllers[1].text),"usualIsWeek": null, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": null, "goalAmount": int.parse(controllers[2].text)});
+              controllers[0].clear();
+              controllers[1].clear();
+              controllers[2].clear();
+            }
             pageController.animateToPage(pageController.page.toInt()+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
         })
       ],

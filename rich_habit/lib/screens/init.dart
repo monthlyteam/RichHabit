@@ -47,16 +47,16 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
     habits[8].add("흡연");
     habits[9].add("추가");
 
-    habits[0].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    habits[1].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    habits[2].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    habits[3].add(new SvgPicture.asset('assets/images/icon/coffee.svg'));
-    habits[4].add(new SvgPicture.asset('assets/images/icon/beer.svg'));
-    habits[5].add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
-    habits[6].add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
-    habits[7].add(new SvgPicture.asset('assets/images/icon/coffee.svg'));
-    habits[8].add(new SvgPicture.asset('assets/images/icon/smoking.svg'));
-    habits[9].add(new SvgPicture.asset('assets/images/icon/plus_circle.svg',color: kPurpleColor,width: 100,));
+    habits[1].add('assets/images/icon/beer.svg');
+    habits[2].add('assets/images/icon/beer.svg');
+    habits[0].add('assets/images/icon/beer.svg');
+    habits[3].add('assets/images/icon/coffee.svg');
+    habits[4].add('assets/images/icon/beer.svg');
+    habits[5].add('assets/images/icon/smoking.svg');
+    habits[6].add('assets/images/icon/smoking.svg');
+    habits[7].add('assets/images/icon/coffee.svg');
+    habits[8].add('assets/images/icon/smoking.svg');
+    habits[9].add('assets/images/icon/plus_circle.svg');
 
 
     for(var i=0;i < habits.length;i++){
@@ -156,7 +156,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                               children:
                                               habits[index][2] ?
                                               [Center(child:
-                                              habits[index][1]),
+                                              SvgPicture.asset(habits[index][1])),
                                                 Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
@@ -168,7 +168,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                                 )
                                               ]
                                                   : [
-                                                Center(child: habits[index][1])
+                                                Center(child: SvgPicture.asset(habits[index][1]))
                                               ],
                                             ),
                                           ),
@@ -355,7 +355,6 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                             child: Center(
                               child: Text("저장",style: TextStyle(fontSize: kSubTitleFontSize,color: kIvoryColor,fontWeight: FontWeight.bold),),
                             )
-
                           )
                         )
                       ],
