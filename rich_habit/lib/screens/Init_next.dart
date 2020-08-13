@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/main_page.dart';
 import 'package:richhabit/screens/home.dart';
@@ -303,8 +304,18 @@ class _InitNextState extends State<InitNext> {
               controllers[0].clear();
               controllers[1].clear();
               controllers[2].clear();
+              pageController.animateToPage(pageController.page.toInt()+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
+            }else{
+              Fluttertoast.showToast(
+                  msg: "정보를 빠짐없이 입력해주세요!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
             }
-            pageController.animateToPage(pageController.page.toInt()+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
         })
       ],
     );
@@ -317,3 +328,6 @@ class _InitNextState extends State<InitNext> {
 
 //https://github.com/flutter/flutter/issues/18846
 //https://medium.com/flutterpub/flutter-keyboard-actions-and-next-focus-field-3260dc4c694
+// 매일 매주 선택가능하고, 변수로 저장하는거
+// 오토포커싱
+// 3개 다 입력하면 절약비용 나오기
