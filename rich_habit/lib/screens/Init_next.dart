@@ -25,7 +25,8 @@ class _InitNextState extends State<InitNext> {
 
   PageController pageController;
   List<TextEditingController> controllers = new List<TextEditingController>(3);
-
+  bool goalIsWeek = false;
+  bool usualIsWeek = false;
   List<Map> habitList;
 
   @override
@@ -33,12 +34,13 @@ class _InitNextState extends State<InitNext> {
     super.initState();
     this._selectedItem = widget.selectedItem;
     habitList = new List<Map>(_selectedItem.length);
+    controllers = List<TextEditingController>.generate(3, (index) => TextEditingController());
+    pageController = new PageController();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    pageController = new PageController();
     return Scaffold(
       backgroundColor: kIvoryColor,
       body: Stack(
@@ -57,12 +59,6 @@ class _InitNextState extends State<InitNext> {
 
 
   Stack _buildPage(BuildContext context,int index){
-    if(habitList[index] != null){
-      controllers[0]..text = habitList[index][''];
-      controllers[1]..text = habitList[index][''];
-      controllers[2]..text = habitList[index]['name'];
-    }
-
     return Stack(
       children: [
         Column(
@@ -82,7 +78,10 @@ class _InitNextState extends State<InitNext> {
                     if(index==0){
                       Navigator.of(context).pop();
                     }else{
-                      pageController.animateToPage(pageController.page.toInt()-1, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+                      pageController.animateToPage(index-1, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+                      controllers[0]..text = habitList[index-1]['usualAmount'].toString();
+                      controllers[1]..text = habitList[index-1]['price'].toString();
+                      controllers[2]..text = habitList[index-1]['goalAmount'].toString();
                     }
                 }
               ),
@@ -150,23 +149,35 @@ class _InitNextState extends State<InitNext> {
                                   GestureDetector(
                                     child: Row(
                                       children:[
-                                        Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,),
+                                        usualIsWeek?
+                                        Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,)
+                                        :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,),
                                         SizedBox(width:5.5),
                                         Text("매일", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.bold)),
                                       ],
                                     ),
-                                    onTap: (){},
+                                    onTap: (){
+                                      setState(() {
+                                        usualIsWeek = false;
+                                      });
+                                    },
                                   ),
                                   SizedBox(width: 20.5,),
                                   GestureDetector(
                                     child: Row(
                                       children:[
-                                        Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,),
+                                        usualIsWeek?
+                                        Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,)
+                                            :Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,),
                                         SizedBox(width:5.5),
                                         Text("매주", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.normal)),
                                       ],
                                     ),
-                                    onTap: (){},
+                                    onTap: (){
+                                      setState(() {
+                                        usualIsWeek = true;
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
@@ -235,23 +246,35 @@ class _InitNextState extends State<InitNext> {
                                   GestureDetector(
                                     child: Row(
                                       children:[
-                                        Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,),
+                                        goalIsWeek?
+                                        Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,)
+                                            :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,),
                                         SizedBox(width:5.5),
                                         Text("매일", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.bold)),
                                       ],
                                     ),
-                                    onTap: (){},
+                                    onTap: (){
+                                      setState(() {
+                                        goalIsWeek = false;
+                                      });
+                                    },
                                   ),
                                   SizedBox(width: 20.5,),
                                   GestureDetector(
                                     child: Row(
                                       children:[
-                                        Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,),
+                                        goalIsWeek?
+                                        Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,)
+                                            :Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,),
                                         SizedBox(width:5.5),
                                         Text("매주", style: TextStyle(color: kPurpleColor,fontSize: 16,fontWeight: FontWeight.normal)),
                                       ],
                                     ),
-                                    onTap: (){},
+                                    onTap: (){
+                                      setState(() {
+                                        goalIsWeek = true;
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
@@ -294,18 +317,25 @@ class _InitNextState extends State<InitNext> {
           ],
         ),
         (index == _selectedItem.length-1)?
-          BottomPositionedBox("완료",(){
-//          provider로 값 넘겨줌
+          BottomPositionedBox("완료", (){
+            if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
+              Fluttertoast.showToast(
+                  msg: "정보를 빠짐없이 입력해주세요!",  
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }else{
+              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text)});
+            }
+            print(habitList);
             Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
           })
           :BottomPositionedBox("다음",(){
-            if(habitList[index]!=null){
-             habitList[pageController.page.toInt()] = ({"name": _selectedItem[pageController.page.toInt()][0], "iconURL": _selectedItem[pageController.page.toInt()][1], "price": int.parse(controllers[1].text),"usualIsWeek": null, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": null, "goalAmount": int.parse(controllers[2].text)});
-              controllers[0].clear();
-              controllers[1].clear();
-              controllers[2].clear();
-              pageController.animateToPage(pageController.page.toInt()+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
-            }else{
+            if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
               Fluttertoast.showToast(
                   msg: "정보를 빠짐없이 입력해주세요!",
                   toastLength: Toast.LENGTH_SHORT,
@@ -315,19 +345,29 @@ class _InitNextState extends State<InitNext> {
                   textColor: Colors.white,
                   fontSize: 16.0
               );
+            }else{
+              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text)});
+              goalIsWeek = false;
+              usualIsWeek = false;
+              pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
+              if(habitList[index+1] != null){
+                controllers[0]..text = habitList[index+1]['usualAmount'].toString();
+                controllers[1]..text = habitList[index+1]['price'].toString();
+                controllers[2]..text = habitList[index+1]['goalAmount'].toString();
+              }else{
+                controllers[0].clear();
+                controllers[1].clear();
+                controllers[2].clear();
+              }
             }
         })
       ],
     );
   }
-
-  Future<void> _changePage() {
-
-  }
 }
 
 //https://github.com/flutter/flutter/issues/18846
 //https://medium.com/flutterpub/flutter-keyboard-actions-and-next-focus-field-3260dc4c694
-// 매일 매주 선택가능하고, 변수로 저장하는거
+// Todo
 // 오토포커싱
 // 3개 다 입력하면 절약비용 나오기
