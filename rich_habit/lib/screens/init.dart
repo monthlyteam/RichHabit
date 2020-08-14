@@ -19,7 +19,7 @@ class Init extends StatefulWidget {
 
 class InitState extends State<Init> with SingleTickerProviderStateMixin{
 
-  List<List<dynamic>> habits; //[name,icon,isSelceted]
+  List<List<dynamic>> habitsRough; //[name,icon,isSelceted]
 
   final textFieldController = TextEditingController();
   AnimationController controller;
@@ -31,36 +31,36 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
     super.initState();
     controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this); //SingleTickerProviderSteteMixin과 연관이있는데 잘모르겠다
 
-    habits = List<List<dynamic>>.generate(
+    habitsRough = List<List<dynamic>>.generate(
       10,(int index) => []
     );
 
     txtstyle = TextStyle(color: kPurpleColor, fontWeight: FontWeight.w600);
-    habits[0].add("음주");
-    habits[1].add("음주");
-    habits[2].add("커피");
-    habits[3].add("커피");
-    habits[4].add("음주");
-    habits[5].add("커피");
-    habits[6].add("흡연");
-    habits[7].add("커피");
-    habits[8].add("흡연");
-    habits[9].add("추가");
+    habitsRough[0].add("음주");
+    habitsRough[1].add("음주");
+    habitsRough[2].add("커피");
+    habitsRough[3].add("커피");
+    habitsRough[4].add("음주");
+    habitsRough[5].add("커피");
+    habitsRough[6].add("흡연");
+    habitsRough[7].add("커피");
+    habitsRough[8].add("흡연");
+    habitsRough[9].add("추가");
 
-    habits[1].add('assets/images/icon/beer.svg');
-    habits[2].add('assets/images/icon/beer.svg');
-    habits[0].add('assets/images/icon/beer.svg');
-    habits[3].add('assets/images/icon/coffee.svg');
-    habits[4].add('assets/images/icon/beer.svg');
-    habits[5].add('assets/images/icon/smoking.svg');
-    habits[6].add('assets/images/icon/smoking.svg');
-    habits[7].add('assets/images/icon/coffee.svg');
-    habits[8].add('assets/images/icon/smoking.svg');
-    habits[9].add('assets/images/icon/plus_circle.svg');
+    habitsRough[1].add('assets/images/icon/beer.svg');
+    habitsRough[2].add('assets/images/icon/beer.svg');
+    habitsRough[0].add('assets/images/icon/beer.svg');
+    habitsRough[3].add('assets/images/icon/coffee.svg');
+    habitsRough[4].add('assets/images/icon/beer.svg');
+    habitsRough[5].add('assets/images/icon/smoking.svg');
+    habitsRough[6].add('assets/images/icon/smoking.svg');
+    habitsRough[7].add('assets/images/icon/coffee.svg');
+    habitsRough[8].add('assets/images/icon/smoking.svg');
+    habitsRough[9].add('assets/images/icon/plus_circle.svg');
 
 
-    for(var i=0;i < habits.length;i++){
-      habits[i].add(false);
+    for(var i=0;i < habitsRough.length;i++){
+      habitsRough[i].add(false);
     }
   }
 
@@ -71,10 +71,10 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
   }
 
 
-  List<List<dynamic>> _selectedListGenerator(List<List<dynamic>> habits){
+  List<List<dynamic>> _selectedListGenerator(List<List<dynamic>> habitsRough){
     List<List<dynamic>> list = List<List<dynamic>>();
-    for(var i = 0 ; i < habits.length ; i++){
-      if(habits[i][2]==true) list.add(habits[i].sublist(0,2));
+    for(var i = 0 ; i < habitsRough.length ; i++){
+      if(habitsRough[i][2]==true) list.add(habitsRough[i].sublist(0,2));
     }
     return list;
   }
@@ -113,6 +113,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                         ),
                       ),
                       SliverGroupBuilder(
+                        padding: EdgeInsets.only(bottom: 80),
                         decoration: BoxDecoration(
                           color: kIvoryColor,
                           borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
@@ -133,12 +134,12 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                       children: <Widget>[
                                         GestureDetector(
                                           onTap: () {
-                                            if(index == habits.length-1){
+                                            if(index == habitsRough.length-1){
                                               _showAddDialog(context);
                                             }else{
                                               setState(() {
-                                                habits[index][2] =
-                                                !habits[index][2];
+                                                habitsRough[index][2] =
+                                                !habitsRough[index][2];
                                               });
                                             }
                                           },
@@ -154,9 +155,9 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
 
                                             child: Stack(
                                               children:
-                                              habits[index][2] ?
+                                              habitsRough[index][2] ?
                                               [Center(child:
-                                              SvgPicture.asset(habits[index][1])),
+                                              SvgPicture.asset(habitsRough[index][1])),
                                                 Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
@@ -168,28 +169,27 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                                 )
                                               ]
                                                   : [
-                                                Center(child: SvgPicture.asset(habits[index][1]))
+                                                Center(child: SvgPicture.asset(habitsRough[index][1]))
                                               ],
                                             ),
                                           ),
                                         ),
                                         SizedBox(height: 10,),
-                                        FittedBox(fit:BoxFit.fitHeight,child: Text(habits[index][0],style: txtstyle,)),
+                                        FittedBox(fit:BoxFit.fitHeight,child: Text(habitsRough[index][0],style: txtstyle,)),
                                       ],
                                     ),
                                   );
                             },
-                            childCount: habits.length,
+                            childCount: habitsRough.length,
                           ),
                         ),
                       ),
-                      SliverAppBar(backgroundColor: kIvoryColor)
                     ],
                   ),
                   BottomPositionedBox("다 체크 했어요!  →",() {
                     bool isAnythingSelected = false;
-                    for(var i = 0; i<habits.length;i++){
-                      if(habits[i][2]==true) {
+                    for(var i = 0; i<habitsRough.length;i++){
+                      if(habitsRough[i][2]==true) {
                         isAnythingSelected = true;
                         break;
                       }
@@ -207,7 +207,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                     }else{
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(habits))));
+                          MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(habitsRough))));
                     }
                   })
                 ],
@@ -340,8 +340,8 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                               if(textFieldController.text.trim().isNotEmpty ){
                                 Navigator.pop(context);
                                 setState((){
-                                  habits.insert(
-                                      habits.length-1,
+                                  habitsRough.insert(
+                                      habitsRough.length-1,
                                       [textFieldController.text,
                                         new SvgPicture.asset('assets/images/icon/custom_coin.svg',fit: BoxFit.cover,),
                                         true
@@ -387,9 +387,14 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 50),
-            GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
-              //가장 처음화면으로 돌아가기
-            }),
+            Container(
+              height: 40,
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){}),
+              ),
+            ),
             SizedBox(height: 20,),
             Text("습관 입력하기",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
             SizedBox(height: 11,),

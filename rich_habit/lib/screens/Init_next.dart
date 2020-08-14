@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/main_page.dart';
 import 'package:richhabit/screens/home.dart';
+import 'package:richhabit/screens/trigger.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 
 
@@ -329,10 +330,10 @@ class _InitNextState extends State<InitNext> {
                   fontSize: 16.0
               );
             }else{
-              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text)});
+              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
             }
             print(habitList);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
           })
           :BottomPositionedBox("다음",(){
             if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
@@ -346,7 +347,7 @@ class _InitNextState extends State<InitNext> {
                   fontSize: 16.0
               );
             }else{
-              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text)});
+              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
               goalIsWeek = false;
               usualIsWeek = false;
               pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
@@ -371,3 +372,11 @@ class _InitNextState extends State<InitNext> {
 // Todo
 // 오토포커싱
 // 3개 다 입력하면 절약비용 나오기
+
+
+/////////////////////////////////////////
+//habitList : List<map{"name": String, "iconURL": String, "price": int,"usualIsWeek":bool, "usualAmount": int, "goalIsWeek": bool,
+// "goalAmount": int,"isTrigger":bool}>
+//BottomPositionedBox("완료",(){
+//  이부분에서 provider에 habitList[index] + DateTime.now 해서 Habit객체 만들어 넘겨줘야함.
+//})
