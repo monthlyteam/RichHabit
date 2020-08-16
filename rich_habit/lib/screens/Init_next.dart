@@ -193,7 +193,9 @@ class _InitNextState extends State<InitNext> {
                                       controller: controllers[0],
                                       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                       textAlign: TextAlign.end,
-                                      keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
+                                      maxLines: 1,
+                                      placeholder: "0",
+                                      keyboardType: TextInputType.numberWithOptions(),
                                     ),
                                   ),
                                   SizedBox(width: 5.5,),
@@ -212,9 +214,11 @@ class _InitNextState extends State<InitNext> {
                                     height: 23,
                                     child: CupertinoTextField(
                                       controller: controllers[1],
+                                      maxLines: 1,
+                                      placeholder: "0",
                                       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                       textAlign: TextAlign.end,
-                                      keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
+                                      keyboardType: TextInputType.numberWithOptions(),
                                     ),
                                   ),
                                   SizedBox(width: 5.5,),
@@ -287,9 +291,11 @@ class _InitNextState extends State<InitNext> {
                                     height: 23,
                                     child: CupertinoTextField(
                                       controller: controllers[2],
+                                      maxLines: 1,
+                                      placeholder: "0",
                                       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                       textAlign: TextAlign.end,
-                                      keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
+                                      keyboardType: TextInputType.numberWithOptions(),
                                     ),
                                   ),
                                   SizedBox(width: 5.5,),
@@ -330,17 +336,19 @@ class _InitNextState extends State<InitNext> {
                   fontSize: 16.0
               );
             }else{
-              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
+              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
               for(var i = 0; i<habitList.length ; i++){
-                context.watch<HabitProvider>().addHabit(Habit(addedTimeID: DateTime.now(),isTrigger: habitList[index]['isTrigger'],
-                    name: habitList[index]['name'],
-                    iconURL: habitList[index]['iconURL'],
-                    price: habitList[index]['price'],
-                    usualAmount: habitList[index]['usualAmount'],
-                    usualIsWeek: habitList[index]['usualWeek'],
-                    goalIsWeek: habitList[index]['goalIsWeek'],
-                    goalAmount: habitList[index]['goalAmount']
-                )
+                Provider.of<HabitProvider>(context,listen: false,).addHabit(Habit(
+                    addedTimeID: DateTime.now(),
+                    isTrigger: habitList[i]['isTrigger'],
+                    name: habitList[i]['name'],
+                    iconURL: habitList[i]['iconURL'],
+                    price: habitList[i]['price'],
+                    usualAmount: habitList[i]['usualAmount'],
+                    usualIsWeek: habitList[i]['usualWeek'],
+                    goalIsWeek: habitList[i]['goalIsWeek'],
+                    goalAmount: habitList[i]['goalAmount']
+                  )
                 );
               }
               Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));

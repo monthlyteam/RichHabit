@@ -159,24 +159,26 @@ class _TriggerNextState extends State<TriggerNext> {
         BottomPositionedBox("완료", (){
           triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
           for(var i = 0; i<triggerList.length ; i++){
-            context.watch<HabitProvider>().addHabit(Habit(addedTimeID: DateTime.now(),isTrigger: triggerList[index]['isTrigger'],
-                name: triggerList[index]['name'],
-              iconURL: triggerList[index]['iconURL'],
-              price: 0,
-              usualAmount: 0,
-              usualIsWeek: false,
-              goalIsWeek: false,
-              goalAmount: 0
-            )
+            context.watch<HabitProvider>().addHabit(Habit(
+                addedTimeID: DateTime.now(),
+                isTrigger: triggerList[i]['isTrigger'],
+                name: triggerList[i]['name'],
+                iconURL: triggerList[i]['iconURL'],
+                price: 0,
+                usualAmount: 0,
+                usualIsWeek: false,
+                goalIsWeek: false,
+                goalAmount: 0
+              )
             );
           }
           Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
           print(triggerList);
-        },context)
+        })
             :BottomPositionedBox("다음",(){
             triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
             pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
-        },context)
+        })
       ],
     );
   }
