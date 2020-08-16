@@ -20,7 +20,7 @@ class HabitProvider with ChangeNotifier {
     initHabit();
   }
 
-  //날짜 확인후 처음 들어오면 이전 습관 틀 제공
+  //날짜 확인후 오 처음 들어오면 이전 습관 틀 제공
   void initHabit() {
     var dailyKeys = dailyHabit.keys.toList();
     var weeklyKeys = weeklyHabit.keys.toList();
@@ -123,10 +123,30 @@ class HabitProvider with ChangeNotifier {
         dailyHabit[nowDate][index].price = newPrice;
       }
     } else {
+      DateTime date = nowDate;
+      int weekDay = nowDate.weekday;
       //주기가 바뀐거 경우라면(Daily -> Weekly)
-      int thisWeek = nowDate.weekday;
-      // TODO: 1.Modify Cycle Daily to Weekly
-      for (int i = 0; i > thisWeek; i++) {}
+      int index = dailyHabit[nowDate]
+          .indexWhere((element) => element.addedTimeID == addedTimeID);
+
+      Habit changedHabit = dailyHabit[nowDate][index];
+      changedHabit.goalIsWeek = true;
+      changedHabit.goalAmount = newAmount;
+      changedHabit.price = newPrice;
+
+      int sum = 0;
+      while (index != -1 || weekDay > 0) {
+        sum += dailyHabit[date][index].nowAmount;
+        dailyHabit[date].removeAt(index);
+        date = date.subtract(Duration(days: 1));
+        weekDay--;
+
+        index = dailyHabit[date]
+            .indexWhere((element) => element.addedTimeID == addedTimeID);
+      }
+
+      changedHabit.nowAmount = sum;
+      weeklyHabit[nowWeekOfYear].add(changedHabit);
     }
 
     notifyListeners();
@@ -296,42 +316,112 @@ class HabitProvider with ChangeNotifier {
   }
 
   //총 누적 절약금액의 절약 기록 표시(addedTimeID null이면 => 전체)
-  Map<dynamic, dynamic> showCumSavingHistory(DateTime addedTimeID) {
-    Map<int, Map<int, Map<int, List<String>>>> map = {};
-    // TODO: 2.Show cumSavingHistory
+  /* Map<int:YEAR ,
+        Map<int:Week,
+          List[index 0: SaveMoney,
+               index 1: List[index 0: '주기+습관이름', index 1: '절약금액']
+          ]
+        >
+     >
+
+     Year의 합은 일단 따로 꺼내서 계산.
+   */
+  Map<int, dynamic> showCumSavingHistory(DateTime addedTimeID) {
+    Map<int, dynamic> map = {};
+    int year = 0;
+    int week = 0;
+    double sumPrice = 0;
+    weeklyHabit.forEach((key, value) {
+      year = key ~/ 100;
+      week = key % 100;
+      map[year][week] = [];
+      value.forEach((element) {
+        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+          sumPrice += element.saveMoney;
+          map[year][week][1].add(['매주 ${element.name}', element.saveMoney]);
+        }
+      });
+
+      if (map[year][week][0] == null)
+        map[year][week][0] = sumPrice;
+      else
+        map[year][week][0] += sumPrice;
+
+      sumPrice = 0;
+    });
+
+    dailyHabit.forEach((key, value) {
+      year = key.year;
+      week = isoWeekNumber(key);
+      if (map[year][week] == null) {
+        map[year][week] = [];
+      }
+      value.forEach((element) {
+        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+          sumPrice = element.saveMoney;
+          map[year][week][1].add(['매일 ${element.name}', element.saveMoney]);
+        }
+      });
+
+      if (map[year][week][0] == null)
+        map[year][week][0] = sumPrice;
+      else
+        map[year][week][0] += sumPrice;
+
+      sumPrice = 0;
+    });
 
     return map;
   }
 
   //목표 유지율 표시(addedTimeID null이면 => 전체)
   List<double> getRetention(DateTime addedTimeID) {
-    // TODO : 3.getRetention
+    List<double> result = [];
     Map<int, double> retentions = {};
-    if (addedTimeID == null) {
-      int weeks = 0;
-      double avg = 0;
-      int len = 0;
-      weeklyHabit.forEach((key, value) {
-        value.forEach((element) {
-          avg = 0;
-          avg += element.retention;
-        });
-        len = value.length;
-        retentions[weeks] = avg / len;
-        weeks++;
-      });
+    int startWeek = 0;
+    double habitRet = 0;
+    int len = 0;
 
-      weeks = 0;
-      avg = 0;
-      double dailyAvg = 0;
-      dailyHabit.forEach((key, value) {
-        value.forEach((element) {
-          dailyAvg = 0;
-          dailyAvg += element.retention;
-        });
+    weeklyHabit.forEach((key, value) {
+      if (startWeek == 0) startWeek = key;
+      value.forEach((element) {
+        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+          habitRet += element.retention;
+          len++;
+        }
       });
-    } else {}
-    return null;
+      retentions[key] = habitRet / len;
+      habitRet = 0;
+      len = 0;
+    });
+
+    int dailyKey = 0;
+    dailyHabit.forEach((key, value) {
+      if (dailyKey != 0 && dailyKey != key.year * 100 + isoWeekNumber(key)) {
+        if (retentions.containsKey(dailyKey)) {
+          retentions[dailyKey] += habitRet / len;
+          retentions[dailyKey] /= 2;
+        } else {
+          retentions[dailyKey] = habitRet / len;
+        }
+        habitRet = 0;
+        len = 0;
+      }
+      dailyKey = key.year * 100 + isoWeekNumber(key);
+
+      value.forEach((element) {
+        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+          habitRet += element.retention;
+          len++;
+        }
+      });
+    });
+
+    var sortedKey = retentions.keys.toList()..sort();
+    for (int i = 0; i < sortedKey.length; i++) {
+      result[i] = retentions[sortedKey[i]];
+    }
+    return result;
   }
 
   int isoWeekNumber(DateTime date) {
