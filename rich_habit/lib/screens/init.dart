@@ -94,7 +94,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
       )),
       builder: (context, snapshot) {
         if(snapshot.hasData){
-          size = MediaQuery.of(context).size;
+          size = MediaQuery.of(context).size; //새로운 핸드폰이지만 init을 거치지 않는다면? ex)login기능 구현시.. 오류가능성있음.
 
           return Scaffold(
               backgroundColor: kPurpleColor,
@@ -342,8 +342,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                 setState((){
                                   habitsRough.insert(
                                       habitsRough.length-1,
-                                      [textFieldController.text,
-                                        new SvgPicture.asset('assets/images/icon/custom_coin.svg',fit: BoxFit.cover,),
+                                      [textFieldController.text,('assets/images/icon/custom_coin.svg'),
                                         true
                                       ]);
                                 });
@@ -381,41 +380,41 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     Color txtColor = kWhiteIvoryColor.withOpacity(headerOpacity(shrinkOffset));
-    return Container(
-        padding: EdgeInsets.only(left: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 50),
-            Container(
-              height: 40,
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){}),
+    return SafeArea(
+      child: Container(
+          padding: EdgeInsets.only(left: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+//              SizedBox(height: 50),
+              Container(
+                height: 40,
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){}),
+                ),
               ),
-            ),
-            SizedBox(height: 20,),
-            Text("습관 입력하기",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
-            SizedBox(height: 11,),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(1)),
-                color: txtColor
+              SizedBox(height: 20,),
+              Text("습관 입력하기",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
+              SizedBox(height: 11,),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(1)),
+                  color: txtColor
+                ),
+                height: 3,
+                width: 33,
               ),
-              height: 3,
-              width: 33,
-            ),
-            SizedBox(height: 11),
-            Container(
-              width: 280,
-              child: Text("평소에 습관적으로 지출 하던 항목들을 전부 체크해주세요.",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
-            ),
-          ],
+              SizedBox(height: 11),
+              Container(
+                width: 280,
+                child: Text("평소에 습관적으로 지출 하던 항목들을 전부 체크해주세요.",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
+              ),
+            ],
+          ),
         ),
-      );
-
-    throw UnimplementedError();
+    );
   }
 
   double headerOpacity(double shrinkOffset){

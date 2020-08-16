@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 
 import '../constants.dart';
-import '../constants.dart';
 
 
 class Profile extends StatelessWidget {
@@ -16,15 +15,18 @@ class Profile extends StatelessWidget {
 
 //  ProfileData profileData;
 //  Profile({this.profileData});
-
-  @override
-  Widget build(BuildContext context) {
-
+  Profile(){
     profileMessage = "절약해서 100억 한번 벌어보자";
     profileImage = AssetImage("assets/example/profileImage.jpg");
     name = "장영환";
     language = "한국어";
     bool isAlarmOn = true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+
 
 //    profileMessage = profileData.profileMessage;
 //    profileImage = profileData.image;
@@ -33,8 +35,8 @@ class Profile extends StatelessWidget {
 //    bool isAlarmOn = profileData.isAlarmOn;
 
 
-    return Scaffold(
-      body: Container(
+    return SafeArea(
+      child: Container(
         decoration: BoxDecoration(
           color: kPurpleColor
         ),
@@ -42,11 +44,11 @@ class Profile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(20,40,20,50),
+              padding: EdgeInsets.fromLTRB(20,10,20,50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("내 계정",style: TextStyle(fontWeight: FontWeight.bold,fontSize: kTitleFontSize+5,color: kIvoryColor),),
+                  Text("내 계정",style: TextStyle(fontWeight: FontWeight.bold,fontSize: kTitleFontSize,color: kWhiteIvoryColor),),
                   SizedBox(height: 30,),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,15 +72,15 @@ class Profile extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Text(name,style: TextStyle(fontSize: kTitleFontSize, color: kIvoryColor,fontWeight: FontWeight.bold),),
+                              Text(name,style: TextStyle(fontSize: kTitleFontSize, color: kWhiteIvoryColor,fontWeight: FontWeight.bold),),
                               SizedBox(width: 6,),
                               GestureDetector(
-                                child: Icon(Icons.edit,size: kTitleFontSize,color: kIvoryColor,),
+                                child: Icon(Icons.edit,size: kTitleFontSize,color: kWhiteIvoryColor,),
                               )
                             ],
                           ),
                           SizedBox(height: 5,),
-                          Text("\"$profileMessage\"",style: TextStyle(fontSize: kNormalFontSize, fontWeight: FontWeight.w200,color: kIvoryColor),)
+                          Text("\"$profileMessage\"",style: TextStyle(fontSize: kNormalFontSize, fontWeight: FontWeight.w200,color: kWhiteIvoryColor),)
                         ],
                       )
                     ],
