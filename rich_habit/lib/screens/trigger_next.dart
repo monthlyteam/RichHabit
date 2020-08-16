@@ -136,14 +136,23 @@ class _TriggerNextState extends State<TriggerNext> {
                           child: SizedBox(
                             height: 150,
                             width: size.width-100,
-                            child: CupertinoDatePicker(
-                              initialDateTime: _dateTime,
-                              mode: CupertinoDatePickerMode.time,
-                              onDateTimeChanged: (dateTime){
-                                setState(() {
-                                  _dateTime = dateTime;
-                                });
-                              },
+                            child: CupertinoTheme(
+                              data: CupertinoThemeData(
+                                textTheme: CupertinoTextThemeData(
+                                  dateTimePickerTextStyle: TextStyle(
+                                    color: kPurpleColor,
+                                  ),
+                                ),
+                              ),
+                              child: CupertinoDatePicker(
+                                initialDateTime: _dateTime,
+                                mode: CupertinoDatePickerMode.time,
+                                onDateTimeChanged: (dateTime){
+                                  setState(() {
+                                    _dateTime = dateTime;
+                                  });
+                                },
+                              ),
                             ),
                           ),
                         )
@@ -159,7 +168,7 @@ class _TriggerNextState extends State<TriggerNext> {
         BottomPositionedBox("완료", (){
           triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
           for(var i = 0; i<triggerList.length ; i++){
-            context.watch<HabitProvider>().addHabit(Habit(
+            context.read<HabitProvider>().addHabit(Habit(
                 addedTimeID: DateTime.now(),
                 isTrigger: triggerList[i]['isTrigger'],
                 name: triggerList[i]['name'],

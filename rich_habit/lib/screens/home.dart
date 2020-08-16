@@ -25,9 +25,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     super.initState();
     initializeDateFormatting();
 
-//    print("Weekly Habits = ${context.watch<HabitProvider>().weeklyHabit}");
-//    print("Daily Habits = ${context.watch<HabitProvider>().dailyHabit}");
-//    print("Trigger Habits = ${context.watch<HabitProvider>().triggerHabit}");
+    print("Weekly Habits = ${context.read<HabitProvider>().weeklyHabit}");
+    print("Daily Habits = ${context.read<HabitProvider>().dailyHabit}");
+    print("Trigger Habits = ${context.read<HabitProvider>().triggerHabit}");
     current = DateTime.now();
     _selDay = DateTime(current.year, current.month, current.day);
     habits[_selDay] = [

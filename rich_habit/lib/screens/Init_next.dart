@@ -327,7 +327,7 @@ class _InitNextState extends State<InitNext> {
           BottomPositionedBox("완료", (){
             if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
               Fluttertoast.showToast(
-                  msg: "정보를 빠짐없이 입력해주세요!",  
+                  msg: "정보를 빠짐없이 입력해주세요!",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
@@ -338,7 +338,7 @@ class _InitNextState extends State<InitNext> {
             }else{
               habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
               for(var i = 0; i<habitList.length ; i++){
-                Provider.of<HabitProvider>(context,listen: false,).addHabit(Habit(
+                context.read<HabitProvider>().addHabit(Habit(
                     addedTimeID: DateTime.now(),
                     isTrigger: habitList[i]['isTrigger'],
                     name: habitList[i]['name'],
