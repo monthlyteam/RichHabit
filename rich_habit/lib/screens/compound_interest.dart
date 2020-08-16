@@ -55,12 +55,14 @@ class _CompoundInterestState extends State<CompoundInterest> {
           SliverList(
             delegate: SliverChildListDelegate([
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: kPadding),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: kPadding, vertical: 2.0),
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(10.0),
-                      height: 120,
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 10.0),
+                      height: 125,
                       decoration: BoxDecoration(
                         color: kIvoryColor,
                         borderRadius: BorderRadius.circular(5.0),
@@ -70,7 +72,32 @@ class _CompoundInterestState extends State<CompoundInterest> {
                         children: [
                           Expanded(
                             child: Column(
-                              children: [Text("8월 예상 절약 금액")],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 40.0,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "8월 예상 절약 금액",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: kPurpleColor, fontSize: 14.0),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "26,000원",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: kDarkPurpleColor,
+                                          fontSize: kSubTitleFontSize,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                           Icon(
@@ -79,7 +106,32 @@ class _CompoundInterestState extends State<CompoundInterest> {
                           ),
                           Expanded(
                             child: Column(
-                              children: [Text("연")],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 40.0,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "연 5% 월 복리로\n 20년후 가치",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: kPurpleColor, fontSize: 14.0),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "111,112,654원",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: kDarkPurpleColor,
+                                          fontSize: kSubTitleFontSize,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ],
