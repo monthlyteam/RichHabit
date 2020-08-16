@@ -4,7 +4,6 @@ import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:richhabit/screens/Init_next.dart';
 import 'package:richhabit/screens/trigger_next.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'dart:math';
@@ -385,8 +384,6 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
         ],
       ),
     );
-
-    throw UnimplementedError();
   }
 
   double headerOpacity(double shrinkOffset){
