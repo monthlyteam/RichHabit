@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
+import 'package:richhabit/habit.dart';
+import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/main_page.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
-
+import 'package:provider/provider.dart';
 
 class TriggerNext extends StatefulWidget{
 
@@ -158,13 +158,25 @@ class _TriggerNextState extends State<TriggerNext> {
         (index == _selectedItem.length-1)?
         BottomPositionedBox("완료", (){
           triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
-          print(triggerList);
+          for(var i = 0; i<triggerList.length ; i++){
+            context.watch<HabitProvider>().addHabit(Habit(addedTimeID: DateTime.now(),isTrigger: triggerList[index]['isTrigger'],
+                name: triggerList[index]['name'],
+              iconURL: triggerList[index]['iconURL'],
+              price: 0,
+              usualAmount: 0,
+              usualIsWeek: false,
+              goalIsWeek: false,
+              goalAmount: 0
+            )
+            );
+          }
           Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-        })
+          print(triggerList);
+        },context)
             :BottomPositionedBox("다음",(){
             triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
             pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
-        })
+        },context)
       ],
     );
   }

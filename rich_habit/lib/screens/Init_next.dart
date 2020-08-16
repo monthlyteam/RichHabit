@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
-import 'package:richhabit/main_page.dart';
-import 'package:richhabit/screens/home.dart';
+import 'package:richhabit/habit.dart';
+import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/screens/trigger.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
-
+import 'package:provider/provider.dart';
 
 class InitNext extends StatefulWidget{
 
@@ -331,9 +331,21 @@ class _InitNextState extends State<InitNext> {
               );
             }else{
               habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
+              for(var i = 0; i<habitList.length ; i++){
+                context.watch<HabitProvider>().addHabit(Habit(addedTimeID: DateTime.now(),isTrigger: habitList[index]['isTrigger'],
+                    name: habitList[index]['name'],
+                    iconURL: habitList[index]['iconURL'],
+                    price: habitList[index]['price'],
+                    usualAmount: habitList[index]['usualAmount'],
+                    usualIsWeek: habitList[index]['usualWeek'],
+                    goalIsWeek: habitList[index]['goalIsWeek'],
+                    goalAmount: habitList[index]['goalAmount']
+                )
+                );
+              }
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
             }
             print(habitList);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
           })
           :BottomPositionedBox("다음",(){
             if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){

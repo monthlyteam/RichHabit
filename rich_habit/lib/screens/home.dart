@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:richhabit/habit_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -23,6 +25,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     super.initState();
     initializeDateFormatting();
 
+    print("Weekly Habits = ${context.watch<HabitProvider>().weeklyHabit}");
+    print("Daily Habits = ${context.watch<HabitProvider>().dailyHabit}");
+    print("Trigger Habits = ${context.watch<HabitProvider>().triggerHabit}");
     current = DateTime.now();
     _selDay = DateTime(current.year, current.month, current.day);
     habits[_selDay] = [

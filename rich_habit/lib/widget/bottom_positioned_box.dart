@@ -4,8 +4,8 @@ import 'package:richhabit/constants.dart';
 class BottomPositionedBox extends StatelessWidget{
   final String txt;
   final VoidCallback onTap;
-
-  BottomPositionedBox(this.txt,this.onTap);
+  final BuildContext context;
+  BottomPositionedBox(this.txt,this.onTap,this.context);
 
   @override
   Widget build(BuildContext context) {
