@@ -6,10 +6,26 @@ import 'package:richhabit/screens/init.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/user_provider.dart';
 
+import 'habit.dart';
 import 'main_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  /*
+  addedTimeID: json['addedTimeID'],
+        name: json['name'],
+        iconURL: json['iconURL'],
+        price: json['price'],
+        usualIsWeek: json['usualIsWeek'],
+        usualAmount: json['usualAmount'],
+        goalIsWeek: json['goalIsWeek'],
+        goalAmount: json['goalAmount'],
+        nowAmount: json['nowAmount'],
+   */
+  var now = DateTime.now();
+  Habit test = Habit(
+    addedTimeID: now,
+  );
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {

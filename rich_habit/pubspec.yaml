@@ -30,6 +30,7 @@ dependencies:
   table_calendar: ^2.2.3
   flutter_group_sliver: ^0.0.2
   fluttertoast: ^7.0.2
+  shared_preferences: ^0.5.8
 
 dev_dependencies:
   flutter_test:
