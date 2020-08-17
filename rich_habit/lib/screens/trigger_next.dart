@@ -174,10 +174,10 @@ class _TriggerNextState extends State<TriggerNext> {
                 name: triggerList[i]['name'],
                 iconURL: triggerList[i]['iconURL'],
                 price: 0,
-                usualAmount: 0,
+                usualAmount: 1,
                 usualIsWeek: false,
                 goalIsWeek: false,
-                goalAmount: 0
+                goalAmount: 1
               )
             );
           }
