@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:richhabit/habit.dart';
 
 class HabitProvider with ChangeNotifier {
+  DateTime startDate; //습관 입력을 시작한 시간
   DateTime nowDate;
   int nowWeekOfYear; //2020년 3주차이면, 202003 으로 표시
 
@@ -23,6 +24,7 @@ class HabitProvider with ChangeNotifier {
 
   //날짜 확인후 오 처음 들어오면 이전 습관 틀 제공
   void initHabit() {
+    //TODO: foreach에서 값이 null이면 에러 나는거 처리 => 빈 날짜 빈 Map넣어주기
     var triggerKeys = triggerHabit.keys.toList();
     var dailyKeys = dailyHabit.keys.toList();
     var weeklyKeys = weeklyHabit.keys.toList();
