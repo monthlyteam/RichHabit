@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import '../habit.dart';
 import '../habit_provider.dart';
@@ -20,6 +21,21 @@ class _CompoundInterestState extends State<CompoundInterest> {
   List<Habit> weeklyHabit;
   List<Habit> total;
 
+  List<FlSpot> spots = [
+    FlSpot(0, 80),
+    FlSpot(1, 90),
+    FlSpot(2, 30),
+    FlSpot(3, 50),
+    FlSpot(4, 95),
+    FlSpot(5, 100),
+    FlSpot(6, 85),
+    FlSpot(7, 70),
+    FlSpot(8, 73),
+  ];
+  List<Color> gradientColors = [
+    const Color(0xff585A79),
+    const Color(0xff585A79),
+  ];
   @override
   void initState() {
     super.initState();
@@ -164,21 +180,49 @@ class _CompoundInterestState extends State<CompoundInterest> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: Row(
-                        children: [Text("lala")],
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "누적 절약 금액",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: kPurpleColor),
+                              ),
+                              Text(
+                                "${context.watch<HabitProvider>().cumSaving(addedTimeID).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    color: kDarkPurpleColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Image.asset(
+                                  "assets/images/coin_1.png",
+                                  height: 52.0,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    print("detail");
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: kPurpleColor,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     SizedBox(height: kPadding),
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: kIvoryColor,
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        children: [Text("lala")],
-                      ),
-                    ),
+                    _buildChart(addedTimeID),
                     SizedBox(height: 800),
                   ],
                 ),
@@ -238,6 +282,152 @@ class _CompoundInterestState extends State<CompoundInterest> {
               fontWeight: FontWeight.bold),
         ),
       ),
+    );
+  }
+
+  Widget _buildChart(DateTime addedTimeID) {
+    return Stack(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 1.70,
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+              color: kIvoryColor,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 24.0, left: 20.0, top: 50, bottom: 12),
+              child: LineChart(
+                _lineData(),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            '목표 유지율',
+            style: TextStyle(fontSize: 16, color: Color(0xff585A79)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  LineChartData _lineData() {
+    return LineChartData(
+      gridData: FlGridData(
+        show: false,
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 22,
+          textStyle: const TextStyle(
+              color: Color(0xff585A79),
+              fontWeight: FontWeight.bold,
+              fontSize: 12),
+          getTitles: (value) {
+//            return value.toInt().toString();
+            int center = (spots.length / 2).floor();
+            if (value.toInt() == 0) {
+              return '1주차';
+            } else if (value.toInt() == center && spots.length > 2) {
+              return (value.toInt() + 1).toString() + '주차';
+            } else if (value.toInt() == spots.length - 1) {
+              return '저번주';
+            }
+/*
+            switch (value.toInt()) {
+              case 0:
+                return '1주차';
+              case center:
+                return '2';
+              case 3:
+                return 'SEP';
+            }
+
+ */
+            return '';
+          },
+          margin: 8,
+        ),
+        leftTitles: SideTitles(
+          showTitles: true,
+          textStyle: const TextStyle(
+            color: Color(0xff585A79),
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 0:
+                return '0%';
+              case 50:
+                return '50%';
+              case 100:
+                return '100%';
+            }
+            return '';
+          },
+          reservedSize: 28,
+          margin: 12,
+        ),
+      ),
+      borderData: FlBorderData(show: false),
+      lineTouchData: LineTouchData(
+          getTouchedSpotIndicator:
+              (LineChartBarData barData, List<int> spotIndexes) {
+            return spotIndexes.map((spotIndex) {
+              return TouchedSpotIndicatorData(
+                FlLine(color: kDarkPurpleColor, strokeWidth: 2),
+                FlDotData(
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                        radius: 6, color: kDarkPurpleColor, strokeWidth: 0.0);
+                  },
+                ),
+              );
+            }).toList();
+          },
+          touchSpotThreshold: 10.0,
+          touchTooltipData: LineTouchTooltipData(
+              tooltipPadding: EdgeInsets.all(4.0),
+              tooltipRoundedRadius: 3.0,
+              tooltipBgColor: kWhiteIvoryColor,
+              getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                return touchedBarSpots.map((barSpot) {
+                  final flSpot = barSpot;
+                  return LineTooltipItem(
+                    '${flSpot.x.toInt() + 1}주차 ${flSpot.y} %',
+                    const TextStyle(
+                        color: kPurpleColor, fontWeight: FontWeight.bold),
+                  );
+                }).toList();
+              })),
+      minY: 0,
+      maxY: 100,
+      lineBarsData: [
+        LineChartBarData(
+          spots: spots,
+          colors: gradientColors,
+          isCurved: true,
+          isStrokeCapRound: true,
+          barWidth: 3,
+          dotData: FlDotData(
+            show: false,
+          ),
+          belowBarData: BarAreaData(
+            show: false,
+            colors:
+                gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          ),
+        ),
+      ],
     );
   }
 }
