@@ -84,7 +84,7 @@ class _BuyOrNotState extends State<BuyOrNot> {
     for (var i = 0; i < _year * 12; i++) {
       v = money * _percent / 100 / 12;
       money += maintain + v;
-      print("money $i : $money");
+//      print("money $i : $money");
     }
     setState(() {
       _price = money;

@@ -7,6 +7,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
+import '../habit.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -15,8 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   DateTime current;
   DateTime _selDay;
-  Map<DateTime, List<Habit>> habits = new Map<DateTime, List<Habit>>();
-  Map<DateTime, List> _events;
+  var selWeekOfYear;
   AnimationController _animationController;
   CalendarController _calendarController;
 
@@ -30,58 +31,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     print("Trigger Habits = ${context.read<HabitProvider>().triggerHabit}");
     current = DateTime.now();
     _selDay = DateTime(current.year, current.month, current.day);
-    habits[_selDay] = [
-      new Habit(
-          name: "양치질",
-          iconURL: "assets/images/icon/smoking.svg",
-          price: 0,
-          usualIsWeek: false,
-          usualAmount: 1,
-          goalIsWeek: false,
-          goalAmount: 1),
-      new Habit(
-          name: "흡연",
-          iconURL: "assets/images/icon/smoking.svg",
-          price: 4500,
-          usualIsWeek: false,
-          usualAmount: 3,
-          goalIsWeek: false,
-          goalAmount: 2)
-    ];
-    habits[_selDay.subtract(Duration(days: 1))] = [
-      new Habit(
-          name: "양치질",
-          iconURL: "assets/images/icon/smoking.svg",
-          price: 0,
-          usualIsWeek: false,
-          usualAmount: 1,
-          goalIsWeek: false,
-          goalAmount: 1),
-      new Habit(
-          name: "흡연",
-          iconURL: "assets/images/icon/smoking.svg",
-          price: 4500,
-          usualIsWeek: false,
-          usualAmount: 3,
-          goalIsWeek: false,
-          goalAmount: 2)
-    ];
-    _events = {
-      _selDay.subtract(Duration(days: 10)): [1],
-      _selDay.subtract(Duration(days: 9)): [1],
-      _selDay.subtract(Duration(days: 8)): [1],
-      _selDay.subtract(Duration(days: 7)): [1],
-      _selDay.subtract(Duration(days: 6)): [1],
-      _selDay.subtract(Duration(days: 5)): [1],
-      _selDay.subtract(Duration(days: 4)): [2],
-      _selDay.subtract(Duration(days: 3)): [1],
-      _selDay.subtract(Duration(days: 2)): [2],
-      _selDay.subtract(Duration(days: 1)): [1],
-      _selDay: [0],
-    };
+    selWeekOfYear = _selDay.year * 100 +
+        context.read<HabitProvider>().isoWeekNumber(_selDay);
+    print(selWeekOfYear);
 
     _calendarController = CalendarController();
-
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 400),
       vsync: this,
@@ -103,12 +57,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       if (isNow(day)) {
         print("같");
         _selDay = DateTime(day.year, day.month, day.day);
+        selWeekOfYear = _selDay.year * 100 +
+            context.read<HabitProvider>().isoWeekNumber(_selDay);
         Navigator.pop(buildContext);
       } else if (day.isAfter(DateTime.now())) {
         print("후");
       } else {
         print("전");
         _selDay = DateTime(day.year, day.month, day.day);
+        selWeekOfYear = _selDay.year * 100 +
+            context.read<HabitProvider>().isoWeekNumber(_selDay);
         Navigator.pop(buildContext);
       }
     });
@@ -124,11 +82,25 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     print('CALLBACK: _onCalendarCreated');
   }
 
-  List<Widget> _getTodayHabit() {
+  List<Widget> _getTodayHabit(bool isWeek, bool isTrigger) {
+    List<Habit> habits;
+    if (isTrigger) {
+      Map<DateTime, List<Habit>> triggerHabit =
+          context.watch<HabitProvider>().triggerHabit;
+      habits = triggerHabit[_selDay];
+    } else if (isWeek) {
+      Map<int, List<Habit>> weeklyHabit =
+          context.watch<HabitProvider>().weeklyHabit;
+      habits = weeklyHabit[selWeekOfYear];
+    } else {
+      Map<DateTime, List<Habit>> dailyHabit =
+          context.watch<HabitProvider>().dailyHabit;
+      habits = dailyHabit[_selDay];
+    }
     //매일, 매주 인자로 받기
     try {
-      return List.generate(habits[_selDay].length, (i) {
-        Habit habit = habits[_selDay][i];
+      return List.generate(habits.length, (i) {
+        Habit habit = habits[i];
         TextStyle textStyle = new TextStyle(color: kPurpleColor, fontSize: 15);
         TextStyle countStyle = new TextStyle(
             color: kPurpleColor, fontSize: 25.0, fontWeight: FontWeight.bold);
@@ -152,8 +124,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          if (habits[_selDay][i].nowAmount > 0) {
-                            habits[_selDay][i].nowAmount--;
+                          if (habit.nowAmount > 0) {
+                            context.read<HabitProvider>().minusNowAmount(
+                                _selDay, habit.addedTimeID, isWeek, isTrigger);
                           }
                         });
                       },
@@ -217,15 +190,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          habits[_selDay][i].nowAmount++;
-                          if (habits[_selDay][i].nowAmount >
-                              habits[_selDay][i].goalAmount) {
+                          context.read<HabitProvider>().plusNowAmount(
+                              _selDay, habit.addedTimeID, isWeek, isTrigger);
+                          if (habit.nowAmount > habit.goalAmount &&
+                              !isTrigger) {
                             //habit 일 경우에만 하기
                             showDialog(
                                 context: context,
                                 builder: (BuildContext buildContext) {
-                                  return _buildWarning(
-                                      buildContext, habits[_selDay][i]);
+                                  return _buildWarning(buildContext, habit);
                                 });
                           }
                         });
@@ -244,15 +217,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         );
       });
     } catch (e) {
-      return [
-        Container(
-          child: Text(
-            "입력된 값이 없습니다.",
-            style:
-                TextStyle(color: kWhiteIvoryColor, fontSize: kNormalFontSize),
-          ),
-        )
-      ];
+      if (isTrigger) {
+        return [
+          Container(
+            child: Text(
+              "입력된 값이 없습니다.",
+              style:
+                  TextStyle(color: kWhiteIvoryColor, fontSize: kNormalFontSize),
+            ),
+          )
+        ];
+      } else {
+        return [Container()];
+      }
     }
   }
 
@@ -364,7 +341,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           rowHeight: 70.0,
           locale: 'ko_KR',
           calendarController: _calendarController,
-          events: _events,
+          events: context.read<HabitProvider>().calendarIcon,
           initialCalendarFormat: CalendarFormat.month,
           formatAnimation: FormatAnimation.scale,
           startingDayOfWeek: StartingDayOfWeek.monday,
@@ -646,6 +623,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     setState(() {
                       _selDay = _selDay =
                           DateTime(current.year, current.month, current.day);
+                      selWeekOfYear = _selDay.year * 100 +
+                          context.read<HabitProvider>().isoWeekNumber(_selDay);
                     });
                   },
                   child: Container(
@@ -699,20 +678,26 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           fontWeight: FontWeight.bold),
                     ),
                     Column(
-                      children: _getTodayHabit(),
+                      children: _getTodayHabit(false, true),
+                    ),
+                    Column(
+                      children: _getTodayHabit(false, false),
                     ),
                     SizedBox(
                       height: kPadding,
                     ),
-                    Text(
-                      "7월 4주차",
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: kWhiteIvoryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    context.watch<HabitProvider>().weeklyHabit[selWeekOfYear] ==
+                            null
+                        ? Container()
+                        : Text(
+                            "${selWeekOfYear - (_selDay.year * 100)} 주차",
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: kWhiteIvoryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
                     Column(
-                      children: _getTodayHabit(),
+                      children: _getTodayHabit(true, false),
                     ),
                   ],
                 ),
@@ -723,36 +708,4 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ),
     );
   }
-}
-
-class Habit {
-  String name;
-  String iconURL;
-  double price; //습관 1회당 가격
-
-  int warningCount = 0; //경고 누적 수
-
-  bool usualIsWeek; // 평상시 횟수 단위 Daily = false, Weekly = true
-  int usualAmount; //평상시 습관 양
-
-  bool goalIsWeek; // 목표 횟수 단위
-  int goalAmount; // 목표 습관 양
-
-  int nowAmount = 0; // 현재 습관 양
-
-  Habit({
-    @required this.name,
-    @required this.iconURL,
-    @required this.price,
-    @required this.usualIsWeek,
-    @required this.usualAmount,
-    @required this.goalIsWeek,
-    @required this.goalAmount,
-  });
-
-  double get retention //목표 유지율
-      => ((usualAmount - nowAmount) / (usualAmount - goalAmount)) * 100.0;
-
-  double get saveMoney //절약 금액
-      => (usualAmount - nowAmount) * price;
 }
