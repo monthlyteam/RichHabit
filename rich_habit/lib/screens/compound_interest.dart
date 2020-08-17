@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
+import 'package:provider/provider.dart';
+
+import '../habit.dart';
+import '../habit_provider.dart';
 
 class CompoundInterest extends StatefulWidget {
   @override
@@ -7,19 +11,33 @@ class CompoundInterest extends StatefulWidget {
 }
 
 class _CompoundInterestState extends State<CompoundInterest> {
-  List<String> categories = [
-    "전체",
-    "흡연",
-    "커피",
-    "군것질",
-    "PC방",
-    "돈",
-    "낭비",
-    "하지",
-    "말자"
-  ];
-
   int selIndex = 0;
+  bool goalIsWeek = false;
+  DateTime addedTimeID;
+  DateTime current;
+  DateTime today;
+  List<Habit> dailyHabit;
+  List<Habit> weeklyHabit;
+  List<Habit> total;
+
+  @override
+  void initState() {
+    super.initState();
+    current = DateTime.now();
+    today = DateTime(current.year, current.month, current.day);
+    dailyHabit = context.read<HabitProvider>().dailyHabit[today];
+    weeklyHabit = context.read<HabitProvider>().weeklyHabit[
+        today.year * 100 + context.read<HabitProvider>().isoWeekNumber(today)];
+    if (dailyHabit != null) {
+      total = dailyHabit;
+    }
+    if (weeklyHabit != null) {
+      total += weeklyHabit;
+    }
+    for (final habit in total) {
+      print("total : ${habit.name}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +96,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                   height: 40.0,
                                   alignment: Alignment.center,
                                   child: Text(
-                                    "8월 예상 절약 금액",
+                                    "${today.month}월 예상 절약 금액",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: kPurpleColor, fontSize: 14.0),
@@ -88,7 +106,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                   child: Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "26,000원",
+                                      "${context.watch<HabitProvider>().thisMonthExpected(addedTimeID, goalIsWeek).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: kDarkPurpleColor,
@@ -122,7 +140,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                   child: Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "111,112,654원",
+                                      "${context.watch<HabitProvider>().compoundInterest(context.watch<HabitProvider>().thisMonthExpected(addedTimeID, goalIsWeek), 20, 5).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: kDarkPurpleColor,
@@ -182,7 +200,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
         },
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
+            itemCount: total.length + 1,
             itemBuilder: (context, index) => _buildCategoryItem(index)),
       ),
     );
@@ -193,6 +211,13 @@ class _CompoundInterestState extends State<CompoundInterest> {
       onTap: () {
         setState(() {
           selIndex = index;
+          if (index == 0) {
+            addedTimeID = null;
+            goalIsWeek = false;
+          } else {
+            addedTimeID = total[index - 1].addedTimeID;
+            goalIsWeek = total[index - 1].goalIsWeek;
+          }
         });
       },
       child: Container(
@@ -204,7 +229,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                 borderRadius: BorderRadius.circular(40.0))
             : BoxDecoration(),
         child: Text(
-          categories[index],
+          index == 0 ? "전체" : total[index - 1].name,
           style: TextStyle(
               color: selIndex == index
                   ? kWhiteIvoryColor

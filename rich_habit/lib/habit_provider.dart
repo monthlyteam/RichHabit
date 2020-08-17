@@ -256,13 +256,16 @@ class HabitProvider with ChangeNotifier {
 
     if (addedTimeID == null) {
       double sum = 0;
-      weeklyHabit[nowWeekOfYear].forEach((element) {
-        sum += (element.expectedSaveMoney / 7) * maxDayOfMonth;
-      });
-
-      dailyHabit[nowDate].forEach((element) {
-        sum += element.expectedSaveMoney * maxDayOfMonth;
-      });
+      if (weeklyHabit[nowWeekOfYear] != null) {
+        weeklyHabit[nowWeekOfYear].forEach((element) {
+          sum += (element.expectedSaveMoney / 7) * maxDayOfMonth;
+        });
+      }
+      if (dailyHabit[nowDate] != null) {
+        dailyHabit[nowDate].forEach((element) {
+          sum += element.expectedSaveMoney * maxDayOfMonth;
+        });
+      }
 
       return sum;
     } else {
@@ -278,8 +281,7 @@ class HabitProvider with ChangeNotifier {
         int index = dailyHabit[nowDate]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
 
-        return dailyHabit[nowWeekOfYear][index].expectedSaveMoney *
-            maxDayOfMonth;
+        return dailyHabit[nowDate][index].expectedSaveMoney * maxDayOfMonth;
       }
     }
   }
@@ -287,10 +289,10 @@ class HabitProvider with ChangeNotifier {
   //복리 가치 계산
   double compoundInterest(
       double thisMonthExpected, int year, int interestRate) {
-    double money = 0;
+    double money = thisMonthExpected;
     double v = 0;
     for (var i = 0; i < year * 12; i++) {
-      v = money * interestRate / 12;
+      v = money * interestRate / 100 / 12;
       money += thisMonthExpected + v;
     }
 
