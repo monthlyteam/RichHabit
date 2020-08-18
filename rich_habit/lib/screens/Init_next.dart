@@ -9,9 +9,12 @@ import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/screens/trigger.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
-class InitNext extends StatefulWidget {
-  final List<List<dynamic>> selectedItem;
+
+class InitNext extends StatefulWidget{
+
+  final List<List<dynamic>> selectedItem; //<String name, String URL>
 
   InitNext({@required this.selectedItem});
 
@@ -20,21 +23,25 @@ class InitNext extends StatefulWidget {
 }
 
 class _InitNextState extends State<InitNext> {
-  List<List<dynamic>> _selectedItem;
+
+}
+  List<List<dynamic>> _selectedItem; //List<String,String>
 
   PageController pageController;
   List<TextEditingController> controllers = new List<TextEditingController>(3);
   bool goalIsWeek = false;
   bool usualIsWeek = false;
   List<Map> habitList;
-
+  List<int> saveAmount;
   @override
   void initState() {
     super.initState();
     this._selectedItem = widget.selectedItem;
     habitList = new List<Map>(_selectedItem.length);
-    controllers = List<TextEditingController>.generate(
-        3, (index) => TextEditingController());
+
+    saveAmount = List<int>.generate(habitList.length, (index) => 0);
+    controllers = List<TextEditingController>.generate(3, (index) => TextEditingController());
+
     pageController = new PageController();
   }
 
@@ -187,6 +194,7 @@ class _InitNextState extends State<InitNext> {
                                     onTap: () {
                                       setState(() {
                                         usualIsWeek = false;
+                                        _onInputChanged(index);
                                       });
                                     },
                                   ),
@@ -218,6 +226,8 @@ class _InitNextState extends State<InitNext> {
                                     onTap: () {
                                       setState(() {
                                         usualIsWeek = true;
+                                        goalIsWeek = true;
+                                        _onInputChanged(index);
                                       });
                                     },
                                   ),
@@ -230,14 +240,21 @@ class _InitNextState extends State<InitNext> {
                                     width: 152,
                                     height: 23,
                                     child: CupertinoTextField(
+                                      onChanged: (text){
+                                        setState(() {
+                                          _onInputChanged(index);
+                                          },
+                                        );
+                                      },
                                       controller: controllers[0],
                                       padding: EdgeInsets.symmetric(
                                           vertical: 2, horizontal: 2),
                                       textAlign: TextAlign.end,
                                       maxLines: 1,
-                                      placeholder: "0",
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(),
+
+                                      placeholder: "1이상",
+                                      keyboardType: TextInputType.numberWithOptions(),
+
                                     ),
                                   ),
                                   SizedBox(
@@ -252,14 +269,9 @@ class _InitNextState extends State<InitNext> {
                               SizedBox(
                                 height: 19.5,
                               ),
-                              Text(
-                                "흡연 1회당 얼마를 쓰십니까?",
-                                style: TextStyle(
-                                    color: kPurpleColor, fontSize: 12),
-                              ),
-                              SizedBox(
-                                height: 2.5,
-                              ),
+
+                              Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 12),),
+                              SizedBox(height: 2.5,),
                               Row(
                                 children: [
                                   Container(
@@ -267,11 +279,16 @@ class _InitNextState extends State<InitNext> {
                                     height: 23,
                                     child: CupertinoTextField(
                                       controller: controllers[1],
+                                      onChanged: (text){
+                                        setState(() {
+                                          _onInputChanged(index);
+                                        },
+                                        );
+                                      },
                                       maxLines: 1,
-                                      placeholder: "0",
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 2),
-                                      textAlign: TextAlign.end,
+
+                                      placeholder: "1이상",
+                                      padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                       keyboardType:
                                           TextInputType.numberWithOptions(),
                                     ),
@@ -314,29 +331,28 @@ class _InitNextState extends State<InitNext> {
                                 children: [
                                   GestureDetector(
                                     child: Row(
-                                      children: [
-                                        goalIsWeek
-                                            ? Icon(
-                                                Icons.radio_button_unchecked,
-                                                color: kPurpleColor,
-                                                size: 16,
-                                              )
-                                            : Icon(
-                                                Icons.radio_button_checked,
-                                                color: kPurpleColor,
-                                                size: 16,
-                                              ),
-                                        SizedBox(width: 5.5),
-                                        Text("매일",
-                                            style: TextStyle(
-                                                color: kPurpleColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold)),
+
+                                      children:[
+                                        usualIsWeek?
+                                          Icon(Icons.radio_button_unchecked,color: Colors.grey,size: 16,)
+                                         :goalIsWeek?
+                                            Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,)
+                                           :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,)
+                                        ,
+                                        SizedBox(width:5.5),
+                                        Text("매일", style: TextStyle(
+                                            color: usualIsWeek?Colors.grey:kPurpleColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold
+                                          )
+                                        ),
                                       ],
                                     ),
-                                    onTap: () {
+                                    onTap: (){
+                                      if(!usualIsWeek)
                                       setState(() {
                                         goalIsWeek = false;
+                                        _onInputChanged(index);
                                       });
                                     },
                                   ),
@@ -368,6 +384,7 @@ class _InitNextState extends State<InitNext> {
                                     onTap: () {
                                       setState(() {
                                         goalIsWeek = true;
+                                        _onInputChanged(index);
                                       });
                                     },
                                   ),
@@ -381,10 +398,16 @@ class _InitNextState extends State<InitNext> {
                                     height: 23,
                                     child: CupertinoTextField(
                                       controller: controllers[2],
+                                      onChanged: (text){
+                                        setState(() {
+                                          _onInputChanged(index);
+                                        },
+                                        );
+                                      },
                                       maxLines: 1,
-                                      placeholder: "0",
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 2),
+
+                                      placeholder: "0이상",
+                                      padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                       textAlign: TextAlign.end,
                                       keyboardType:
                                           TextInputType.numberWithOptions(),
@@ -401,21 +424,13 @@ class _InitNextState extends State<InitNext> {
                               ),
                               SizedBox(height: 50),
                               Center(
-                                  child: Column(
-                                children: [
-                                  Text(
-                                    "\"평소 습관 보다 매일 15,000원을",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: kPurpleColor,
-                                        fontWeight: FontWeight.w100),
-                                  ),
-                                  Text(
-                                    "절약하는 목표입니다.\"",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: kPurpleColor,
-                                        fontWeight: FontWeight.w100),
+
+                                  child:
+                                  Column(
+                                    children: [
+                                      Text("\"평소 습관 보다 매일 ${saveAmount[index]}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                      Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
+                                    ],
                                   )
                                 ],
                               ))
@@ -430,20 +445,22 @@ class _InitNextState extends State<InitNext> {
             )
           ],
         ),
-        (index == _selectedItem.length - 1)
-            ? BottomPositionedBox("완료", () {
-                if (controllers[0].text.trim().isEmpty ||
-                    controllers[1].text.trim().isEmpty ||
-                    controllers[2].text.trim().isEmpty) {
-                  Fluttertoast.showToast(
-                      msg: "정보를 빠짐없이 입력해주세요!",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.grey,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                } else {
+
+        (index == _selectedItem.length-1)?
+          BottomPositionedBox("완료", (){
+            try{//try-catch로 숫자가 아닌것이 입력되는걸 잡음
+              if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){//값이 비어있는경우
+                Fluttertoast.showToast(
+                    msg: "정보를 빠짐없이 입력해주세요!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){ //값이 최솟값 이상인경우
+                if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {//목표량이 현재보다 낮은경우
                   habitList[index] = ({
                     "name": _selectedItem[index][0],
                     "iconURL": _selectedItem[index][1],
@@ -455,7 +472,9 @@ class _InitNextState extends State<InitNext> {
                     "isTrigger": false
                   });
                   for (var i = 0; i < habitList.length; i++) {
-                    context.read<HabitProvider>().addHabit(Habit(
+
+                    context.read<HabitProvider>().addHabit(
+                      Habit(
                         addedTimeID: DateTime.now(),
                         isTrigger: habitList[i]['isTrigger'],
                         name: habitList[i]['name'],
@@ -464,57 +483,140 @@ class _InitNextState extends State<InitNext> {
                         usualAmount: habitList[i]['usualAmount'],
                         usualIsWeek: habitList[i]['usualWeek'],
                         goalIsWeek: habitList[i]['goalIsWeek'],
-                        goalAmount: habitList[i]['goalAmount']));
+
+                        goalAmount: habitList[i]['goalAmount']
+                      )
+                    );
                   }
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Trigger()));
-                }
-                print(habitList);
-              })
-            : BottomPositionedBox("다음", () {
-                if (controllers[0].text.trim().isEmpty ||
-                    controllers[1].text.trim().isEmpty ||
-                    controllers[2].text.trim().isEmpty) {
+                }else{//목표량이 현재보다 높은경우
                   Fluttertoast.showToast(
-                      msg: "정보를 빠짐없이 입력해주세요!",
+                      msg: "목표치를 확인해주세요",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
                       backgroundColor: Colors.grey,
                       textColor: Colors.white,
-                      fontSize: 16.0);
-                } else {
-                  habitList[index] = ({
-                    "name": _selectedItem[index][0],
-                    "iconURL": _selectedItem[index][1],
-                    "price": double.parse(controllers[1].text),
-                    "usualIsWeek": usualIsWeek,
-                    "usualAmount": int.parse(controllers[0].text),
-                    "goalIsWeek": goalIsWeek,
-                    "goalAmount": int.parse(controllers[2].text),
-                    "isTrigger": false
-                  });
+                      fontSize: 16.0
+                  );
+                }
+              }else {//값이 최소값 미만인경우
+                Fluttertoast.showToast(
+                    msg: "올바른 값을 입력해주세요!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              }
+            }catch(e){
+              print(e);
+              Fluttertoast.showToast(
+                  msg: "올바른 값을 입력해주세요!\n숫자만 입력할 수 있습니다.",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }
+          })
+
+          :BottomPositionedBox("다음",(){
+            try{
+              if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
+                Fluttertoast.showToast(
+                    msg: "정보를 빠짐없이 입력해주세요!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){//목표량이 현재보다 낮은경우
+                if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {
+                  habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
                   goalIsWeek = false;
                   usualIsWeek = false;
-                  pageController.animateToPage(index + 1,
-                      duration: Duration(milliseconds: 400),
-                      curve: Curves.easeInOut); //다음페이지로 넘어가는거 만들면됨
-                  if (habitList[index + 1] != null) {
-                    controllers[0]
-                      ..text = habitList[index + 1]['usualAmount'].toString();
-                    controllers[1]
-                      ..text = habitList[index + 1]['price'].toString();
-                    controllers[2]
-                      ..text = habitList[index + 1]['goalAmount'].toString();
-                  } else {
+                  pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
+                  if(habitList[index+1] != null){
+                    controllers[0]..text = habitList[index+1]['usualAmount'].toString();
+                    controllers[1]..text = habitList[index+1]['price'].toString();
+                    controllers[2]..text = habitList[index+1]['goalAmount'].toString();
+                  }else{
                     controllers[0].clear();
                     controllers[1].clear();
                     controllers[2].clear();
                   }
+                }else{
+                  Fluttertoast.showToast(
+                      msg: "목표치를 확인해주세요",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.grey,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
                 }
-              })
+              }else{
+                Fluttertoast.showToast(
+                    msg: "올바른 값을 입력해주세요!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              }
+            }catch(e){
+              Fluttertoast.showToast(
+                  msg: "올바른 값을 입력해주세요.\n숫자만 입력할 수 있습니다.",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }
+        })
       ],
     );
+  }
+  _onInputChanged(int index){
+    try{
+      if(controllers[0].text.trim().isNotEmpty&&controllers[1].text.trim().isNotEmpty&controllers[2].text.trim().isNotEmpty){
+        if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){
+          double aDayCost;
+          double aDayCost_goal;
+          if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {
+            if(usualIsWeek){
+              aDayCost=int.parse(controllers[0].text)*double.parse(controllers[1].text)/7;
+            }else{
+              aDayCost=int.parse(controllers[0].text)*double.parse(controllers[1].text);
+            }
+            if(goalIsWeek){
+              aDayCost_goal=int.parse(controllers[2].text)*double.parse(controllers[1].text)/7;
+            }else{
+              aDayCost_goal=int.parse(controllers[2].text)*double.parse(controllers[1].text);
+            }
+            print("day : $aDayCost\ngoal : $aDayCost_goal");
+          }
+          saveAmount[index] = (aDayCost-aDayCost_goal).floor().toInt();
+        }
+      }
+    }catch(e){}
+  }
+  int boolToInt(bool flag){
+    if(flag) return 1;
+    else return 0;
   }
 }
 
@@ -522,11 +624,9 @@ class _InitNextState extends State<InitNext> {
 //https://medium.com/flutterpub/flutter-keyboard-actions-and-next-focus-field-3260dc4c694
 // Todo
 // 오토포커싱
-// 3개 다 입력하면 절약비용 나오기
 
-/////////////////////////////////////////
-//habitList : List<map{"name": String, "iconURL": String, "price": int,"usualIsWeek":bool, "usualAmount": int, "goalIsWeek": bool,
-// "goalAmount": int,"isTrigger":bool}>
-//BottomPositionedBox("완료",(){
-//  이부분에서 provider에 habitList[index] + DateTime.now 해서 Habit객체 만들어 넘겨줘야함.
-//})
+// 입력값 체크하는거 함수화
+
+//건의사항
+//usual 매주여도 goal 매일 할수있도록
+// 절약금 매일 말고 매달로 표시

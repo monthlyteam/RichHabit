@@ -81,7 +81,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
             ),
           ),
           CustomScrollView(
-            shrinkWrap: false,
+            shrinkWrap: true,
             slivers: <Widget>[
               SliverPersistentHeader(
                 pinned : true,
@@ -92,7 +92,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                 ),
               ),
               SliverGroupBuilder(
-//                padding: ,
+                padding: EdgeInsets.only(bottom: 80),
                 decoration: BoxDecoration(
                   color: kIvoryColor,
                   borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
@@ -317,7 +317,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                                         triggersRough.insert(
                                             triggersRough.length-1,
                                             [textFieldController.text,
-                                              new SvgPicture.asset('assets/images/icon/custom_coin.svg',fit: BoxFit.cover,),
+                                              'assets/images/icon/custom_coin.svg',
                                               true
                                             ]);
                                       });
@@ -366,7 +366,7 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
             //가장 처음화면으로 돌아가기
           }),
           SizedBox(height: 20,),
-          Text("습관 입력하기",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
+          Text("습관 동반자",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
           SizedBox(height: 11,),
           Container(
             decoration: BoxDecoration(
@@ -379,7 +379,7 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
           SizedBox(height: 11),
           Container(
               width: 280,
-              child: Text("평소에 습관적으로 지출 하던 항목들을 전부 체크해주세요.",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
+              child: Text("평소에 매일 하던 행동과 함께 관리하며 기록을 더 잘 할 수 있어요!",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
           ),
         ],
       ),
