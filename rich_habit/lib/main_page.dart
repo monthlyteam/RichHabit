@@ -214,13 +214,13 @@ class _MainPageState extends State<MainPage> {
     if (_selectedIndex == val) {
       switch (val) {
         case 0:
-          _buyOrNot.currentState.popUntil((route) => route.isFirst);
+          _home.currentState.popUntil((route) => route.isFirst);
           break;
         case 1:
-          _compoundInterest.currentState.popUntil((route) => route.isFirst);
+          _buyOrNot.currentState.popUntil((route) => route.isFirst);
           break;
         case 2:
-          _home.currentState.popUntil((route) => route.isFirst);
+          _compoundInterest.currentState.popUntil((route) => route.isFirst);
           break;
         case 3:
           _invest.currentState.popUntil((route) => route.isFirst);

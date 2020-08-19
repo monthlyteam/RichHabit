@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:richhabit/screens/compound_interest_detail.dart';
 
 import '../habit.dart';
 import '../habit_provider.dart';
@@ -208,7 +209,12 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    print("detail");
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CompoundInterestDetail()),
+                                    );
                                   },
                                   child: Icon(
                                     Icons.arrow_forward_ios,
