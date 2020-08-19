@@ -38,7 +38,7 @@ class Habit {
   double get expectedSaveMoney //예상 절약 금액
       => (usualAmount - goalAmount) * price;
 
-  Habit fromJson(Map<String, dynamic> json) => Habit(
+  factory Habit.fromJson(Map<String, dynamic> json) => Habit(
         addedTimeID: json['addedTimeID'],
         name: json['name'],
         iconURL: json['iconURL'],
@@ -51,7 +51,7 @@ class Habit {
       );
 
   Map<String, dynamic> toJson() => {
-        'addedTimeID': addedTimeID,
+        'addedTimeID': addedTimeID.toString(),
         'name': name,
         'iconURL': iconURL,
         'price': price,

@@ -1,80 +1,44 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/screens/home.dart';
 import 'package:richhabit/screens/init.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/user_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'habit.dart';
 import 'main_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  bool isEmpty = sp.getKeys().isEmpty;
+
+  Map<DateTime, List<Habit>> triggerHabit = Map<DateTime, List<Habit>>();
   Map<DateTime, List<Habit>> dailyHabit = Map<DateTime, List<Habit>>();
+  Map<int, List<Habit>> weeklyHabit = Map<int, List<Habit>>();
 
-  var now = DateTime.now();
-  Habit test1 = Habit(
-      addedTimeID: now,
-      name: 'Habit1',
-      iconURL: 'assets/images/icon/custom_coin.svg',
-      price: 1000,
-      usualIsWeek: false,
-      usualAmount: 5,
-      goalIsWeek: false,
-      goalAmount: 1,
-      nowAmount: 0);
-  Habit test2 = Habit(
-      addedTimeID: now,
-      name: 'Habit2',
-      iconURL: 'assets/images/icon/custom_coin.svg',
-      price: 1000,
-      usualIsWeek: false,
-      usualAmount: 5,
-      goalIsWeek: false,
-      goalAmount: 1,
-      nowAmount: 0);
-  Habit test3 = Habit(
-      addedTimeID: now,
-      name: 'Habit3',
-      iconURL: 'assets/images/icon/custom_coin.svg',
-      price: 1000,
-      usualIsWeek: false,
-      usualAmount: 5,
-      goalIsWeek: false,
-      goalAmount: 1,
-      nowAmount: 0);
-  Habit test4 = Habit(
-      addedTimeID: now,
-      name: 'Habit4',
-      iconURL: 'assets/images/icon/custom_coin.svg',
-      price: 1000,
-      usualIsWeek: false,
-      usualAmount: 5,
-      goalIsWeek: false,
-      goalAmount: 1,
-      nowAmount: 0);
-
-  dailyHabit[DateTime(now.year, now.month, now.day)] = [test1];
-  dailyHabit[DateTime(now.year, now.month, now.day)].add(test2);
-  dailyHabit[DateTime(now.year, now.month, now.day).add(Duration(days: 1))] = [
-    test3
-  ];
-  dailyHabit[DateTime(now.year, now.month, now.day).add(Duration(days: 1))]
-      .add(test4);
-
-  dailyHabit[DateTime(now.year, now.month, now.day).add(Duration(days: 2))] =
-      [];
-  print(
-      'dailyHabit : ${dailyHabit[DateTime(now.year, now.month, now.day).add(Duration(days: 2))]}');
-  dailyHabit.forEach((key, value) {
-    value.forEach((element) {
-      print('element: ${element.name}');
+  if (!isEmpty) {
+    Map<String, dynamic> json = jsonDecode(sp.getString('triggerHabit'));
+    json.forEach((key, value) {
+      var list = value as List;
+      List<Habit> habitList = list.map((e) => Habit.fromJson(e)).toList();
+      triggerHabit[DateTime.parse(key)] = habitList;
     });
-  });
+  }
 
-  print('daily: $dailyHabit');
+  Map<String, dynamic> jsonMap = {};
+  jsonMap[dailyHabit.keys.toList().first.toString()] =
+      dailyHabit[dailyHabit.keys.toList().first]
+          .map((e) => e.toJson())
+          .toList();
+
+  var json = jsonEncode(jsonMap);
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
@@ -84,19 +48,23 @@ void main() {
           ChangeNotifierProvider(create: (_) => HabitProvider()),
           ChangeNotifierProvider(create: (_) => UserProvider()),
         ],
-        child: MyApp(),
+        child: MyApp(isEmpty),
       ),
     );
   });
 }
 
 class MyApp extends StatelessWidget {
+  final bool isEmpty;
+
+  MyApp(this.isEmpty);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'RichHabit',
       theme: ThemeData(),
-      home: Init(),
+      home: isEmpty ? Init() : Home(),
       debugShowCheckedModeBanner: false,
     );
   }
