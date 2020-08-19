@@ -39,7 +39,7 @@ class Habit {
       => (usualAmount - goalAmount) * price;
 
   factory Habit.fromJson(Map<String, dynamic> json) => Habit(
-        addedTimeID: json['addedTimeID'],
+        addedTimeID: DateTime.parse(json['addedTimeID']),
         name: json['name'],
         iconURL: json['iconURL'],
         price: json['price'],
