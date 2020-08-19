@@ -179,7 +179,7 @@ class HabitProvider with ChangeNotifier {
       triggerHabit[inputTime][index].nowAmount++;
     } else {
       if (goalIsWeek) {
-        int isoWeekOfYear = isoWeekNumber(inputTime);
+        int isoWeekOfYear = inputTime.year * 100 + isoWeekNumber(inputTime);
         //weekly
         int index = weeklyHabit[isoWeekOfYear]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
@@ -218,7 +218,7 @@ class HabitProvider with ChangeNotifier {
       triggerHabit[inputTime][index].nowAmount--;
     } else {
       if (goalIsWeek) {
-        int isoWeekOfYear = isoWeekNumber(inputTime);
+        int isoWeekOfYear = inputTime.year * 100 + isoWeekNumber(inputTime);
         //weekly
         int index = weeklyHabit[isoWeekOfYear]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
