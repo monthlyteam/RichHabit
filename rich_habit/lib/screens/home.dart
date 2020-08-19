@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/screens/home_detail.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -108,7 +109,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: GestureDetector(
             onTap: () {
-              print("눌림");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeDetail(
+                          habit: habit,
+                        )),
+              );
             },
             child: Container(
               height: 70.0,
