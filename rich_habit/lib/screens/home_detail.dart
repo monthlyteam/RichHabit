@@ -179,7 +179,7 @@ class HomeDetail extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "${habit.price}원",
+                          "${habit.price.round()}원",
                           style: TextStyle(
                               fontSize: 16.0,
                               color: kPurpleColor,
