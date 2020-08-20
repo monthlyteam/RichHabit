@@ -59,7 +59,9 @@ class HabitProvider with ChangeNotifier {
         });
 
         for (int i = 1; lastDate.add(Duration(days: i - 1)) != nowDate; i++) {
-          triggerHabit[lastDate.add(Duration(days: i))] = initTriggerHabitList;
+          triggerHabit[lastDate.add(Duration(days: i))] = initTriggerHabitList
+              .map((e) => Habit.fromJson(e.toJson()))
+              .toList();
         }
       }
 
@@ -72,7 +74,10 @@ class HabitProvider with ChangeNotifier {
         });
 
         for (int i = 1; lastDate.add(Duration(days: i - 1)) != nowDate; i++) {
-          dailyHabit[lastDate.add(Duration(days: i))] = initDailyHabitList;
+          dailyHabit[lastDate.add(Duration(days: i))] = initDailyHabitList
+              .map((e) => Habit.fromJson(e.toJson()))
+              .toList();
+          ;
         }
       }
 
@@ -86,7 +91,10 @@ class HabitProvider with ChangeNotifier {
           });
 
           for (int i = lastNowWeekOfYear + 1; i - 1 != nowWeekOfYear; i++) {
-            weeklyHabit[i] = initWeeklyHabitList;
+            weeklyHabit[i] = initWeeklyHabitList
+                .map((e) => Habit.fromJson(e.toJson()))
+                .toList();
+            ;
           }
         }
       }
@@ -211,27 +219,16 @@ class HabitProvider with ChangeNotifier {
             .indexWhere((element) => element.addedTimeID == addedTimeID);
 
         weeklyHabit[isoWeekOfYear][index].nowAmount++;
-        if (weeklyHabit[isoWeekOfYear][index].nowAmount >
-            weeklyHabit[isoWeekOfYear][index].goalAmount) {
-          calendarIcon[inputTime] = [2];
-        } else {
-          calendarIcon[inputTime] = [1];
-        }
       } else {
         //daily
         int index = dailyHabit[inputTime]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
 
         dailyHabit[inputTime][index].nowAmount++;
-        if (dailyHabit[inputTime][index].nowAmount >
-            dailyHabit[inputTime][index].goalAmount) {
-          calendarIcon[inputTime] = [2];
-        } else {
-          calendarIcon[inputTime] = [1];
-        }
       }
     }
 
+    _checkCalendarIcon(inputTime);
     _setLocalDB();
     notifyListeners();
   }
@@ -251,27 +248,16 @@ class HabitProvider with ChangeNotifier {
             .indexWhere((element) => element.addedTimeID == addedTimeID);
 
         weeklyHabit[isoWeekOfYear][index].nowAmount--;
-        if (weeklyHabit[isoWeekOfYear][index].nowAmount >
-            weeklyHabit[isoWeekOfYear][index].goalAmount) {
-          calendarIcon[inputTime] = [2];
-        } else {
-          calendarIcon[inputTime] = [1];
-        }
       } else {
         //daily
         int index = dailyHabit[inputTime]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
 
         dailyHabit[inputTime][index].nowAmount--;
-        if (dailyHabit[inputTime][index].nowAmount >
-            dailyHabit[inputTime][index].goalAmount) {
-          calendarIcon[inputTime] = [2];
-        } else {
-          calendarIcon[inputTime] = [1];
-        }
       }
     }
 
+    _checkCalendarIcon(inputTime);
     _setLocalDB();
     notifyListeners();
   }
@@ -483,6 +469,31 @@ class HabitProvider with ChangeNotifier {
 
   int _dayOfYear(DateTime date) {
     return date.difference(DateTime(date.year, 1, 1)).inDays;
+  }
+
+  void _checkCalendarIcon(DateTime inputTime) {
+    int inputTimeWeekOfYear = inputTime.year * 100 + isoWeekNumber(inputTime);
+    calendarIcon[inputTime] = [1];
+
+    if (dailyHabit.containsKey(inputTime)) {
+      dailyHabit[inputTime].forEach((element) {
+        if (element.nowAmount > element.goalAmount)
+          calendarIcon[inputTime] = [2];
+      });
+    }
+
+    if (weeklyHabit.containsKey(inputTimeWeekOfYear)) {
+      DateTime tempTime;
+      weeklyHabit[inputTimeWeekOfYear].forEach((element) {
+        if (element.nowAmount > element.goalAmount) {
+          for (int i = nowDate.weekday; i > 0; i--) {
+            tempTime = nowDate.subtract(Duration(days: nowDate.weekday - i));
+
+            if (calendarIcon[tempTime][0] != 0) calendarIcon[tempTime] = [2];
+          }
+        }
+      });
+    }
   }
 
   void _setLocalDB() {
