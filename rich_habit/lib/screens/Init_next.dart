@@ -32,6 +32,7 @@ class _InitNextState extends State<InitNext> {
   bool usualIsWeek = false;
   List<Map> habitList;
   List<int> saveAmount;
+  List<FocusNode> nodes;
   @override
   void initState() {
     super.initState();
@@ -40,6 +41,7 @@ class _InitNextState extends State<InitNext> {
 
     saveAmount = List<int>.generate(habitList.length, (index) => 0);
     controllers = List<TextEditingController>.generate(3, (index) => TextEditingController());
+    nodes = List<FocusNode>.generate(3, (index) => FocusNode());
     pageController = new PageController();
   }
 
@@ -244,13 +246,18 @@ class _InitNextState extends State<InitNext> {
                                           },
                                         );
                                       },
+                                      onEditingComplete: (){
+                                        nodes[0].unfocus();
+                                        FocusScope.of(context).requestFocus(nodes[1]);
+                                      },
+                                      textInputAction: TextInputAction.next,
                                       controller: controllers[0],
                                       padding: EdgeInsets.symmetric(
                                           vertical: 2, horizontal: 2),
                                       textAlign: TextAlign.end,
                                       maxLines: 1,
-                                      placeholder: "1이상",
                                       keyboardType: TextInputType.numberWithOptions(),
+                                      focusNode: nodes[0],
                                     ),
                                   ),
                                   SizedBox(
@@ -273,15 +280,19 @@ class _InitNextState extends State<InitNext> {
                                     width: 152,
                                     height: 23,
                                     child: CupertinoTextField(
+                                      focusNode: nodes[1],
                                       controller: controllers[1],
                                       onChanged: (text){
                                         setState(() {
                                           _onInputChanged(index);
                                         },
                                         );
-                                      },
+                                      },onEditingComplete: (){
+                                      nodes[1].unfocus();
+                                      FocusScope.of(context).requestFocus(nodes[2]);}
+                                      ,
+                                      textInputAction: TextInputAction.next,
                                       maxLines: 1,
-                                      placeholder: "1이상",
                                       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                       textAlign: TextAlign.end,
                                       keyboardType:
@@ -391,6 +402,7 @@ class _InitNextState extends State<InitNext> {
                                     width: 152,
                                     height: 23,
                                     child: CupertinoTextField(
+                                      focusNode: nodes[2],
                                       controller: controllers[2],
                                       onChanged: (text){
                                         setState(() {
@@ -399,7 +411,6 @@ class _InitNextState extends State<InitNext> {
                                         );
                                       },
                                       maxLines: 1,
-                                      placeholder: "0이상",
                                       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                       textAlign: TextAlign.end,
                                       keyboardType:
@@ -420,7 +431,7 @@ class _InitNextState extends State<InitNext> {
                                 child:
                                 Column(
                                   children: [
-                                    Text("\"평소 습관 보다 매일 ${saveAmount[index]}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                    Text("\"평소 습관 보다 매달 ${saveAmount[index]}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                     Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
                                   ],
                                 )
@@ -471,7 +482,7 @@ class _InitNextState extends State<InitNext> {
                           iconURL: habitList[i]['iconURL'],
                           price: habitList[i]['price'],
                           usualAmount: habitList[i]['usualAmount'],
-                          usualIsWeek: habitList[i]['usualWeek'],
+                          usualIsWeek: habitList[i]['usualIsWeek'],
                           goalIsWeek: habitList[i]['goalIsWeek'],
 
                           goalAmount: habitList[i]['goalAmount']
@@ -603,7 +614,7 @@ class _InitNextState extends State<InitNext> {
             }
             print("day : $aDayCost\ngoal : $aDayCost_goal");
           }
-          saveAmount[index] = (aDayCost-aDayCost_goal).floor().toInt();
+          saveAmount[index] = (aDayCost-aDayCost_goal).floor().toInt()*30;
         }
       }
     }catch(e){}

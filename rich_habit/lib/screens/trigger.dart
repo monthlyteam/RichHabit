@@ -81,7 +81,6 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
             ),
           ),
           CustomScrollView(
-            shrinkWrap: true,
             slivers: <Widget>[
               SliverPersistentHeader(
                 pinned : true,
@@ -363,7 +362,8 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
         children: <Widget>[
           SizedBox(height: 50),
           GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
-            //가장 처음화면으로 돌아가기
+            Navigator.of(context).pop();
+
           }),
           SizedBox(height: 20,),
           Text("습관 동반자",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
