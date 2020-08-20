@@ -77,7 +77,6 @@ class HabitProvider with ChangeNotifier {
           dailyHabit[lastDate.add(Duration(days: i))] = initDailyHabitList
               .map((e) => Habit.fromJson(e.toJson()))
               .toList();
-          ;
         }
       }
 
@@ -94,7 +93,6 @@ class HabitProvider with ChangeNotifier {
             weeklyHabit[i] = initWeeklyHabitList
                 .map((e) => Habit.fromJson(e.toJson()))
                 .toList();
-            ;
           }
         }
       }
@@ -361,49 +359,67 @@ class HabitProvider with ChangeNotifier {
      Year의 합은 일단 따로 꺼내서 계산.
    */
   Map<int, dynamic> showCumSavingHistory(DateTime addedTimeID) {
-    Map<int, dynamic> map = {};
+    Map<int, Map<int, List<dynamic>>> map = Map<int, Map<int, List<dynamic>>>();
+
     int year = 0;
     int week = 0;
     double sumPrice = 0;
-    weeklyHabit.forEach((key, value) {
-      year = key ~/ 100;
-      week = key % 100;
-      map[year][week] = [];
-      value.forEach((element) {
-        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
-          sumPrice += element.saveMoney;
-          map[year][week][1].add(['매주 ${element.name}', element.saveMoney]);
+
+    //Todo: 해당 주차 전부 입력 접속이 없을시 예외처리 해야 정확함
+    if (weeklyHabit.isNotEmpty) {
+      weeklyHabit.forEach((key, value) {
+        if (key != nowWeekOfYear) {
+          year = key ~/ 100;
+          week = key % 100;
+
+          if (!map.containsKey(year)) map[year] = {};
+
+          if (!map[year].containsKey(week)) map[year][week] = [null, []];
+
+          value.forEach((element) {
+            if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+              sumPrice += element.saveMoney;
+              map[year][week][1].add(['매주 ${element.name}', element.saveMoney]);
+            }
+          });
+
+          if (map[year][week][0] == null)
+            map[year][week][0] = sumPrice;
+          else
+            map[year][week][0] += sumPrice;
+
+          sumPrice = 0;
         }
       });
+    }
 
-      if (map[year][week][0] == null)
-        map[year][week][0] = sumPrice;
-      else
-        map[year][week][0] += sumPrice;
+    if (dailyHabit.isNotEmpty) {
+      dailyHabit.forEach((key, value) {
+        if (key != nowDate && calendarIcon[key][0] != 0) {
+          year = key.year;
+          week = isoWeekNumber(key);
 
-      sumPrice = 0;
-    });
+          if (!map.containsKey(year)) map[year] = {};
 
-    dailyHabit.forEach((key, value) {
-      year = key.year;
-      week = isoWeekNumber(key);
-      if (map[year][week] == null) {
-        map[year][week] = [];
-      }
-      value.forEach((element) {
-        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
-          sumPrice = element.saveMoney;
-          map[year][week][1].add(['매일 ${element.name}', element.saveMoney]);
+          if (!map[year].containsKey(week)) map[year][week] = [null, []];
+
+          value.forEach((element) {
+            if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+              sumPrice = element.saveMoney;
+              map[year][week][1]
+                  .add(['${key.day}일 ${element.name}', element.saveMoney]);
+            }
+          });
+
+          if (map[year][week][0] == null)
+            map[year][week][0] = sumPrice;
+          else
+            map[year][week][0] += sumPrice;
+
+          sumPrice = 0;
         }
       });
-
-      if (map[year][week][0] == null)
-        map[year][week][0] = sumPrice;
-      else
-        map[year][week][0] += sumPrice;
-
-      sumPrice = 0;
-    });
+    }
 
     return map;
   }
