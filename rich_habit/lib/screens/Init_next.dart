@@ -420,7 +420,7 @@ class _InitNextState extends State<InitNext> {
                                 child:
                                 Column(
                                   children: [
-                                    Text("\"평소 습관 보다 매일 ${saveAmount[index]}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                    Text("\"평소 습관 보다 매달 ${saveAmount[index]}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                     Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
                                   ],
                                 )
@@ -603,7 +603,7 @@ class _InitNextState extends State<InitNext> {
             }
             print("day : $aDayCost\ngoal : $aDayCost_goal");
           }
-          saveAmount[index] = (aDayCost-aDayCost_goal).floor().toInt();
+          saveAmount[index] = (aDayCost-aDayCost_goal).floor().toInt()*30;
         }
       }
     }catch(e){}
@@ -620,6 +620,3 @@ class _InitNextState extends State<InitNext> {
 // 오토포커싱
 // 입력값 체크하는거 함수화
 
-//건의사항
-//usual 매주여도 goal 매일 할수있도록
-// 절약금 매일 말고 매달로 표시

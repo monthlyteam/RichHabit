@@ -104,7 +104,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RichHabit',
       theme: ThemeData(),
-      home: isEmpty ? Init() : MainPage(),
+      home: true ? Init() : MainPage(),
+//      home: isEmpty ? Init() : MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }
