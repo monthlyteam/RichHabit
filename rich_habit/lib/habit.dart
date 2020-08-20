@@ -26,6 +26,7 @@ class Habit {
     this.usualAmount,
     this.goalIsWeek,
     this.goalAmount,
+    this.nowAmount = 0,
   });
 
   double get retention //목표 유지율
@@ -36,6 +37,32 @@ class Habit {
 
   double get expectedSaveMoney //예상 절약 금액
       => (usualAmount - goalAmount) * price;
+
+  factory Habit.fromJson(Map<String, dynamic> json) => Habit(
+        addedTimeID: DateTime.parse(json['addedTimeID']),
+        name: json['name'],
+        iconURL: json['iconURL'],
+        price: json['price'] * 1.0,
+        isTrigger: json['isTrigger'],
+        usualIsWeek: json['usualIsWeek'],
+        usualAmount: json['usualAmount'],
+        goalIsWeek: json['goalIsWeek'],
+        goalAmount: json['goalAmount'],
+        nowAmount: json['nowAmount'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        'addedTimeID': addedTimeID.toString(),
+        'name': name,
+        'iconURL': iconURL,
+        'price': price,
+        'isTrigger': isTrigger,
+        'usualIsWeek': usualIsWeek,
+        'usualAmount': usualAmount,
+        'goalIsWeek': goalIsWeek,
+        'goalAmount': goalAmount,
+        'nowAmount': nowAmount,
+      };
 
   void addNowAmount() {
     nowAmount++;
