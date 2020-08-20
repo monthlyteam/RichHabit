@@ -10,12 +10,23 @@ import 'package:provider/provider.dart';
 import 'package:richhabit/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'habit.dart';
+import 'test_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   //Get Local DB data
   SharedPreferences sp = await SharedPreferences.getInstance();
   bool isEmpty = sp.getKeys().isEmpty;
+
+  //TODO: Must Erase Test Data after debug
+  //testData Start
+  if (isEmpty) {
+    TestData.getData(sp);
+    isEmpty = false;
+    print("main.dart: Get TestData DONE");
+  }
+  //TestData Finish
 
   Map<DateTime, List<Habit>> triggerHabit = Map<DateTime, List<Habit>>();
   Map<DateTime, List<Habit>> dailyHabit = Map<DateTime, List<Habit>>();
@@ -46,12 +57,12 @@ void main() async {
     }
 
     if (sp.containsKey('weekly')) {
-      Map<int, dynamic> json = jsonDecode(sp.getString('weekly'));
+      Map<String, dynamic> json = jsonDecode(sp.getString('weekly'));
 
       json.forEach((key, value) {
         var list = value as List;
         habitList = list.map((e) => Habit.fromJson(e)).toList();
-        weeklyHabit[key.toInt()] = habitList;
+        weeklyHabit[int.parse(key)] = habitList;
       });
     }
 
@@ -59,7 +70,7 @@ void main() async {
       Map<String, dynamic> json = jsonDecode(sp.getString('calendar'));
 
       json.forEach((key, value) {
-        calendarIcon[DateTime.parse(key)] = value;
+        calendarIcon[DateTime.parse(key)] = [value[0]];
       });
     }
   }

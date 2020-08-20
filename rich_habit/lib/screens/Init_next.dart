@@ -462,7 +462,7 @@ class _InitNextState extends State<InitNext> {
                         iconURL: habitList[i]['iconURL'],
                         price: habitList[i]['price'],
                         usualAmount: habitList[i]['usualAmount'],
-                        usualIsWeek: habitList[i]['usualWeek'],
+                        usualIsWeek: habitList[i]['usualIsWeek'],
                         goalIsWeek: habitList[i]['goalIsWeek'],
                         goalAmount: habitList[i]['goalAmount']));
                   }

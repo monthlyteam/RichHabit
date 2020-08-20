@@ -33,7 +33,10 @@ class HabitProvider with ChangeNotifier {
     var calendarKeys = calendarIcon.keys.toList();
     //유저가 데이터가 있고, 오늘 처음 접속이면
     //빈 날짜에 Habit을 채움
-    if (calendarKeys.length != 0 && calendarKeys.last != nowDate) {
+    if (calendarKeys.length == 0) {
+      calendarIcon[nowDate] = [0]; //처음 접속일 경
+      _setLocalDB();
+    } else if (calendarKeys.last != nowDate) {
       var triggerKeys = triggerHabit.keys.toList();
       var dailyKeys = dailyHabit.keys.toList();
       var weeklyKeys = weeklyHabit.keys.toList();
@@ -55,7 +58,7 @@ class HabitProvider with ChangeNotifier {
           initTriggerHabitList.add(initHabit);
         });
 
-        for (int i = 1; lastDate.add(Duration(days: i)) != nowDate; i++) {
+        for (int i = 1; lastDate.add(Duration(days: i - 1)) != nowDate; i++) {
           triggerHabit[lastDate.add(Duration(days: i))] = initTriggerHabitList;
         }
       }
@@ -68,30 +71,33 @@ class HabitProvider with ChangeNotifier {
           initDailyHabitList.add(initHabit);
         });
 
-        for (int i = 1; lastDate.add(Duration(days: i)) != nowDate; i++) {
+        for (int i = 1; lastDate.add(Duration(days: i - 1)) != nowDate; i++) {
           dailyHabit[lastDate.add(Duration(days: i))] = initDailyHabitList;
         }
       }
 
       if (weeklyKeys.length != 0) {
         lastNowWeekOfYear = weeklyKeys.last;
-        weeklyHabit[lastNowWeekOfYear].forEach((element) {
-          initHabit = element;
-          initHabit.nowAmount = 0;
-          initWeeklyHabitList.add(initHabit);
-        });
+        if (lastNowWeekOfYear != nowWeekOfYear) {
+          weeklyHabit[lastNowWeekOfYear].forEach((element) {
+            initHabit = element;
+            initHabit.nowAmount = 0;
+            initWeeklyHabitList.add(initHabit);
+          });
 
-        for (int i = lastNowWeekOfYear + 1; i != nowWeekOfYear; i++) {
-          weeklyHabit[i] = initWeeklyHabitList;
+          for (int i = lastNowWeekOfYear + 1; i - 1 != nowWeekOfYear; i++) {
+            weeklyHabit[i] = initWeeklyHabitList;
+          }
         }
       }
 
       for (int i = 1;
-          calendarKeys.last.add(Duration(days: i)) != nowDate;
+          calendarKeys.last.add(Duration(days: i - 1)) != nowDate;
           i++) {
         calendarIcon[calendarKeys.last.add(Duration(days: i))] = [0];
       }
 
+      _setLocalDB();
       notifyListeners();
     }
   }
@@ -199,7 +205,7 @@ class HabitProvider with ChangeNotifier {
       triggerHabit[inputTime][index].nowAmount++;
     } else {
       if (goalIsWeek) {
-        int isoWeekOfYear = isoWeekNumber(inputTime);
+        int isoWeekOfYear = (inputTime.year * 100) + isoWeekNumber(inputTime);
         //weekly
         int index = weeklyHabit[isoWeekOfYear]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
@@ -239,7 +245,7 @@ class HabitProvider with ChangeNotifier {
       triggerHabit[inputTime][index].nowAmount--;
     } else {
       if (goalIsWeek) {
-        int isoWeekOfYear = isoWeekNumber(inputTime);
+        int isoWeekOfYear = inputTime.year * 100 + isoWeekNumber(inputTime);
         //weekly
         int index = weeklyHabit[isoWeekOfYear]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
@@ -468,7 +474,6 @@ class HabitProvider with ChangeNotifier {
 
   int isoWeekNumber(DateTime date) {
     int daysToAdd = DateTime.thursday - date.weekday;
-    print('$daysToAdd , ${date.weekday}');
     DateTime thursdayDate = daysToAdd > 0
         ? date.add(Duration(days: daysToAdd))
         : date.subtract(Duration(days: daysToAdd.abs()));
@@ -501,7 +506,6 @@ class HabitProvider with ChangeNotifier {
       });
 
       json = jsonEncode(jsonMap);
-      print("sp: $sp");
       sp.setString('daily', json.toString());
     }
 
