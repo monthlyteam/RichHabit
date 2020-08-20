@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:richhabit/habit_provider.dart';
 
 import '../habit.dart';
 
@@ -85,7 +86,7 @@ class HomeDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "\"평균 목표 달성률 96%! 좀 더 절약해 보는게 어떤가요?\"",
+                    "\"평균 목표 달성률 ${_getPercent(context)}%! 좀 더 절약해 보는게 어떤가요?\"",
                     style: TextStyle(
                         fontSize: 14.0,
                         color: kWhiteIvoryColor.withOpacity(0.8)),
@@ -198,5 +199,14 @@ class HomeDetail extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double _getPercent(BuildContext context) {
+    var list = context.watch<HabitProvider>().getRetention(habit.addedTimeID);
+    var avg = 0.0;
+    if (list != null) {
+      avg = list.reduce((a, b) => a + b);
+    }
+    return avg;
   }
 }
