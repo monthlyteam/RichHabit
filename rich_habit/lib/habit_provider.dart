@@ -453,7 +453,7 @@ class HabitProvider with ChangeNotifier {
 
     var sortedKey = retentions.keys.toList()..sort();
     for (int i = 0; i < sortedKey.length; i++) {
-      result[i] = retentions[sortedKey[i]];
+      result.add(retentions[sortedKey[i]]);
     }
     return result;
   }

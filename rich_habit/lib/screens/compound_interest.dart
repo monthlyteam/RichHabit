@@ -409,7 +409,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                 return touchedBarSpots.map((barSpot) {
                   final flSpot = barSpot;
                   return LineTooltipItem(
-                    '${flSpot.x.toInt() + 1}주차 ${flSpot.y} %',
+                    '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)} %',
                     const TextStyle(
                         color: kPurpleColor, fontWeight: FontWeight.bold),
                   );
@@ -419,7 +419,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
       maxY: 100,
       lineBarsData: [
         LineChartBarData(
-          spots: spots,
+          spots: getFlSpot(addedTimeID),
           colors: gradientColors,
           isCurved: true,
           isStrokeCapRound: true,
@@ -435,5 +435,19 @@ class _CompoundInterestState extends State<CompoundInterest> {
         ),
       ],
     );
+  }
+
+  List<FlSpot> getFlSpot(DateTime addedTimeID) {
+    print("ID : $addedTimeID---");
+    var spotList = context.watch<HabitProvider>().getRetention(addedTimeID);
+    spots = [FlSpot(0, 50)];
+    if (spotList != null) {
+      spots = [];
+      for (int i = 0; i < spotList.length; i++) {
+        print("spot : ${spotList[i]}");
+        spots.add(FlSpot(i.toDouble(), spotList[i]));
+      }
+    }
+    return spots;
   }
 }
