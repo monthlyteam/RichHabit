@@ -260,6 +260,17 @@ class HabitProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //데이터 초기화
+  void resetData() {
+    triggerHabit = Map<DateTime, List<Habit>>();
+    dailyHabit = Map<DateTime, List<Habit>>();
+    weeklyHabit = Map<int, List<Habit>>();
+    calendarIcon = Map<DateTime, List<int>>();
+
+    sp.clear();
+    notifyListeners();
+  }
+
   //이번달 예상 절약 금액(addedTimeID null이면 => 전체)
   double thisMonthExpected(DateTime addedTimeID, bool goalIsWeek) {
     int maxDayOfMonth = DateTime(nowDate.year, nowDate.month + 1, 1)
