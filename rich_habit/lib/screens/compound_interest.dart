@@ -213,7 +213,8 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              CompoundInterestDetail()),
+                                              CompoundInterestDetail(
+                                                  addedTimeID: addedTimeID)),
                                     );
                                   },
                                   child: Icon(
