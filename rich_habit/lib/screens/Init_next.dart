@@ -33,13 +33,16 @@ class _InitNextState extends State<InitNext> {
   List<Map> habitList;
   List<int> saveAmount;
   List<FocusNode> nodes;
+  bool whereFocus=false; //false:1번 true: 2번
+  Color firstBlockColor = kPurpleColor;
+  Color secondBlockColor = Colors.grey;
   @override
   void initState() {
     super.initState();
     this._selectedItem = widget.selectedItem;
     habitList = new List<Map>(_selectedItem.length);
 
-    saveAmount = List<int>.generate(habitList.length, (index) => 0);
+    saveAmount = List<int>.generate(_selectedItem.length, (index) => 0);
     controllers = List<TextEditingController>.generate(3, (index) => TextEditingController());
     nodes = List<FocusNode>.generate(3, (index) => FocusNode());
     pageController = new PageController();
@@ -47,6 +50,18 @@ class _InitNextState extends State<InitNext> {
 
   @override
   Widget build(BuildContext context) {
+    nodes[0].addListener((){setState(() {
+      firstBlockColor = kPurpleColor;
+      secondBlockColor = Colors.grey;
+    });});
+    nodes[1].addListener((){setState(() {
+      firstBlockColor = kPurpleColor;
+      secondBlockColor = Colors.grey;
+    });});
+    nodes[2].addListener((){setState(() {
+      firstBlockColor = Colors.grey;
+      secondBlockColor = kPurpleColor;
+    });});
     return Scaffold(
       backgroundColor: kIvoryColor,
       body: Stack(
@@ -151,7 +166,7 @@ class _InitNextState extends State<InitNext> {
                       children: [
                         Text(
                           "①  평소 얼마나 자주 소비하십니까?",
-                          style: TextStyle(color: kPurpleColor, fontSize: 16),
+                          style: TextStyle(color: firstBlockColor, fontSize: 16),
                         ),
                         SizedBox(
                           height: 5.5,
@@ -162,7 +177,7 @@ class _InitNextState extends State<InitNext> {
                               EdgeInsets.only(left: 20, top: 5, bottom: 15),
                           decoration: BoxDecoration(
                               border: Border(
-                            left: BorderSide(width: 1, color: kPurpleColor),
+                            left: BorderSide(width: 1, color: firstBlockColor),
                           )),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,13 +195,13 @@ class _InitNextState extends State<InitNext> {
                                               )
                                             : Icon(
                                                 Icons.radio_button_checked,
-                                                color: kPurpleColor,
+                                                color: firstBlockColor,
                                                 size: 16,
                                               ),
                                         SizedBox(width: 5.5),
                                         Text("매일",
                                             style: TextStyle(
-                                                color: kPurpleColor,
+                                                color: firstBlockColor,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold)),
                                       ],
@@ -207,18 +222,18 @@ class _InitNextState extends State<InitNext> {
                                         usualIsWeek
                                             ? Icon(
                                                 Icons.radio_button_checked,
-                                                color: kPurpleColor,
+                                                color: firstBlockColor,
                                                 size: 16,
                                               )
                                             : Icon(
                                                 Icons.radio_button_unchecked,
-                                                color: kPurpleColor,
+                                                color: firstBlockColor,
                                                 size: 16,
                                               ),
                                         SizedBox(width: 5.5),
                                         Text("매주",
                                             style: TextStyle(
-                                                color: kPurpleColor,
+                                                color: firstBlockColor,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.normal)),
                                       ],
@@ -265,14 +280,14 @@ class _InitNextState extends State<InitNext> {
                                   ),
                                   Text(
                                     "회",
-                                    style: TextStyle(color: kPurpleColor),
+                                    style: TextStyle(color: firstBlockColor),
                                   )
                                 ],
                               ),
                               SizedBox(
                                 height: 19.5,
                               ),
-                              Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 12),),
+                              Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: firstBlockColor,fontSize: 12),),
                               SizedBox(height: 2.5,),
                               Row(
                                 children: [
@@ -304,7 +319,7 @@ class _InitNextState extends State<InitNext> {
                                   ),
                                   Text(
                                     "원",
-                                    style: TextStyle(color: kPurpleColor),
+                                    style: TextStyle(color: firstBlockColor),
                                   )
                                 ],
                               ),
@@ -318,7 +333,7 @@ class _InitNextState extends State<InitNext> {
                       children: [
                         Text(
                           "② 앞으로의 목표치를 정해주세요!",
-                          style: TextStyle(color: kPurpleColor, fontSize: 16),
+                          style: TextStyle(color: secondBlockColor, fontSize: 16),
                         ),
                         SizedBox(
                           height: 5.5,
@@ -328,7 +343,7 @@ class _InitNextState extends State<InitNext> {
                           padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
                           decoration: BoxDecoration(
                               border: Border(
-                            left: BorderSide(width: 1, color: kPurpleColor),
+                            left: BorderSide(width: 1, color: secondBlockColor),
                           )),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,12 +356,12 @@ class _InitNextState extends State<InitNext> {
                                         usualIsWeek?
                                           Icon(Icons.radio_button_unchecked,color: Colors.grey,size: 16,)
                                          :goalIsWeek?
-                                            Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,)
-                                           :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,)
+                                            Icon(Icons.radio_button_unchecked,color: secondBlockColor,size: 16,)
+                                           :Icon(Icons.radio_button_checked,color: secondBlockColor,size: 16,)
                                         ,
                                         SizedBox(width:5.5),
                                         Text("매일", style: TextStyle(
-                                            color: usualIsWeek?Colors.grey:kPurpleColor,
+                                            color: usualIsWeek?Colors.grey:secondBlockColor,
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold
                                           )
@@ -370,18 +385,18 @@ class _InitNextState extends State<InitNext> {
                                         goalIsWeek
                                             ? Icon(
                                                 Icons.radio_button_checked,
-                                                color: kPurpleColor,
+                                                color: secondBlockColor,
                                                 size: 16,
                                               )
                                             : Icon(
                                                 Icons.radio_button_unchecked,
-                                                color: kPurpleColor,
+                                                color: secondBlockColor,
                                                 size: 16,
                                               ),
                                         SizedBox(width: 5.5),
                                         Text("매주",
                                             style: TextStyle(
-                                                color: kPurpleColor,
+                                                color: secondBlockColor,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.normal)),
                                       ],
@@ -422,7 +437,7 @@ class _InitNextState extends State<InitNext> {
                                   ),
                                   Text(
                                     "회",
-                                    style: TextStyle(color: kPurpleColor),
+                                    style: TextStyle(color: secondBlockColor),
                                   )
                                 ],
                               ),
@@ -545,7 +560,8 @@ class _InitNextState extends State<InitNext> {
                 habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
                 goalIsWeek = false;
                 usualIsWeek = false;
-                pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
+                nodes[0].requestFocus();
+                pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);
                 if(habitList[index+1] != null){
                   controllers[0]..text = habitList[index+1]['usualAmount'].toString();
                   controllers[1]..text = habitList[index+1]['price'].toString();
@@ -596,6 +612,7 @@ class _InitNextState extends State<InitNext> {
 
   }
   _onInputChanged(int index){
+    index=pageController.page.toInt();
     try{
       if(controllers[0].text.trim().isNotEmpty&&controllers[1].text.trim().isNotEmpty&controllers[2].text.trim().isNotEmpty){
         if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){
@@ -612,7 +629,6 @@ class _InitNextState extends State<InitNext> {
             }else{
               aDayCost_goal=int.parse(controllers[2].text)*double.parse(controllers[1].text);
             }
-            print("day : $aDayCost\ngoal : $aDayCost_goal");
           }
           saveAmount[index] = (aDayCost-aDayCost_goal).floor().toInt()*30;
         }

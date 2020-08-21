@@ -188,7 +188,6 @@ class _TriggerNextState extends State<TriggerNext> {
             );
           }
           Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-          print(triggerList);
         })
             :BottomPositionedBox("다음",(){
             triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
