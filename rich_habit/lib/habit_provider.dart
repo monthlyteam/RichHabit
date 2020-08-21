@@ -24,7 +24,7 @@ class HabitProvider with ChangeNotifier {
       this.calendarIcon}) {
     var now = DateTime.now();
     nowDate = DateTime(now.year, now.month, now.day);
-    nowWeekOfYear = (now.year * 100) + isoWeekNumber(now);
+    nowWeekOfYear = isoWeekNumber(now);
 
     initHabit();
   }
@@ -210,7 +210,7 @@ class HabitProvider with ChangeNotifier {
       triggerHabit[inputTime][index].nowAmount++;
     } else {
       if (goalIsWeek) {
-        int isoWeekOfYear = (inputTime.year * 100) + isoWeekNumber(inputTime);
+        int isoWeekOfYear = isoWeekNumber(inputTime);
         //weekly
         int index = weeklyHabit[isoWeekOfYear]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
@@ -239,7 +239,7 @@ class HabitProvider with ChangeNotifier {
       triggerHabit[inputTime][index].nowAmount--;
     } else {
       if (goalIsWeek) {
-        int isoWeekOfYear = inputTime.year * 100 + isoWeekNumber(inputTime);
+        int isoWeekOfYear = isoWeekNumber(inputTime);
         //weekly
         int index = weeklyHabit[isoWeekOfYear]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
@@ -409,7 +409,7 @@ class HabitProvider with ChangeNotifier {
       dailyHabit.forEach((key, value) {
         if (key != nowDate && calendarIcon[key][0] != 0) {
           year = key.year;
-          week = isoWeekNumber(key);
+          week = isoWeekNumber(key) % 100;
 
           if (!map.containsKey(year)) map[year] = {};
 
@@ -468,9 +468,7 @@ class HabitProvider with ChangeNotifier {
     if (dailyHabit.isNotEmpty) {
       dailyHabit.forEach((key, value) {
         if (!(dailyKey >= nowWeekOfYear)) {
-          if (len != 0 &&
-              dailyKey != 0 &&
-              dailyKey != key.year * 100 + isoWeekNumber(key)) {
+          if (len != 0 && dailyKey != 0 && dailyKey != isoWeekNumber(key)) {
             print(
                 'dailykey: $dailyKey, ret: $habitRet, len: $len, retention[key] : ${retentions[dailyKey]}');
             if (retentions.containsKey(dailyKey)) {
@@ -483,7 +481,7 @@ class HabitProvider with ChangeNotifier {
             habitRet = 0;
             len = 0;
           }
-          dailyKey = key.year * 100 + isoWeekNumber(key);
+          dailyKey = isoWeekNumber(key);
 
           value.forEach((element) {
             if (calendarIcon[key][0] != 0 &&
@@ -509,15 +507,18 @@ class HabitProvider with ChangeNotifier {
         ? date.add(Duration(days: daysToAdd))
         : date.subtract(Duration(days: daysToAdd.abs()));
     int dayOfYearThursday = _dayOfYear(thursdayDate);
-    return 1 + ((dayOfYearThursday - 1) / 7).floor();
+
+    return thursdayDate.year * 100 +
+        (1 + ((dayOfYearThursday - 1) / 7).floor());
+//    return (1 + ((dayOfYearThursday - 1) / 7).floor());
   }
 
   int _dayOfYear(DateTime date) {
-    return date.difference(DateTime(date.year, 1, 1)).inDays;
+    return 1 + date.difference(DateTime(date.year, 1, 1)).inDays;
   }
 
   void _checkCalendarIcon(DateTime inputTime) {
-    int inputTimeWeekOfYear = inputTime.year * 100 + isoWeekNumber(inputTime);
+    int inputTimeWeekOfYear = isoWeekNumber(inputTime);
     calendarIcon[inputTime] = [1];
 
     if (dailyHabit.containsKey(inputTime)) {
