@@ -277,7 +277,6 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                           child: AnimatedBuilder(
                               animation: offsetAnimation,
                               builder: (buildContext, child) {
-                                print('${offsetAnimation.value + 8.0}');
                                 return Container(
                                   padding: EdgeInsets.only(left: offsetAnimation.value + 15.0, right: 15.0 - offsetAnimation.value),
                                   child: CupertinoTextField(
@@ -315,7 +314,6 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                         Expanded(
                           child: GestureDetector(
                             onTap: (){
-                              print(textFieldController.text);
                               textFieldController.clear();
                               Navigator.pop(context);
                             },
@@ -336,7 +334,6 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                         Expanded(
                           child: GestureDetector(
                             onTap: (){
-                              print(textFieldController.text);
                               if(textFieldController.text.trim().isNotEmpty ){
                                 Navigator.pop(context);
                                 setState((){

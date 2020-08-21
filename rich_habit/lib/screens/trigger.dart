@@ -81,7 +81,6 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
             ),
           ),
           CustomScrollView(
-            shrinkWrap: true,
             slivers: <Widget>[
               SliverPersistentHeader(
                 pinned : true,
@@ -251,7 +250,6 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                             child: AnimatedBuilder(
                                 animation: offsetAnimation,
                                 builder: (buildContext, child) {
-                                  print('${offsetAnimation.value + 8.0}');
                                   return Container(
                                     padding: EdgeInsets.only(left: offsetAnimation.value + 15.0, right: 15.0 - offsetAnimation.value),
                                     child: CupertinoTextField(
@@ -289,7 +287,6 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                           Expanded(
                               child: GestureDetector(
                                 onTap: (){
-                                  print(textFieldController.text);
                                   textFieldController.clear();
                                   Navigator.pop(context);
                                 },
@@ -310,7 +307,6 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                           Expanded(
                               child: GestureDetector(
                                   onTap: (){
-                                    print(textFieldController.text);
                                     if(textFieldController.text.trim().isNotEmpty ){
                                       Navigator.pop(context);
                                       setState((){
@@ -363,7 +359,8 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
         children: <Widget>[
           SizedBox(height: 50),
           GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
-            //가장 처음화면으로 돌아가기
+            Navigator.of(context).pop();
+
           }),
           SizedBox(height: 20,),
           Text("습관 동반자",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
