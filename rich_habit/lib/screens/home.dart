@@ -32,8 +32,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     print("Trigger Habits = ${context.read<HabitProvider>().triggerHabit}");
     current = DateTime.now();
     _selDay = DateTime(current.year, current.month, current.day);
-    selWeekOfYear = _selDay.year * 100 +
-        context.read<HabitProvider>().isoWeekNumber(_selDay);
+    selWeekOfYear = context.read<HabitProvider>().isoWeekNumber(_selDay);
     print(selWeekOfYear);
 
     _calendarController = CalendarController();
@@ -58,16 +57,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       if (_isNow(day)) {
         print("같");
         _selDay = DateTime(day.year, day.month, day.day);
-        selWeekOfYear = _selDay.year * 100 +
-            context.read<HabitProvider>().isoWeekNumber(_selDay);
+        selWeekOfYear = context.read<HabitProvider>().isoWeekNumber(_selDay);
         Navigator.pop(buildContext);
       } else if (day.isAfter(DateTime.now())) {
         print("후");
       } else {
         print("전");
         _selDay = DateTime(day.year, day.month, day.day);
-        selWeekOfYear = _selDay.year * 100 +
-            context.read<HabitProvider>().isoWeekNumber(_selDay);
+        selWeekOfYear = context.read<HabitProvider>().isoWeekNumber(_selDay);
         Navigator.pop(buildContext);
       }
     });
@@ -637,7 +634,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     setState(() {
                       _selDay = _selDay =
                           DateTime(current.year, current.month, current.day);
-                      selWeekOfYear = _selDay.year * 100 +
+                      selWeekOfYear =
                           context.read<HabitProvider>().isoWeekNumber(_selDay);
                     });
                   },

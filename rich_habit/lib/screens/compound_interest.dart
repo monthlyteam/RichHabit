@@ -43,8 +43,9 @@ class _CompoundInterestState extends State<CompoundInterest> {
     current = DateTime.now();
     today = DateTime(current.year, current.month, current.day);
     dailyHabit = context.read<HabitProvider>().dailyHabit[today];
-    weeklyHabit = context.read<HabitProvider>().weeklyHabit[
-        today.year * 100 + context.read<HabitProvider>().isoWeekNumber(today)];
+    weeklyHabit = context
+        .read<HabitProvider>()
+        .weeklyHabit[context.read<HabitProvider>().isoWeekNumber(today)];
     if (dailyHabit != null) {
       total = dailyHabit;
     }
