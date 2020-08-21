@@ -85,13 +85,15 @@ class HomeDetail extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    "\"평균 목표 달성률 ${_getPercent(context)}%! 좀 더 절약해 보는게 어떤가요?\"",
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: kWhiteIvoryColor.withOpacity(0.8)),
-                    textAlign: TextAlign.center,
-                  ),
+                  habit.isTrigger
+                      ? Container()
+                      : Text(
+                          "\"평균 목표 달성률 ${_getPercent(context).toStringAsFixed(1)}%! 좀 더 절약해 보는게 어떤가요?\"",
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: kWhiteIvoryColor.withOpacity(0.8)),
+                          textAlign: TextAlign.center,
+                        ),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -169,25 +171,38 @@ class HomeDetail extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: kIvoryColor,
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "${habit.name} 1회 당 평균 소비 금액",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: kPurpleColor.withOpacity(0.5),
+                    child: habit.isTrigger
+                        ? Row(
+                            children: [
+                              Text(
+                                "당신의 습관 동반자 입니다!",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: kPurpleColor.withOpacity(0.5),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "${habit.name} 1회 당 평균 소비 금액",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: kPurpleColor.withOpacity(0.5),
+                                ),
+                              ),
+                              Text(
+                                "${habit.price.round()}원",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: kPurpleColor,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
                           ),
-                        ),
-                        Text(
-                          "${habit.price.round()}원",
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              color: kPurpleColor,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
                   ),
                   SizedBox(
                     height: 50.0,
@@ -206,6 +221,7 @@ class HomeDetail extends StatelessWidget {
     var avg = 0.0;
     if (list != null) {
       avg = list.reduce((a, b) => a + b);
+      avg = avg / list.length;
     }
     return avg;
   }
