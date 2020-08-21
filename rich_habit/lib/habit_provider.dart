@@ -34,8 +34,7 @@ class HabitProvider with ChangeNotifier {
     //유저가 데이터가 있고, 오늘 처음 접속이면
     //빈 날짜에 Habit을 채움
     if (calendarKeys.length == 0) {
-      calendarIcon[nowDate] = [0]; //처음 접속일 경
-      _setLocalDB();
+      calendarIcon[nowDate] = [0]; //처음 접속일 경우
     } else if (calendarKeys.last != nowDate) {
       var triggerKeys = triggerHabit.keys.toList();
       var dailyKeys = dailyHabit.keys.toList();
@@ -53,7 +52,7 @@ class HabitProvider with ChangeNotifier {
       if (triggerKeys.length != 0) {
         lastDate = triggerKeys.last;
         triggerHabit[lastDate].forEach((element) {
-          initHabit = element;
+          initHabit = Habit.fromJson(element.toJson());
           initHabit.nowAmount = 0;
           initTriggerHabitList.add(initHabit);
         });
@@ -68,7 +67,7 @@ class HabitProvider with ChangeNotifier {
       if (dailyKeys.length != 0) {
         lastDate = dailyKeys.last;
         dailyHabit[lastDate].forEach((element) {
-          initHabit = element;
+          initHabit = Habit.fromJson(element.toJson());
           initHabit.nowAmount = 0;
           initDailyHabitList.add(initHabit);
         });
@@ -84,7 +83,7 @@ class HabitProvider with ChangeNotifier {
         lastNowWeekOfYear = weeklyKeys.last;
         if (lastNowWeekOfYear != nowWeekOfYear) {
           weeklyHabit[lastNowWeekOfYear].forEach((element) {
-            initHabit = element;
+            initHabit = Habit.fromJson(element.toJson());
             initHabit.nowAmount = 0;
             initWeeklyHabitList.add(initHabit);
           });
@@ -267,6 +266,8 @@ class HabitProvider with ChangeNotifier {
     weeklyHabit = Map<int, List<Habit>>();
     calendarIcon = Map<DateTime, List<int>>();
 
+    calendarIcon[nowDate] = [0]; //처음 접속일 경우
+
     sp.clear();
     notifyListeners();
   }
@@ -443,44 +444,61 @@ class HabitProvider with ChangeNotifier {
     double habitRet = 0;
     int len = 0;
 
-    weeklyHabit.forEach((key, value) {
-      if (startWeek == 0) startWeek = key;
-      value.forEach((element) {
-        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
-          habitRet += element.retention;
-          len++;
+    if (weeklyHabit.isNotEmpty) {
+      weeklyHabit.forEach((key, value) {
+        if (!(key >= nowWeekOfYear)) {
+          if (startWeek == 0) startWeek = key;
+          value.forEach((element) {
+            if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+              habitRet += element.retention;
+              len++;
+            }
+          });
+
+          if (len != 0) retentions[key] = habitRet / len;
+
+          habitRet = 0;
+          len = 0;
         }
       });
-      retentions[key] = habitRet / len;
-      habitRet = 0;
-      len = 0;
-    });
+    }
 
     int dailyKey = 0;
-    dailyHabit.forEach((key, value) {
-      if (dailyKey != 0 && dailyKey != key.year * 100 + isoWeekNumber(key)) {
-        if (retentions.containsKey(dailyKey)) {
-          retentions[dailyKey] += habitRet / len;
-          retentions[dailyKey] /= 2;
-        } else {
-          retentions[dailyKey] = habitRet / len;
-        }
-        habitRet = 0;
-        len = 0;
-      }
-      dailyKey = key.year * 100 + isoWeekNumber(key);
 
-      value.forEach((element) {
-        if (addedTimeID == null || addedTimeID == element.addedTimeID) {
-          habitRet += element.retention;
-          len++;
+    if (dailyHabit.isNotEmpty) {
+      dailyHabit.forEach((key, value) {
+        if (!(dailyKey >= nowWeekOfYear)) {
+          if (len != 0 &&
+              dailyKey != 0 &&
+              dailyKey != key.year * 100 + isoWeekNumber(key)) {
+            print(
+                'dailykey: $dailyKey, ret: $habitRet, len: $len, retention[key] : ${retentions[dailyKey]}');
+            if (retentions.containsKey(dailyKey)) {
+              retentions[dailyKey] += habitRet / len;
+              retentions[dailyKey] /= 2;
+            } else {
+              retentions[dailyKey] = habitRet / len;
+            }
+            print('retention[key] : ${retentions[dailyKey]}');
+            habitRet = 0;
+            len = 0;
+          }
+          dailyKey = key.year * 100 + isoWeekNumber(key);
+
+          value.forEach((element) {
+            if (calendarIcon[key][0] != 0 &&
+                (addedTimeID == null || addedTimeID == element.addedTimeID)) {
+              habitRet += element.retention;
+              len++;
+            }
+          });
         }
       });
-    });
+    }
 
     var sortedKey = retentions.keys.toList()..sort();
     for (int i = 0; i < sortedKey.length; i++) {
-      result[i] = retentions[sortedKey[i]];
+      result.add(retentions[sortedKey[i]]);
     }
     return result;
   }
