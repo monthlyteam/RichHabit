@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
+import 'package:richhabit/screens/set_alarm.dart';
+import 'package:richhabit/screens/set_language.dart';
 
 import '../constants.dart';
 
@@ -115,9 +117,18 @@ class Profile extends StatelessWidget {
                   color: kPurpleColor,
                   height: 25,
                 ),
-                _buildContents(Icons.notifications, "알람", () {},
+                _buildContents(
+                    Icons.notifications,
+                    "알람",
+                    () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SetAlarmPage()));
+                    },
                     subData: isAlarmOn ? "켜짐" : "꺼짐"),
-                _buildContents(Icons.language, "언어", () {}, subData: language),
+                _buildContents(Icons.language, "언어", () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SetLanguagePage()));
+                }, subData: language),
                 Container(
                   color: kPurpleColor,
                   height: 25,
