@@ -26,6 +26,10 @@ class HabitProvider with ChangeNotifier {
     nowDate = DateTime(now.year, now.month, now.day);
     nowWeekOfYear = isoWeekNumber(now);
 
+    for (int i = 0; i < 10; i++) {
+      print(
+          'week: ${(2020 - i) * 100 + 2}, number to Date: ${weekNumberToDate((2020 - i) * 100 + 2)}');
+    }
     initHabit();
   }
 
@@ -510,11 +514,24 @@ class HabitProvider with ChangeNotifier {
 
     return thursdayDate.year * 100 +
         (1 + ((dayOfYearThursday - 1) / 7).floor());
-//    return (1 + ((dayOfYearThursday - 1) / 7).floor());
   }
 
   int _dayOfYear(DateTime date) {
     return 1 + date.difference(DateTime(date.year, 1, 1)).inDays;
+  }
+
+  DateTime weekNumberToDate(int weekNumber) {
+    int year = weekNumber ~/ 100;
+    int week = weekNumber % 100;
+
+    DateTime tempDate = DateTime(year, 1, 1);
+    if ((isoWeekNumber(tempDate) % 100) == 1) {
+      tempDate = tempDate.subtract(Duration(days: tempDate.weekday - 1));
+      return tempDate.add(Duration(days: (week - 1) * 7));
+    } else {
+      tempDate = tempDate.add(Duration(days: 8 - tempDate.weekday));
+      return tempDate.add(Duration(days: (week - 1) * 7));
+    }
   }
 
   void _checkCalendarIcon(DateTime inputTime) {
