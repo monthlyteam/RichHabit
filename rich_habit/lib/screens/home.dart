@@ -55,7 +55,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void _onDaySelected(BuildContext buildContext, DateTime day, List events) {
     print('CALLBACK: _onDaySelected');
     setState(() {
-      if (isNow(day)) {
+      if (_isNow(day)) {
         print("같");
         _selDay = DateTime(day.year, day.month, day.day);
         selWeekOfYear = _selDay.year * 100 +
@@ -83,7 +83,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     print('CALLBACK: _onCalendarCreated');
   }
 
-  List<Widget> _getTodayHabit(bool isWeek, bool isTrigger) {
+  List<Widget> _getHabitContainer(bool isWeek, bool isTrigger) {
     List<Habit> habits;
     if (isTrigger) {
       Map<DateTime, List<Habit>> triggerHabit =
@@ -118,7 +118,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               );
             },
             child: Container(
-              height: 70.0,
+              height: 85.0,
               decoration: BoxDecoration(
                   color: kIvoryColor,
                   borderRadius: BorderRadius.all(Radius.circular(15.0))),
@@ -421,7 +421,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     thickness: 0.5,
                     height: 0.5,
                   ),
-                  (isNow(date))
+                  (_isNow(date))
                       ? Expanded(
                           child: Container(
                             decoration: BoxDecoration(
@@ -558,7 +558,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  String getWeek(int weekNum) {
+  String _getWeek(int weekNum) {
     String weekStr = "";
     switch (weekNum) {
       case 1:
@@ -589,7 +589,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return weekStr;
   }
 
-  bool isNow(DateTime dateTime) {
+  bool _isNow(DateTime dateTime) {
     DateTime now = DateTime.now();
     if (now.day == dateTime.day &&
         now.month == dateTime.month &&
@@ -598,6 +598,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     } else {
       return false;
     }
+  }
+
+  String _getWeekStartDay() {
+    var day = "";
+    DateTime startOfWeek =
+        _selDay.subtract(Duration(days: _selDay.weekday - 1));
+    return "(${startOfWeek.month}월 ${startOfWeek.day}일~)";
   }
 
   @override
@@ -614,7 +621,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             title: Padding(
               padding: const EdgeInsets.only(left: kPadding),
               child: Text(
-                "${_selDay.month}월 ${_selDay.day}일 ${getWeek(_selDay.weekday)}",
+                "${_selDay.month}월 ${_selDay.day}일 ${_getWeek(_selDay.weekday)}",
                 style: TextStyle(
                     fontSize: kTitleFontSize,
                     color: kWhiteIvoryColor,
@@ -685,10 +692,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           fontWeight: FontWeight.bold),
                     ),
                     Column(
-                      children: _getTodayHabit(false, true),
+                      children: _getHabitContainer(false, true),
                     ),
                     Column(
-                      children: _getTodayHabit(false, false),
+                      children: _getHabitContainer(false, false),
                     ),
                     SizedBox(
                       height: kPadding,
@@ -697,14 +704,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             null
                         ? Container()
                         : Text(
-                            "${selWeekOfYear - (_selDay.year * 100)} 주차",
+                            "${selWeekOfYear - (_selDay.year * 100)} 주차 ${_getWeekStartDay()}",
                             style: TextStyle(
                                 fontSize: 20.0,
                                 color: kWhiteIvoryColor,
                                 fontWeight: FontWeight.bold),
                           ),
                     Column(
-                      children: _getTodayHabit(true, false),
+                      children: _getHabitContainer(true, false),
                     ),
                   ],
                 ),
