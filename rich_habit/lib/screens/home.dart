@@ -118,7 +118,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               );
             },
             child: Container(
-              height: 70.0,
+              height: 85.0,
               decoration: BoxDecoration(
                   color: kIvoryColor,
                   borderRadius: BorderRadius.all(Radius.circular(15.0))),
