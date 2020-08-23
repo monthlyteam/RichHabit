@@ -53,10 +53,20 @@ class _InitNextState extends State<InitNext> {
     nodes[0].addListener((){setState(() {
       firstBlockColor = kPurpleColor;
       secondBlockColor = Colors.grey;
+//      if(!nodes[0].hasFocus){
+//        if(controllers[0].text.isNotEmpty&&controllers[1].text.isNotEmpty){
+//          FocusScope.of(context).requestFocus(nodes[2]);
+//        }
+//      }
     });});
     nodes[1].addListener((){setState(() {
       firstBlockColor = kPurpleColor;
       secondBlockColor = Colors.grey;
+//      if(!nodes[1].hasFocus){
+//        if(controllers[0].text.isNotEmpty&&controllers[1].text.isNotEmpty){
+//          FocusScope.of(context).requestFocus(nodes[2]);
+//        }
+//      }
     });});
     nodes[2].addListener((){setState(() {
       firstBlockColor = Colors.grey;
@@ -87,7 +97,7 @@ class _InitNextState extends State<InitNext> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 20, top: 50, bottom: 10),
-              child: GestureDetector(
+              child: GestureDetector(behavior: HitTestBehavior.translucent,
                   child: Container(
                       width: 50,
                       height: 50,
@@ -184,7 +194,7 @@ class _InitNextState extends State<InitNext> {
                             children: [
                               Row(
                                 children: [
-                                  GestureDetector(
+                                  GestureDetector(behavior: HitTestBehavior.translucent,
                                     child: Row(
                                       children: [
                                         usualIsWeek
@@ -203,7 +213,7 @@ class _InitNextState extends State<InitNext> {
                                             style: TextStyle(
                                                 color: firstBlockColor,
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.bold)),
+                                                fontWeight: usualIsWeek?FontWeight.normal:FontWeight.bold)),
                                       ],
                                     ),
                                     onTap: () {
@@ -216,7 +226,7 @@ class _InitNextState extends State<InitNext> {
                                   SizedBox(
                                     width: 20.5,
                                   ),
-                                  GestureDetector(
+                                  GestureDetector(behavior: HitTestBehavior.translucent,
                                     child: Row(
                                       children: [
                                         usualIsWeek
@@ -235,7 +245,7 @@ class _InitNextState extends State<InitNext> {
                                             style: TextStyle(
                                                 color: firstBlockColor,
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.normal)),
+                                                fontWeight: usualIsWeek?FontWeight.bold:FontWeight.normal)),
                                       ],
                                     ),
                                     onTap: () {
@@ -255,6 +265,7 @@ class _InitNextState extends State<InitNext> {
                                     width: 152,
                                     height: 23,
                                     child: CupertinoTextField(
+                                      maxLength: 2,
                                       onChanged: (text){
                                         setState(() {
                                           _onInputChanged(index);
@@ -295,6 +306,7 @@ class _InitNextState extends State<InitNext> {
                                     width: 152,
                                     height: 23,
                                     child: CupertinoTextField(
+                                      maxLength: 8,
                                       focusNode: nodes[1],
                                       controller: controllers[1],
                                       onChanged: (text){
@@ -350,7 +362,7 @@ class _InitNextState extends State<InitNext> {
                             children: [
                               Row(
                                 children: [
-                                  GestureDetector(
+                                  GestureDetector(behavior: HitTestBehavior.translucent,
                                     child: Row(
                                       children:[
                                         usualIsWeek?
@@ -363,7 +375,7 @@ class _InitNextState extends State<InitNext> {
                                         Text("매일", style: TextStyle(
                                             color: usualIsWeek?Colors.grey:secondBlockColor,
                                             fontSize: 16,
-                                            fontWeight: FontWeight.bold
+                                            fontWeight: goalIsWeek?FontWeight.normal:FontWeight.bold
                                           )
                                         ),
                                       ],
@@ -379,7 +391,7 @@ class _InitNextState extends State<InitNext> {
                                   SizedBox(
                                     width: 20.5,
                                   ),
-                                  GestureDetector(
+                                  GestureDetector(behavior: HitTestBehavior.translucent,
                                     child: Row(
                                       children: [
                                         goalIsWeek
@@ -398,7 +410,7 @@ class _InitNextState extends State<InitNext> {
                                             style: TextStyle(
                                                 color: secondBlockColor,
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.normal)),
+                                                fontWeight : goalIsWeek?FontWeight.bold:FontWeight.normal)),
                                       ],
                                     ),
                                     onTap: () {
@@ -417,6 +429,7 @@ class _InitNextState extends State<InitNext> {
                                     width: 152,
                                     height: 23,
                                     child: CupertinoTextField(
+                                      maxLength: 2,
                                       focusNode: nodes[2],
                                       controller: controllers[2],
                                       onChanged: (text){
@@ -504,6 +517,8 @@ class _InitNextState extends State<InitNext> {
                       )
                   );
                 }
+                print("Weekly :${context.read<HabitProvider>().weeklyHabit}");
+                print("Daily : ${context.read<HabitProvider>().dailyHabit}");
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Trigger()));
               }else{//목표량이 현재보다 높은경우
@@ -639,6 +654,7 @@ class _InitNextState extends State<InitNext> {
     if(flag) return 1;
     else return 0;
   }
+
 }
 
 //https://github.com/flutter/flutter/issues/18846

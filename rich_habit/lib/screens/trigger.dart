@@ -7,7 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/screens/trigger_next.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'dart:math';
-
+import 'package:richhabit/habit_provider.dart';
+import 'package:provider/provider.dart';
 import '../constants.dart';
 
 
@@ -111,7 +112,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                         padding: EdgeInsets.only(top: 20),
                         child: Column(
                           children: <Widget>[
-                            GestureDetector(
+                            GestureDetector(behavior: HitTestBehavior.translucent,
                               onTap: () {
                                 if(index == triggersRough.length-1){
                                   _showAddDialog(context);
@@ -285,7 +286,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                       child: Row(
                         children: [
                           Expanded(
-                              child: GestureDetector(
+                              child: GestureDetector(behavior: HitTestBehavior.translucent,
                                 onTap: (){
                                   textFieldController.clear();
                                   Navigator.pop(context);
@@ -305,7 +306,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                               )
                           ),
                           Expanded(
-                              child: GestureDetector(
+                              child: GestureDetector(behavior: HitTestBehavior.translucent,
                                   onTap: (){
                                     if(textFieldController.text.trim().isNotEmpty ){
                                       Navigator.pop(context);
@@ -351,34 +352,39 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     Color txtColor = kWhiteIvoryColor.withOpacity(headerOpacity(shrinkOffset));
-    return Container(
-      color: kPurpleColor,
-      padding: EdgeInsets.only(left: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(height: 50),
-          GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
-            Navigator.of(context).pop();
-
-          }),
-          SizedBox(height: 20,),
-          Text("습관 동반자",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
-          SizedBox(height: 11,),
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(1)),
-                color: txtColor
+    return WillPopScope(
+      onWillPop: () async{
+        context.read<HabitProvider>().resetData();
+      },
+      child: Container(
+        color: kPurpleColor,
+        padding: EdgeInsets.only(left: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 50),
+            GestureDetector(behavior: HitTestBehavior.translucent,child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
+              context.read<HabitProvider>().resetData();
+              Navigator.of(context).pop();
+            }),
+            SizedBox(height: 20,),
+            Text("습관 동반자",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
+            SizedBox(height: 11,),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(1)),
+                  color: txtColor
+              ),
+              height: 3,
+              width: 33,
             ),
-            height: 3,
-            width: 33,
-          ),
-          SizedBox(height: 11),
-          Container(
-              width: 280,
-              child: Text("평소에 매일 하던 행동과 함께 관리하며 기록을 더 잘 할 수 있어요!",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
-          ),
-        ],
+            SizedBox(height: 11),
+            Container(
+                width: 280,
+                child: Text("평소에 매일 하던 행동과 함께 관리하며 기록을 더 잘 할 수 있어요!",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
+            ),
+          ],
+        ),
       ),
     );
   }
