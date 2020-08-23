@@ -60,7 +60,7 @@ class _TriggerNextState extends State<TriggerNext> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 20, top: 50, bottom: 10),
-              child: GestureDetector(
+              child: GestureDetector(behavior: HitTestBehavior.translucent,
                   child: Container(
                       width: 50,
                       height: 50,

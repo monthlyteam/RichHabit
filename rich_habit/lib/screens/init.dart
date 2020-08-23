@@ -312,7 +312,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                     child: Row(
                       children: [
                         Expanded(
-                          child: GestureDetector(
+                          child: GestureDetector(behavior: HitTestBehavior.translucent,
                             onTap: (){
                               textFieldController.clear();
                               Navigator.pop(context);
@@ -332,7 +332,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                           )
                         ),
                         Expanded(
-                          child: GestureDetector(
+                          child: GestureDetector(behavior: HitTestBehavior.translucent,
                             onTap: (){
                               if(textFieldController.text.trim().isNotEmpty ){
                                 Navigator.pop(context);
@@ -389,7 +389,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
-                  child: GestureDetector(child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){}),
+                  child: GestureDetector(behavior: HitTestBehavior.translucent,child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){}),
                 ),
               ),
               SizedBox(height: 20,),
