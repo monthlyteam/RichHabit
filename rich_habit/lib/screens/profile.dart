@@ -256,7 +256,7 @@ class Profile extends StatelessWidget {
                                   Navigator.pop(context);
                                 },
                                 child: Container(
-                                  child : Center(child: Text("취소", style: TextStyle(fontSize: kSubTitleFontSize,fontWeight: FontWeight.bold,color: Color(0xFFDE711E)),)),
+                                  child : Center(child: Text("취소", style: TextStyle(fontSize: kSubTitleFontSize,fontWeight: FontWeight.bold,color: kWhiteIvoryColor),)),
                                 ),
                               )
                           ),
@@ -274,7 +274,7 @@ class Profile extends StatelessWidget {
                                     context.read<HabitProvider>().resetData();
                                   },
                                   child: Center(
-                                    child: Text("초기화",style: TextStyle(fontSize: kSubTitleFontSize,color: Colors.red,fontWeight: FontWeight.bold),),
+                                    child: Text("초기화",style: TextStyle(fontSize: kSubTitleFontSize,color: Color(0xFFDE711E),fontWeight: FontWeight.bold),),
                                   )
                               )
                           )
