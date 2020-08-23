@@ -14,6 +14,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  bool keyboardIsOpened = false;
 
   final _buyOrNot = GlobalKey<NavigatorState>();
   final _compoundInterest = GlobalKey<NavigatorState>();
@@ -23,6 +24,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
+    print("key : $keyboardIsOpened");
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: kPurpleColor,
     ));
@@ -86,7 +89,7 @@ class _MainPageState extends State<MainPage> {
         child: _buildBottomBar(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _buildFab(context),
+      floatingActionButton: keyboardIsOpened ? Container() : _buildFab(context),
     );
   }
 

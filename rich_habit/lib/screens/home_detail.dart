@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';
 
 import '../habit.dart';
+import 'home_detail_edit.dart';
 
 class HomeDetail extends StatelessWidget {
   Habit habit;
@@ -36,7 +37,16 @@ class HomeDetail extends StatelessWidget {
                     ),
                   ),
                 ),
-                InkWell(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomeDetailEdit(
+                                habit: habit,
+                              )),
+                    );
+                  },
                   child: Text(
                     "편집",
                     style: TextStyle(color: kWhiteIvoryColor, fontSize: 16.0),
