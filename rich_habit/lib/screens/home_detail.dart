@@ -218,7 +218,7 @@ class HomeDetail extends StatelessWidget {
                           ),
                   ),
                   SizedBox(
-                    height: 50.0,
+                    height: 40.0,
                   )
                 ],
               ),

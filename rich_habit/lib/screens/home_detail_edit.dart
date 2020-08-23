@@ -17,10 +17,11 @@ class HomeDetailEdit extends StatefulWidget {
 }
 
 class _HomeDetailEditState extends State<HomeDetailEdit> {
-  var focus = FocusNode();
   TextEditingController _goalAmountCont;
   TextEditingController _priceCont;
+  var focus = FocusNode();
   bool _goalIsWeek;
+  double _height;
 
   @override
   void initState() {
@@ -34,6 +35,14 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var padding = MediaQuery.of(context).padding;
+    _height = height - padding.top - padding.bottom;
+    _height = _height - 300.0 - 225.0 - 100.0;
+    if (_height <= 40.0) {
+      _height = 40.0;
+    }
+    print(_height);
     return SafeArea(
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
@@ -101,106 +110,144 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
               ),
             ),
             SizedBox(
-              height: 50.0,
+              height: _height,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25.0),
-                  decoration: BoxDecoration(
-                      color: kIvoryColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25.0),
-                          topRight: Radius.circular(25.0))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "목표 주기 설정",
-                        style: TextStyle(fontSize: 12.0, color: kPurpleColor),
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            child: Row(
-                              children: [
-                                _goalIsWeek
-                                    ? Icon(
-                                        Icons.radio_button_unchecked,
-                                        color: kPurpleColor,
-                                        size: 16,
-                                      )
-                                    : Icon(
-                                        Icons.radio_button_checked,
-                                        color: kPurpleColor,
-                                        size: 16,
-                                      ),
-                                SizedBox(width: 5.5),
-                                Text("매일",
-                                    style: TextStyle(
-                                        color: kPurpleColor,
-                                        fontSize: 16,
-                                        fontWeight: _goalIsWeek
-                                            ? FontWeight.normal
-                                            : FontWeight.bold)),
-                              ],
+            Container(
+//              height: _height - 300.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20, horizontal: 25.0),
+                    decoration: BoxDecoration(
+                        color: kIvoryColor,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25.0),
+                            topRight: Radius.circular(25.0))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "목표 주기 설정",
+                          style: TextStyle(fontSize: 12.0, color: kPurpleColor),
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              child: Row(
+                                children: [
+                                  _goalIsWeek
+                                      ? Icon(
+                                          Icons.radio_button_unchecked,
+                                          color: kPurpleColor,
+                                          size: 16,
+                                        )
+                                      : Icon(
+                                          Icons.radio_button_checked,
+                                          color: kPurpleColor,
+                                          size: 16,
+                                        ),
+                                  SizedBox(width: 5.5),
+                                  Text("매일",
+                                      style: TextStyle(
+                                          color: kPurpleColor,
+                                          fontSize: 16,
+                                          fontWeight: _goalIsWeek
+                                              ? FontWeight.normal
+                                              : FontWeight.bold)),
+                                ],
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  _goalIsWeek = false;
+                                });
+                              },
                             ),
-                            onTap: () {
-                              setState(() {
-                                _goalIsWeek = false;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            width: 20.5,
-                          ),
-                          widget.habit.goalIsWeek
-                              ? GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  child: Row(
-                                    children: [
-                                      _goalIsWeek
-                                          ? Icon(
-                                              Icons.radio_button_checked,
-                                              color: kPurpleColor,
-                                              size: 16,
-                                            )
-                                          : Icon(
-                                              Icons.radio_button_unchecked,
-                                              color: kPurpleColor,
-                                              size: 16,
-                                            ),
-                                      SizedBox(width: 5.5),
-                                      Text("매주",
-                                          style: TextStyle(
-                                              color: kPurpleColor,
-                                              fontSize: 16,
-                                              fontWeight: _goalIsWeek
-                                                  ? FontWeight.bold
-                                                  : FontWeight.normal)),
-                                    ],
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      _goalIsWeek = true;
-                                    });
-                                  },
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 152,
-                            height: 23,
-                            child: CupertinoTextField(
-                                controller: _goalAmountCont,
-                                textInputAction: TextInputAction.next,
-                                maxLength: 2,
+                            SizedBox(
+                              width: 20.5,
+                            ),
+                            widget.habit.goalIsWeek
+                                ? GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    child: Row(
+                                      children: [
+                                        _goalIsWeek
+                                            ? Icon(
+                                                Icons.radio_button_checked,
+                                                color: kPurpleColor,
+                                                size: 16,
+                                              )
+                                            : Icon(
+                                                Icons.radio_button_unchecked,
+                                                color: kPurpleColor,
+                                                size: 16,
+                                              ),
+                                        SizedBox(width: 5.5),
+                                        Text("매주",
+                                            style: TextStyle(
+                                                color: kPurpleColor,
+                                                fontSize: 16,
+                                                fontWeight: _goalIsWeek
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal)),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        _goalIsWeek = true;
+                                      });
+                                    },
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 152,
+                              height: 23,
+                              child: CupertinoTextField(
+                                  controller: _goalAmountCont,
+                                  textInputAction: TextInputAction.next,
+                                  maxLength: 2,
+                                  maxLines: 1,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 2, horizontal: 2),
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: kPurpleColor),
+                                  keyboardType:
+                                      TextInputType.numberWithOptions(),
+                                  onSubmitted: (_) => FocusScope.of(context)
+                                      .requestFocus(focus)),
+                            ),
+                            SizedBox(
+                              width: 5.5,
+                            ),
+                            Text(
+                              "회",
+                              style: TextStyle(
+                                  fontSize: 16.0, color: kPurpleColor),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 18),
+                        Text(
+                          "1회당 평균 소비 비용 설정",
+                          style: TextStyle(fontSize: 12.0, color: kPurpleColor),
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 152,
+                              height: 23,
+                              child: CupertinoTextField(
+                                focusNode: focus,
+                                controller: _priceCont,
+                                textInputAction: TextInputAction.done,
                                 maxLines: 1,
                                 padding: EdgeInsets.symmetric(
                                     vertical: 2, horizontal: 2),
@@ -208,87 +255,54 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                 style: TextStyle(
                                     fontSize: 16.0, color: kPurpleColor),
                                 keyboardType: TextInputType.numberWithOptions(),
-                                onSubmitted: (_) =>
-                                    FocusScope.of(context).requestFocus(focus)),
-                          ),
-                          SizedBox(
-                            width: 5.5,
-                          ),
-                          Text(
-                            "회",
-                            style:
-                                TextStyle(fontSize: 16.0, color: kPurpleColor),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 18),
-                      Text(
-                        "1회당 평균 소비 비용 설정",
-                        style: TextStyle(fontSize: 12.0, color: kPurpleColor),
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 152,
-                            height: 23,
-                            child: CupertinoTextField(
-                              focusNode: focus,
-                              controller: _priceCont,
-                              textInputAction: TextInputAction.done,
-                              maxLines: 1,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 2, horizontal: 2),
-                              textAlign: TextAlign.end,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.5,
+                            ),
+                            Text(
+                              "원",
                               style: TextStyle(
                                   fontSize: 16.0, color: kPurpleColor),
-                              keyboardType: TextInputType.numberWithOptions(),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5.5,
-                          ),
-                          Text(
-                            "원",
-                            style:
-                                TextStyle(fontSize: 16.0, color: kPurpleColor),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                GestureDetector(
-                  onTap: () {
-                    context.read<HabitProvider>().modifyHabit(
-                        widget.habit.addedTimeID,
-                        widget.habit.goalIsWeek,
-                        _goalIsWeek,
-                        int.parse(_goalAmountCont.text),
-                        double.parse(_priceCont.text));
-                    Navigator.pop(context, false);
-                    print("저장");
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 45,
-                    decoration: BoxDecoration(
-                        color: kDarkPurpleColor,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25.0),
-                            bottomRight: Radius.circular(25.0))),
-                    child: Text(
-                      "저장",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: kWhiteIvoryColor,
-                          fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                SizedBox(height: 50.0)
-              ],
+                  SizedBox(height: 10.0),
+                  GestureDetector(
+                    onTap: () {
+                      context.read<HabitProvider>().modifyHabit(
+                          widget.habit.addedTimeID,
+                          widget.habit.goalIsWeek,
+                          _goalIsWeek,
+                          int.parse(_goalAmountCont.text),
+                          double.parse(_priceCont.text));
+                      Navigator.pop(context, false);
+                      print("저장");
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: kDarkPurpleColor,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(25.0),
+                              bottomRight: Radius.circular(25.0))),
+                      child: Text(
+                        "저장",
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            color: kWhiteIvoryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            SizedBox(height: 50.0)
           ],
         ),
       ),
