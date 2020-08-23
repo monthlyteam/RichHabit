@@ -233,7 +233,9 @@ class HomeDetail extends StatelessWidget {
     var list = context.watch<HabitProvider>().getRetention(habit.addedTimeID);
     var avg = 0.0;
     var str = "좀 더 절약해 보는게 어떤가요?";
-    if (list != null) {
+    if (list == null || list.length == 0) {
+      str = "데이터를 더 모아주세요!";
+    } else {
       avg = list.reduce((a, b) => a + b);
       avg = avg / list.length;
     }
