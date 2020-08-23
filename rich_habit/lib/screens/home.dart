@@ -698,7 +698,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       height: kPadding,
                     ),
                     context.watch<HabitProvider>().weeklyHabit[selWeekOfYear] ==
-                            null
+                                null ||
+                            context
+                                    .watch<HabitProvider>()
+                                    .weeklyHabit[selWeekOfYear]
+                                    .length ==
+                                0
                         ? Container()
                         : Text(
                             "${selWeekOfYear - (_selDay.year * 100)} 주차 ${_getWeekStartDay()}",

@@ -19,7 +19,7 @@ class HomeDetailEdit extends StatefulWidget {
 class _HomeDetailEditState extends State<HomeDetailEdit> {
   TextEditingController _goalAmountCont;
   TextEditingController _priceCont;
-  bool _goalIsWeek = false;
+  bool _goalIsWeek;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, false);
                   },
                   child: Text(
                     "취소",
@@ -53,7 +53,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print("삭제");
+                    _showDelDialog(context);
                   },
                   child: Text(
                     "삭제",
@@ -156,37 +156,39 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                           SizedBox(
                             width: 20.5,
                           ),
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            child: Row(
-                              children: [
-                                _goalIsWeek
-                                    ? Icon(
-                                        Icons.radio_button_checked,
-                                        color: kPurpleColor,
-                                        size: 16,
-                                      )
-                                    : Icon(
-                                        Icons.radio_button_unchecked,
-                                        color: kPurpleColor,
-                                        size: 16,
-                                      ),
-                                SizedBox(width: 5.5),
-                                Text("매주",
-                                    style: TextStyle(
-                                        color: kPurpleColor,
-                                        fontSize: 16,
-                                        fontWeight: _goalIsWeek
-                                            ? FontWeight.bold
-                                            : FontWeight.normal)),
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                _goalIsWeek = true;
-                              });
-                            },
-                          ),
+                          widget.habit.goalIsWeek
+                              ? GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  child: Row(
+                                    children: [
+                                      _goalIsWeek
+                                          ? Icon(
+                                              Icons.radio_button_checked,
+                                              color: kPurpleColor,
+                                              size: 16,
+                                            )
+                                          : Icon(
+                                              Icons.radio_button_unchecked,
+                                              color: kPurpleColor,
+                                              size: 16,
+                                            ),
+                                      SizedBox(width: 5.5),
+                                      Text("매주",
+                                          style: TextStyle(
+                                              color: kPurpleColor,
+                                              fontSize: 16,
+                                              fontWeight: _goalIsWeek
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal)),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      _goalIsWeek = true;
+                                    });
+                                  },
+                                )
+                              : Container(),
                         ],
                       ),
                       Row(
@@ -255,6 +257,13 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                 SizedBox(height: 10.0),
                 GestureDetector(
                   onTap: () {
+                    context.read<HabitProvider>().modifyHabit(
+                        widget.habit.addedTimeID,
+                        widget.habit.goalIsWeek,
+                        _goalIsWeek,
+                        int.parse(_goalAmountCont.text),
+                        double.parse(_priceCont.text));
+                    Navigator.pop(context, false);
                     print("저장");
                   },
                   child: Container(
@@ -281,5 +290,116 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
         ),
       ),
     );
+  }
+
+  Widget _showDelDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext buildContext) {
+          return Dialog(
+            backgroundColor: kIvoryColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)), //this right here
+            child: Container(
+                height: 226,
+                width: 320,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: 176,
+                      padding: EdgeInsets.fromLTRB(26, 15, 26, 13),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 80,
+                            width: 80,
+                            padding: EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: kWhiteIvoryColor,
+                            ),
+                            child: Center(
+                                child: SvgPicture.asset(
+                                    '${widget.habit.iconURL}',
+                                    width: 44)),
+                          ),
+                          SizedBox(
+                            height: 10.5,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+//                          padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              "${widget.habit.name}을(를) 삭제하시겠습니까?",
+                              style: TextStyle(
+                                  fontSize: 14.0, color: kPurpleColor),
+                            ),
+                          ),
+                          SizedBox(height: 8.5),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: kPurpleColor),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pop(buildContext);
+                              },
+                              child: Container(
+                                child: Center(
+                                  child: Text(
+                                    "취소",
+                                    style: TextStyle(
+                                        fontSize: kSubTitleFontSize,
+                                        fontWeight: FontWeight.bold,
+                                        color: kIvoryColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 14,
+                            width: 4,
+                            child: VerticalDivider(
+                              width: 4,
+                              color: kIvoryColor,
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                context.read<HabitProvider>().deleteHabit(
+                                    widget.habit.addedTimeID,
+                                    widget.habit.goalIsWeek);
+                                Navigator.pop(buildContext);
+                                Navigator.pop(context, true);
+                              },
+                              child: Center(
+                                child: Text(
+                                  "삭제",
+                                  style: TextStyle(
+                                      fontSize: kSubTitleFontSize,
+                                      color: kSelectedColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
+          );
+        });
   }
 }

@@ -38,14 +38,17 @@ class HomeDetail extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    var isChanged = await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => HomeDetailEdit(
                                 habit: habit,
                               )),
                     );
+                    if (isChanged) {
+                      Navigator.pop(context);
+                    }
                   },
                   child: Text(
                     "편집",
@@ -98,7 +101,7 @@ class HomeDetail extends StatelessWidget {
                   habit.isTrigger
                       ? Container()
                       : Text(
-                          "\"평균 목표 달성률 ${_getPercent(context).toStringAsFixed(1)}%! 좀 더 절약해 보는게 어떤가요?\"",
+                          "\"평균 목표 달성률 ${_getPercent(context)}\"",
                           style: TextStyle(
                               fontSize: 14.0,
                               color: kWhiteIvoryColor.withOpacity(0.8)),
@@ -226,13 +229,17 @@ class HomeDetail extends StatelessWidget {
     );
   }
 
-  double _getPercent(BuildContext context) {
+  String _getPercent(BuildContext context) {
     var list = context.watch<HabitProvider>().getRetention(habit.addedTimeID);
     var avg = 0.0;
+    var str = "좀 더 절약해 보는게 어떤가요?";
     if (list != null) {
       avg = list.reduce((a, b) => a + b);
       avg = avg / list.length;
     }
-    return avg;
+    if (avg >= 100.0) {
+      str = "현재 달성률을 유지하세요!";
+    }
+    return "${avg.toStringAsFixed(1)}%! $str";
   }
 }

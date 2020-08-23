@@ -42,19 +42,6 @@ class _CompoundInterestState extends State<CompoundInterest> {
     super.initState();
     current = DateTime.now();
     today = DateTime(current.year, current.month, current.day);
-    dailyHabit = context.read<HabitProvider>().dailyHabit[today];
-    weeklyHabit = context
-        .read<HabitProvider>()
-        .weeklyHabit[context.read<HabitProvider>().isoWeekNumber(today)];
-    if (dailyHabit != null) {
-      total = dailyHabit;
-    }
-    if (weeklyHabit != null) {
-      total += weeklyHabit;
-    }
-    for (final habit in total) {
-      print("total : ${habit.name}");
-    }
   }
 
   @override
@@ -243,6 +230,19 @@ class _CompoundInterestState extends State<CompoundInterest> {
   }
 
   Widget _buildCategories(BuildContext context) {
+    dailyHabit = context.watch<HabitProvider>().dailyHabit[today];
+    weeklyHabit = context
+        .watch<HabitProvider>()
+        .weeklyHabit[context.watch<HabitProvider>().isoWeekNumber(today)];
+    if (dailyHabit != null) {
+      total = dailyHabit;
+    }
+    if (weeklyHabit != null) {
+      total += weeklyHabit;
+    }
+    for (final habit in total) {
+      print("total : ${habit.name}");
+    }
     return SizedBox(
       height: 30,
       child: NotificationListener<OverscrollIndicatorNotification>(
