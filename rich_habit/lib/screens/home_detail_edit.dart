@@ -239,34 +239,41 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                           "1회당 평균 소비 비용 설정",
                           style: TextStyle(fontSize: 12.0, color: kPurpleColor),
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 152,
-                              height: 23,
-                              child: CupertinoTextField(
-                                focusNode: focus,
-                                controller: _priceCont,
-                                textInputAction: TextInputAction.done,
-                                maxLines: 1,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 2),
-                                textAlign: TextAlign.end,
+                        widget.habit.isTrigger
+                            ? Text(
+                                "당신의 습관 동반자입니다!",
                                 style: TextStyle(
-                                    fontSize: 16.0, color: kPurpleColor),
-                                keyboardType: TextInputType.numberWithOptions(),
+                                    fontSize: 14.0, color: kPurpleColor),
+                              )
+                            : Row(
+                                children: [
+                                  Container(
+                                    width: 152,
+                                    height: 23,
+                                    child: CupertinoTextField(
+                                      focusNode: focus,
+                                      controller: _priceCont,
+                                      textInputAction: TextInputAction.done,
+                                      maxLines: 1,
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 2),
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: kPurpleColor),
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5.5,
+                                  ),
+                                  Text(
+                                    "원",
+                                    style: TextStyle(
+                                        fontSize: 16.0, color: kPurpleColor),
+                                  )
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              width: 5.5,
-                            ),
-                            Text(
-                              "원",
-                              style: TextStyle(
-                                  fontSize: 16.0, color: kPurpleColor),
-                            )
-                          ],
-                        ),
                       ],
                     ),
                   ),
