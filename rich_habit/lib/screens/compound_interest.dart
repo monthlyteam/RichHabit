@@ -441,9 +441,16 @@ class _CompoundInterestState extends State<CompoundInterest> {
 
   List<FlSpot> getFlSpot(DateTime addedTimeID) {
     print("ID : $addedTimeID---");
-    var spotList = context.watch<HabitProvider>().getRetention(addedTimeID);
-    spots = [FlSpot(0, 50)];
-    if (spotList != null) {
+    List<double> spotList;
+    try {
+      spotList = context.watch<HabitProvider>().getRetention(addedTimeID);
+    } catch (e) {
+      spotList = null;
+    }
+    print("len : ${spotList.length}");
+    if (spotList == null || spotList.length == 0) {
+      spots = [FlSpot(0, 0)];
+    } else {
       spots = [];
       for (int i = 0; i < spotList.length; i++) {
         print("spot : ${spotList[i]}");
