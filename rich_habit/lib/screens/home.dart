@@ -715,7 +715,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     Column(
                       children: _getHabitContainer(true, false),
                     ),
-                    SizedBox(height: 20.0)
+                    SizedBox(height: kPadding)
                   ],
                 ),
               )
