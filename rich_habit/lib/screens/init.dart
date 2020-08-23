@@ -12,6 +12,9 @@ import '../constants.dart';
 
 
 class Init extends StatefulWidget {
+  final bool isFirst;
+
+  Init({this.isFirst});
 
   @override
   State createState() => InitState();
@@ -207,7 +210,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                     }else{
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(habitsRough))));
+                          MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(habitsRough),isFirst:widget.isFirst)));
                     }
                   })
                 ],
