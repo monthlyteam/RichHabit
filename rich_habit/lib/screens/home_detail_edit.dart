@@ -17,6 +17,7 @@ class HomeDetailEdit extends StatefulWidget {
 }
 
 class _HomeDetailEditState extends State<HomeDetailEdit> {
+  var focus = FocusNode();
   TextEditingController _goalAmountCont;
   TextEditingController _priceCont;
   bool _goalIsWeek;
@@ -197,17 +198,18 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                             width: 152,
                             height: 23,
                             child: CupertinoTextField(
-                              controller: _goalAmountCont,
-                              textInputAction: TextInputAction.next,
-                              maxLength: 2,
-                              maxLines: 1,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 2, horizontal: 2),
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  fontSize: 16.0, color: kPurpleColor),
-                              keyboardType: TextInputType.numberWithOptions(),
-                            ),
+                                controller: _goalAmountCont,
+                                textInputAction: TextInputAction.next,
+                                maxLength: 2,
+                                maxLines: 1,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 2),
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    fontSize: 16.0, color: kPurpleColor),
+                                keyboardType: TextInputType.numberWithOptions(),
+                                onSubmitted: (_) =>
+                                    FocusScope.of(context).requestFocus(focus)),
                           ),
                           SizedBox(
                             width: 5.5,
@@ -230,8 +232,9 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                             width: 152,
                             height: 23,
                             child: CupertinoTextField(
+                              focusNode: focus,
                               controller: _priceCont,
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               maxLines: 1,
                               padding: EdgeInsets.symmetric(
                                   vertical: 2, horizontal: 2),
