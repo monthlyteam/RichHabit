@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/user_provider.dart';
 
 import '../habit.dart';
 
@@ -19,6 +20,7 @@ class HomeDetailEdit extends StatefulWidget {
 class _HomeDetailEditState extends State<HomeDetailEdit> {
   TextEditingController _goalAmountCont;
   TextEditingController _priceCont;
+  DateTime _dateTime;
   var focus = FocusNode();
   bool _goalIsWeek;
   double _height;
@@ -31,10 +33,16 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
     _priceCont =
         new TextEditingController(text: "${widget.habit.price.round()}");
     _goalIsWeek = widget.habit.goalIsWeek;
+
+    _dateTime = context.read<UserProvider>().pushAlarmTime;
+    if (_dateTime == null) {
+      _dateTime = DateTime.now();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    print("init : $_dateTime");
     var height = MediaQuery.of(context).size.height;
     var padding = MediaQuery.of(context).padding;
     _height = height - padding.top - padding.bottom;
@@ -126,126 +134,160 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(25.0),
                             topRight: Radius.circular(25.0))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "목표 주기 설정",
-                          style: TextStyle(fontSize: 12.0, color: kPurpleColor),
-                        ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              child: Row(
-                                children: [
-                                  _goalIsWeek
-                                      ? Icon(
-                                          Icons.radio_button_unchecked,
-                                          color: kPurpleColor,
-                                          size: 16,
-                                        )
-                                      : Icon(
-                                          Icons.radio_button_checked,
-                                          color: kPurpleColor,
-                                          size: 16,
-                                        ),
-                                  SizedBox(width: 5.5),
-                                  Text("매일",
-                                      style: TextStyle(
-                                          color: kPurpleColor,
-                                          fontSize: 16,
-                                          fontWeight: _goalIsWeek
-                                              ? FontWeight.normal
-                                              : FontWeight.bold)),
-                                ],
+                    child: widget.habit.isTrigger
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "알람 시간 설정",
+                                style: TextStyle(
+                                    fontSize: 12.0, color: kPurpleColor),
                               ),
-                              onTap: () {
-                                setState(() {
-                                  _goalIsWeek = false;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              width: 20.5,
-                            ),
-                            widget.habit.goalIsWeek
-                                ? GestureDetector(
+                              Center(
+                                child: SizedBox(
+                                  height: 150,
+                                  child: CupertinoTheme(
+                                    data: CupertinoThemeData(
+                                      textTheme: CupertinoTextThemeData(
+                                        dateTimePickerTextStyle: TextStyle(
+                                          color: kPurpleColor,
+                                        ),
+                                      ),
+                                    ),
+                                    child: CupertinoDatePicker(
+                                      initialDateTime: _dateTime,
+                                      mode: CupertinoDatePickerMode.time,
+                                      onDateTimeChanged: (dateTime) {
+                                        setState(() {
+                                          _dateTime = dateTime;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "목표 주기 설정",
+                                style: TextStyle(
+                                    fontSize: 12.0, color: kPurpleColor),
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     child: Row(
                                       children: [
                                         _goalIsWeek
                                             ? Icon(
-                                                Icons.radio_button_checked,
+                                                Icons.radio_button_unchecked,
                                                 color: kPurpleColor,
                                                 size: 16,
                                               )
                                             : Icon(
-                                                Icons.radio_button_unchecked,
+                                                Icons.radio_button_checked,
                                                 color: kPurpleColor,
                                                 size: 16,
                                               ),
                                         SizedBox(width: 5.5),
-                                        Text("매주",
+                                        Text("매일",
                                             style: TextStyle(
                                                 color: kPurpleColor,
                                                 fontSize: 16,
                                                 fontWeight: _goalIsWeek
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal)),
+                                                    ? FontWeight.normal
+                                                    : FontWeight.bold)),
                                       ],
                                     ),
                                     onTap: () {
                                       setState(() {
-                                        _goalIsWeek = true;
+                                        _goalIsWeek = false;
                                       });
                                     },
+                                  ),
+                                  SizedBox(
+                                    width: 20.5,
+                                  ),
+                                  widget.habit.goalIsWeek
+                                      ? GestureDetector(
+                                          behavior: HitTestBehavior.translucent,
+                                          child: Row(
+                                            children: [
+                                              _goalIsWeek
+                                                  ? Icon(
+                                                      Icons
+                                                          .radio_button_checked,
+                                                      color: kPurpleColor,
+                                                      size: 16,
+                                                    )
+                                                  : Icon(
+                                                      Icons
+                                                          .radio_button_unchecked,
+                                                      color: kPurpleColor,
+                                                      size: 16,
+                                                    ),
+                                              SizedBox(width: 5.5),
+                                              Text("매주",
+                                                  style: TextStyle(
+                                                      color: kPurpleColor,
+                                                      fontSize: 16,
+                                                      fontWeight: _goalIsWeek
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal)),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            setState(() {
+                                              _goalIsWeek = true;
+                                            });
+                                          },
+                                        )
+                                      : Container(),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 152,
+                                    height: 23,
+                                    child: CupertinoTextField(
+                                        controller: _goalAmountCont,
+                                        textInputAction: TextInputAction.next,
+                                        maxLength: 2,
+                                        maxLines: 1,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 2),
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: kPurpleColor),
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(),
+                                        onSubmitted: (_) =>
+                                            FocusScope.of(context)
+                                                .requestFocus(focus)),
+                                  ),
+                                  SizedBox(
+                                    width: 5.5,
+                                  ),
+                                  Text(
+                                    "회",
+                                    style: TextStyle(
+                                        fontSize: 16.0, color: kPurpleColor),
                                   )
-                                : Container(),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 152,
-                              height: 23,
-                              child: CupertinoTextField(
-                                  controller: _goalAmountCont,
-                                  textInputAction: TextInputAction.next,
-                                  maxLength: 2,
-                                  maxLines: 1,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 2),
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      fontSize: 16.0, color: kPurpleColor),
-                                  keyboardType:
-                                      TextInputType.numberWithOptions(),
-                                  onSubmitted: (_) => FocusScope.of(context)
-                                      .requestFocus(focus)),
-                            ),
-                            SizedBox(
-                              width: 5.5,
-                            ),
-                            Text(
-                              "회",
-                              style: TextStyle(
-                                  fontSize: 16.0, color: kPurpleColor),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 18),
-                        Text(
-                          "1회당 평균 소비 비용 설정",
-                          style: TextStyle(fontSize: 12.0, color: kPurpleColor),
-                        ),
-                        widget.habit.isTrigger
-                            ? Text(
-                                "당신의 습관 동반자입니다!",
+                                ],
+                              ),
+                              SizedBox(height: 18),
+                              Text(
+                                "1회당 평균 소비 비용 설정",
                                 style: TextStyle(
-                                    fontSize: 14.0, color: kPurpleColor),
-                              )
-                            : Row(
+                                    fontSize: 12.0, color: kPurpleColor),
+                              ),
+                              Row(
                                 children: [
                                   Container(
                                     width: 152,
@@ -274,18 +316,24 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                   )
                                 ],
                               ),
-                      ],
-                    ),
+                            ],
+                          ),
                   ),
                   SizedBox(height: 10.0),
                   GestureDetector(
                     onTap: () {
-                      context.read<HabitProvider>().modifyHabit(
-                          widget.habit.addedTimeID,
-                          widget.habit.goalIsWeek,
-                          _goalIsWeek,
-                          int.parse(_goalAmountCont.text),
-                          double.parse(_priceCont.text));
+                      if (widget.habit.isTrigger) {
+                        context.read<UserProvider>().pushAlarmTime = _dateTime;
+                        print(
+                            "time : ${context.read<UserProvider>().pushAlarmTime}");
+                      } else {
+                        context.read<HabitProvider>().modifyHabit(
+                            widget.habit.addedTimeID,
+                            widget.habit.goalIsWeek,
+                            _goalIsWeek,
+                            int.parse(_goalAmountCont.text),
+                            double.parse(_priceCont.text));
+                      }
                       Navigator.pop(context, false);
                       print("저장");
                     },

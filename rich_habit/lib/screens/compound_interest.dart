@@ -294,34 +294,36 @@ class _CompoundInterestState extends State<CompoundInterest> {
   }
 
   Widget _buildChart(DateTime addedTimeID) {
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-              color: kIvoryColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 24.0, left: 20.0, top: 50, bottom: 12),
-              child: LineChart(
-                _lineData(),
-              ),
-            ),
+    return AspectRatio(
+      aspectRatio: 1.70,
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
           ),
+          color: kIvoryColor,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            '목표 유지율',
-            style: TextStyle(fontSize: 16, color: Color(0xff585A79)),
-          ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '목표 유지율',
+                style: TextStyle(fontSize: 16, color: Color(0xff585A79)),
+              ),
+            ),
+            Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    right: 35.0, left: 15.0, top: 50, bottom: 12),
+                child: LineChart(
+                  _lineData(),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -411,7 +413,9 @@ class _CompoundInterestState extends State<CompoundInterest> {
                 return touchedBarSpots.map((barSpot) {
                   final flSpot = barSpot;
                   return LineTooltipItem(
-                    '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)} %',
+                    flSpot.y == 100.01
+                        ? '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)}+ %'
+                        : '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)} %',
                     const TextStyle(
                         color: kPurpleColor, fontWeight: FontWeight.bold),
                   );
@@ -453,8 +457,13 @@ class _CompoundInterestState extends State<CompoundInterest> {
     } else {
       spots = [];
       for (int i = 0; i < spotList.length; i++) {
-        print("spot : ${spotList[i]}");
-        spots.add(FlSpot(i.toDouble(), spotList[i]));
+//        print("spot : ${spotList[i]}");
+        if (spotList[i] > 100.0) {
+          spots.add(FlSpot(i.toDouble(), 100.01));
+//          print("real : ${spots[i].y}");
+        } else {
+          spots.add(FlSpot(i.toDouble(), spotList[i]));
+        }
       }
     }
     return spots;
