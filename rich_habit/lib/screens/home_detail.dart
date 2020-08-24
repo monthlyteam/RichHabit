@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/user_provider.dart';
+import 'package:intl/intl.dart';
 
 import '../habit.dart';
 import 'home_detail_edit.dart';
@@ -186,15 +188,22 @@ class HomeDetail extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5.0)),
                     child: habit.isTrigger
                         ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "당신의 습관 동반자 입니다!",
+                                "알람 시간",
                                 style: TextStyle(
                                   fontSize: 16.0,
                                   color: kPurpleColor.withOpacity(0.5),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
+                              Text(
+                                  "${DateFormat.jm().format(context.watch<UserProvider>().pushAlarmTime)}",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: kPurpleColor,
+                                      fontWeight: FontWeight.bold))
                             ],
                           )
                         : Row(
