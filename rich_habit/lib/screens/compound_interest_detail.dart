@@ -124,7 +124,7 @@ List<Widget> _showHitsoryList(Map<int, dynamic> history) {
                   fontWeight: FontWeight.bold),
             ),
             Text(
-                "$value.toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
+                "${value.toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
                 style: TextStyle(color: kDarkPurpleColor, fontSize: 16))
           ],
         ));
