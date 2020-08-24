@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:richhabit/constants.dart';
+import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/screens/buy_or_not.dart';
 import 'package:richhabit/screens/compound_interest.dart';
 import 'package:richhabit/screens/home.dart';
 import 'package:richhabit/screens/invest.dart';
 import 'package:richhabit/screens/profile.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -16,11 +18,20 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   bool keyboardIsOpened = false;
 
+  DateTime _current;
+
   final _buyOrNot = GlobalKey<NavigatorState>();
   final _compoundInterest = GlobalKey<NavigatorState>();
   final _home = GlobalKey<NavigatorState>();
   final _invest = GlobalKey<NavigatorState>();
   final _profile = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    var current = DateTime.now();
+    _current = DateTime(current.year, current.month, current.day);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +105,28 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildFab(BuildContext context) {
+    Image image = Image.asset("assets/images/coin_1.png");
+    BoxShadow boxShadow = BoxShadow(
+        color: Color(0xffffeb50), blurRadius: 20, offset: Offset(0, 8));
+    var list = context.watch<HabitProvider>().calendarIcon[_current];
+//    list.forEach((k, v) => print('$k: $v'));
+//    print("current : $_current");
+    switch (list[0]) {
+      case 1: //완료
+        image = Image.asset('assets/images/coin_1.png');
+        break;
+      case 2: //오버
+        image = Image.asset('assets/images/coin_2.png');
+        boxShadow = BoxShadow(
+            color: Color(0xffC4B786), blurRadius: 20, offset: Offset(0, 8));
+        break;
+      case 0: //안함
+        image = Image.asset('assets/images/coin_3.png');
+        break;
+      default: //이상함
+        image = Image.asset('assets/images/question_mark.png');
+        break;
+    }
     return Container(
       height: 70.0,
       width: 70.0,
@@ -121,14 +154,11 @@ class _MainPageState extends State<MainPage> {
               shape: BoxShape.circle,
               boxShadow: <BoxShadow>[
                 _selectedIndex == 0
-                    ? BoxShadow(
-                        color: Color(0xffffeb50),
-                        blurRadius: 20,
-                        offset: Offset(0, 8))
+                    ? boxShadow
                     : BoxShadow(color: Color(0xffffffff).withOpacity(1.0)),
               ],
             ),
-            child: Image.asset("assets/images/coin_1.png"),
+            child: image,
           ),
         ),
         elevation: 0.0,
