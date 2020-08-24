@@ -199,7 +199,10 @@ class HomeDetail extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                  "${DateFormat.jm().format(context.watch<UserProvider>().pushAlarmTime)}",
+                                  context.watch<UserProvider>().pushAlarmTime !=
+                                          null
+                                      ? "${DateFormat.jm().format(context.watch<UserProvider>().pushAlarmTime)}"
+                                      : "알람 시간이 없어요!",
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: kPurpleColor,
