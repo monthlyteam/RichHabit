@@ -7,7 +7,7 @@ import 'package:richhabit/screens/home_detail.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
-
+import 'init.dart';
 import '../habit.dart';
 
 class Home extends StatefulWidget {
@@ -652,7 +652,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  print("plus");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Init(isFirst: false)));
                 },
                 iconSize: 25.0,
                 icon: Icon(

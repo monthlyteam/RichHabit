@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/habit.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/screens/home.dart';
 import 'package:richhabit/screens/trigger.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,8 @@ import 'dart:math';
 class InitNext extends StatefulWidget{
 
   final List<List<dynamic>> selectedItem; //<String name, String URL>
-
-  InitNext({@required this.selectedItem});
+  final bool isFirst;
+  InitNext({@required this.selectedItem,@required this.isFirst});
 
   @override
   State createState() => _InitNextState();
@@ -519,8 +520,11 @@ class _InitNextState extends State<InitNext> {
                 }
                 print("Weekly :${context.read<HabitProvider>().weeklyHabit}");
                 print("Daily : ${context.read<HabitProvider>().dailyHabit}");
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Trigger()));
+                if(widget.isFirst){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
+                }else{
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                }
               }else{//목표량이 현재보다 높은경우
                 Fluttertoast.showToast(
                     msg: "목표치를 확인해주세요",
