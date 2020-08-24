@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/screens/set_alarm.dart';
 import 'package:richhabit/screens/set_language.dart';
-
+import 'package:provider/provider.dart';
+import 'package:richhabit/habit_provider.dart';
 import '../constants.dart';
 
 class Profile extends StatelessWidget {
@@ -134,7 +135,9 @@ class Profile extends StatelessWidget {
                   height: 25,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: (){
+                    _showAddDialog(context);
+                  },
                   child: Container(
                     height: 50,
                     color: kIvoryColor,
@@ -206,5 +209,82 @@ class Profile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _showAddDialog(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: kIvoryColor,
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(20.0)), //this right here
+            child: Container(
+                height: 206,
+                width: 320,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: 156,
+                      padding: EdgeInsets.fromLTRB(26,15,26,13),
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 10,),
+                            Text("정말 초기화 하시겠습니까?.",style: TextStyle(color: kPurpleColor,fontSize: kSubTitleFontSize),),
+                            SizedBox(height: 20,),
+                            Text("데이터를 초기화하면",style: TextStyle(color: kPurpleColor,fontSize: 18),),
+                            Text("모든 기록이 지워집니다.",style: TextStyle(color: kPurpleColor,fontSize: 18),),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: kPurpleColor
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: GestureDetector(behavior: HitTestBehavior.translucent,
+                                onTap: (){
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  child : Center(child: Text("취소", style: TextStyle(fontSize: kSubTitleFontSize,fontWeight: FontWeight.bold,color: kWhiteIvoryColor),)),
+                                ),
+                              )
+                          ),
+                          Container(
+                              height: 14,
+                              width: 4,
+                              child: VerticalDivider(
+                                width: 4,
+                                color: kIvoryColor,
+                              )
+                          ),
+                          Expanded(
+                              child: GestureDetector(behavior: HitTestBehavior.translucent,
+                                  onTap: (){
+                                    context.read<HabitProvider>().resetData();
+                                  },
+                                  child: Center(
+                                    child: Text("초기화",style: TextStyle(fontSize: kSubTitleFontSize,color: Color(0xFFDE711E),fontWeight: FontWeight.bold),),
+                                  )
+                              )
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+            ),
+          );
+        });
   }
 }
