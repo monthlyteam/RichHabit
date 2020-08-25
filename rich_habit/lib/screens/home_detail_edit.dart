@@ -9,7 +9,7 @@ import 'package:richhabit/user_provider.dart';
 import '../habit.dart';
 
 class HomeDetailEdit extends StatefulWidget {
-  Habit habit;
+  final Habit habit;
 
   HomeDetailEdit({@required this.habit});
 
@@ -364,7 +364,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
     );
   }
 
-  Widget _showDelDialog(BuildContext context) {
+  void _showDelDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext buildContext) {

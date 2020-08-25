@@ -10,7 +10,7 @@ import '../habit.dart';
 import 'home_detail_edit.dart';
 
 class HomeDetail extends StatelessWidget {
-  Habit habit;
+  final Habit habit;
 
   HomeDetail({@required this.habit});
   @override
