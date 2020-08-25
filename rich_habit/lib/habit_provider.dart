@@ -395,55 +395,60 @@ class HabitProvider with ChangeNotifier {
 
     if (weeklyHabit.isNotEmpty) {
       weeklyHabit.forEach((key, value) {
-        if (key != nowWeekOfYear && _checkWeekIsEmpty(key)) {
-          year = key ~/ 100;
-          week = key % 100;
+        if (addedTimeID == null || key >= isoWeekNumber(addedTimeID)) {
+          if (key != nowWeekOfYear && _checkWeekIsEmpty(key)) {
+            year = key ~/ 100;
+            week = key % 100;
 
-          if (!map.containsKey(year)) map[year] = {};
+            if (!map.containsKey(year)) map[year] = {};
 
-          if (!map[year].containsKey(week)) map[year][week] = [null, []];
+            if (!map[year].containsKey(week)) map[year][week] = [null, []];
 
-          value.forEach((element) {
-            if (addedTimeID == null || addedTimeID == element.addedTimeID) {
-              sumPrice += element.saveMoney;
-              map[year][week][1].add(['매주 ${element.name}', element.saveMoney]);
-            }
-          });
+            value.forEach((element) {
+              if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+                sumPrice += element.saveMoney;
+                map[year][week][1]
+                    .add(['매주 ${element.name}', element.saveMoney]);
+              }
+            });
 
-          if (map[year][week][0] == null)
-            map[year][week][0] = sumPrice;
-          else
-            map[year][week][0] += sumPrice;
+            if (map[year][week][0] == null)
+              map[year][week][0] = sumPrice;
+            else
+              map[year][week][0] += sumPrice;
 
-          sumPrice = 0;
+            sumPrice = 0;
+          }
         }
       });
     }
 
     if (dailyHabit.isNotEmpty) {
       dailyHabit.forEach((key, value) {
-        if (key != nowDate && calendarIcon[key][0] != 0) {
-          year = key.year;
-          week = isoWeekNumber(key) % 100;
+        if (addedTimeID == null || addedTimeID.difference(key).inDays <= 0) {
+          if (key != nowDate && calendarIcon[key][0] != 0) {
+            year = key.year;
+            week = isoWeekNumber(key) % 100;
 
-          if (!map.containsKey(year)) map[year] = {};
+            if (!map.containsKey(year)) map[year] = {};
 
-          if (!map[year].containsKey(week)) map[year][week] = [null, []];
+            if (!map[year].containsKey(week)) map[year][week] = [null, []];
 
-          value.forEach((element) {
-            if (addedTimeID == null || addedTimeID == element.addedTimeID) {
-              sumPrice += element.saveMoney;
-              map[year][week][1]
-                  .add(['${key.day}일 ${element.name}', element.saveMoney]);
-            }
-          });
+            value.forEach((element) {
+              if (addedTimeID == null || addedTimeID == element.addedTimeID) {
+                sumPrice += element.saveMoney;
+                map[year][week][1]
+                    .add(['${key.day}일 ${element.name}', element.saveMoney]);
+              }
+            });
 
-          if (map[year][week][0] == null)
-            map[year][week][0] = sumPrice;
-          else
-            map[year][week][0] += sumPrice;
+            if (map[year][week][0] == null)
+              map[year][week][0] = sumPrice;
+            else
+              map[year][week][0] += sumPrice;
 
-          sumPrice = 0;
+            sumPrice = 0;
+          }
         }
       });
     }
@@ -461,20 +466,22 @@ class HabitProvider with ChangeNotifier {
 
     if (weeklyHabit.isNotEmpty) {
       weeklyHabit.forEach((key, value) {
-        if (!(key >= nowWeekOfYear)) {
-          if (startWeek == 0) startWeek = key;
-          value.forEach((element) {
-            if (_checkWeekIsEmpty(key) &&
-                (addedTimeID == null || addedTimeID == element.addedTimeID)) {
-              habitRet += element.retention;
-              len++;
-            }
-          });
+        if (addedTimeID == null || key >= isoWeekNumber(addedTimeID)) {
+          if (!(key >= nowWeekOfYear)) {
+            if (startWeek == 0) startWeek = key;
+            value.forEach((element) {
+              if (_checkWeekIsEmpty(key) &&
+                  (addedTimeID == null || addedTimeID == element.addedTimeID)) {
+                habitRet += element.retention;
+                len++;
+              }
+            });
 
-          if (len != 0) retentions[key] = habitRet / len;
+            if (len != 0) retentions[key] = habitRet / len;
 
-          habitRet = 0;
-          len = 0;
+            habitRet = 0;
+            len = 0;
+          }
         }
       });
     }
@@ -483,31 +490,33 @@ class HabitProvider with ChangeNotifier {
 
     if (dailyHabit.isNotEmpty) {
       dailyHabit.forEach((key, value) {
-        if (!(dailyKey >= nowWeekOfYear)) {
-          if (len != 0 && dailyKey != 0 && dailyKey != isoWeekNumber(key)) {
-            if (retentions.containsKey(dailyKey)) {
-              retentions[dailyKey] += habitRet / len;
-              retentions[dailyKey] /= 2;
-            } else {
-              retentions[dailyKey] = habitRet / len;
+        if (addedTimeID == null || addedTimeID.difference(key).inDays <= 0) {
+          if (!(dailyKey >= nowWeekOfYear)) {
+            if (len != 0 && dailyKey != 0 && dailyKey != isoWeekNumber(key)) {
+              if (retentions.containsKey(dailyKey)) {
+                retentions[dailyKey] += habitRet / len;
+                retentions[dailyKey] /= 2;
+              } else {
+                retentions[dailyKey] = habitRet / len;
+              }
+              habitRet = 0;
+              len = 0;
             }
-            habitRet = 0;
-            len = 0;
-          }
-          dailyKey = isoWeekNumber(key);
+            dailyKey = isoWeekNumber(key);
 
-          value.forEach((element) {
-            if (calendarIcon[key][0] != 0 &&
-                (addedTimeID == null || addedTimeID == element.addedTimeID)) {
-              habitRet += element.retention;
-              len++;
-            }
-          });
+            value.forEach((element) {
+              if (calendarIcon[key][0] != 0 &&
+                  (addedTimeID == null || addedTimeID == element.addedTimeID)) {
+                habitRet += element.retention;
+                len++;
+              }
+            });
+          }
         }
       });
     }
 
-    DateTime startDate = triggerHabit.keys.first;
+    DateTime startDate = addedTimeID ?? triggerHabit.keys.first;
     int week = isoWeekNumber(startDate);
 
     for (int i = 0;
