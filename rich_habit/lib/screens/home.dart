@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
@@ -238,6 +240,34 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget _buildWarning(BuildContext buildContext, Habit habit) {
+    String warn = "";
+    switch (habit.name) {
+      case "흡연":
+        warn = kWarningList[0];
+        break;
+      case "커피":
+        warn = kWarningList[1];
+        break;
+      case "음주":
+        warn = kWarningList[2];
+        break;
+      case "외식":
+        warn = kWarningList[3];
+        break;
+      case "택시":
+        warn = kWarningList[4];
+        break;
+      case "군것질":
+        warn = kWarningList[5];
+        break;
+      case "피씨방":
+        warn = kWarningList[6];
+        break;
+      default:
+        warn =
+            kCustomWaringList[Random().nextInt(kCustomWaringList.length - 1)];
+        break;
+    }
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0))),
@@ -289,14 +319,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               style: TextStyle(fontSize: 16.0, color: kPurpleColor),
             ),
             Text(
-              "2,268,200원",
+              "${context.read<HabitProvider>().compoundInterest(habit.price * (habit.nowAmount - habit.goalAmount), 20, 5).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
               style: TextStyle(
                   fontSize: kTitleFontSize,
                   color: kPurpleColor,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 40.0),
-            Text("\"담배는 돈 뿐만 아니라 건강에도 최악!\n다음에는 꼭 목표를 지켜봐요\"",
+            Text("\"$warn\n다음에는 꼭 목표를 지켜봐요\"",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16.0, color: kPurpleColor)),
             Expanded(
@@ -598,7 +628,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   String _getWeekStartDay() {
-    var day = "";
     DateTime startOfWeek =
         _selDay.subtract(Duration(days: _selDay.weekday - 1));
     return "(${startOfWeek.month}월 ${startOfWeek.day}일~)";
@@ -652,7 +681,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Init(isFirst: false)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Init(isFirst: false)));
                 },
                 iconSize: 25.0,
                 icon: Icon(
