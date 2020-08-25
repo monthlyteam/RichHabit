@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/habit.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/main_page.dart';
 import 'package:richhabit/screens/home.dart';
 import 'package:richhabit/screens/trigger.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
@@ -523,7 +524,7 @@ class _InitNextState extends State<InitNext> {
                 if(widget.isFirst){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
                 }else{
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                  Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
                 }
               }else{//목표량이 현재보다 높은경우
                 Fluttertoast.showToast(

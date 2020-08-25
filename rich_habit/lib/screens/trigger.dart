@@ -355,6 +355,7 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
     return WillPopScope(
       onWillPop: () async{
         context.read<HabitProvider>().resetData();
+        Navigator.of(context).pop();
       },
       child: Container(
         color: kPurpleColor,

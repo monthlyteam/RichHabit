@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
+import 'package:richhabit/screens/init.dart';
 import 'package:richhabit/screens/set_alarm.dart';
 import 'package:richhabit/screens/set_language.dart';
 import 'package:provider/provider.dart';
@@ -272,6 +274,17 @@ class Profile extends StatelessWidget {
                               child: GestureDetector(behavior: HitTestBehavior.translucent,
                                   onTap: (){
                                     context.read<HabitProvider>().resetData();
+                                    Fluttertoast.showToast(
+                                        msg: "데이터가 초기화 되었습니다.",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
+
+                                        fontSize: 16.0
+                                    );
+                                    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>Init(isFirst: true,)));
                                   },
                                   child: Center(
                                     child: Text("초기화",style: TextStyle(fontSize: kSubTitleFontSize,color: Color(0xFFDE711E),fontWeight: FontWeight.bold),),

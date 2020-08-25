@@ -681,10 +681,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Init(isFirst: false)));
+                  Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>Init(isFirst: false,)));
                 },
                 iconSize: 25.0,
                 icon: Icon(

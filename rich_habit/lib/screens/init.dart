@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:richhabit/main_page.dart';
 import 'package:richhabit/screens/Init_next.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'dart:math';
@@ -102,118 +104,128 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
           return Scaffold(
               backgroundColor: kPurpleColor,
               resizeToAvoidBottomPadding: false,
-              body : Stack(
-                children: [
-                  CustomScrollView(
-                    shrinkWrap: true,
-                    slivers: <Widget>[
-                      SliverPersistentHeader(
-                        pinned : true,
-                        floating: true,
-                        delegate: InitPageHeader(
-                          minExtent : 220.0,
-                          maxExtent : 300.0,
-                        ),
-                      ),
-                      SliverGroupBuilder(
-                        padding: EdgeInsets.only(bottom: 80),
-                        decoration: BoxDecoration(
-                          color: kIvoryColor,
-                          borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
-                        ),
-                        child: SliverGrid(
-                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent:size.width/2,
-                            mainAxisSpacing: 10.0,
-                            crossAxisSpacing:10.0,
-//                            childAspectRatio: size.width-40/(190+15), // 가로/세로
-                            childAspectRatio: 0.85, // 가로/세로
+              body : WillPopScope(
+                onWillPop: ()async{
+                  widget.isFirst?
+                    Future.delayed(const Duration(milliseconds: 1000), () {
+                      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                    })
+                      : Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
+                  },
+                child: Stack(
+                  children: [
+                    CustomScrollView(
+                      shrinkWrap: true,
+                      slivers: <Widget>[
+                        SliverPersistentHeader(
+                          pinned : true,
+                          floating: true,
+                          delegate: InitPageHeader(
+                            minExtent : 220.0,
+                            maxExtent : 300.0,
+                            isFirst: widget.isFirst
                           ),
-                          delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return Container(
-                                    padding: EdgeInsets.only(top: 20),
-                                    child: Column(
-                                      children: <Widget>[
-                                        GestureDetector(
-                                          onTap: () {
-                                            if(index == habitsRough.length-1){
-                                              _showAddDialog(context);
-                                            }else{
-                                              setState(() {
-                                                habitsRough[index][2] =
-                                                !habitsRough[index][2];
-                                              });
-                                            }
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: kWhiteIvoryColor,
-                                            ),
-                                            height: 160,
-                                            width: 160,
+                        ),
+                        SliverGroupBuilder(
+                          padding: EdgeInsets.only(bottom: 80),
+                          decoration: BoxDecoration(
+                            color: kIvoryColor,
+                            borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
+                          ),
+                          child: SliverGrid(
+                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent:size.width/2,
+                              mainAxisSpacing: 10.0,
+                              crossAxisSpacing:10.0,
+//                            childAspectRatio: size.width-40/(190+15), // 가로/세로
+                              childAspectRatio: 0.85, // 가로/세로
+                            ),
+                            delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return Container(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Column(
+                                        children: <Widget>[
+                                          GestureDetector(
+                                            onTap: () {
+                                              if(index == habitsRough.length-1){
+                                                _showAddDialog(context);
+                                              }else{
+                                                setState(() {
+                                                  habitsRough[index][2] =
+                                                  !habitsRough[index][2];
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: kWhiteIvoryColor,
+                                              ),
+                                              height: 160,
+                                              width: 160,
 //                      margin: EdgeInsets.fromLTRB(15,10,15,10),
-                                            alignment: Alignment.center,
+                                              alignment: Alignment.center,
 
-                                            child: Stack(
-                                              children:
-                                              habitsRough[index][2] ?
-                                              [Center(child:
-                                              SvgPicture.asset(habitsRough[index][1])),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.black
-                                                          .withOpacity(0.5),
-                                                    ),
-                                                    height: 160,
-                                                    width: 160
-                                                )
-                                              ]
-                                                  : [
-                                                Center(child: SvgPicture.asset(habitsRough[index][1]))
-                                              ],
+                                              child: Stack(
+                                                children:
+                                                habitsRough[index][2] ?
+                                                [Center(child:
+                                                SvgPicture.asset(habitsRough[index][1])),
+                                                  Container(
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Colors.black
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                      height: 160,
+                                                      width: 160
+                                                  )
+                                                ]
+                                                    : [
+                                                  Center(child: SvgPicture.asset(habitsRough[index][1]))
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10,),
-                                        FittedBox(fit:BoxFit.fitHeight,child: Text(habitsRough[index][0],style: txtstyle,)),
-                                      ],
-                                    ),
-                                  );
-                            },
-                            childCount: habitsRough.length,
+                                          SizedBox(height: 10,),
+                                          FittedBox(fit:BoxFit.fitHeight,child: Text(habitsRough[index][0],style: txtstyle,)),
+                                        ],
+                                      ),
+                                    );
+                              },
+                              childCount: habitsRough.length,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  BottomPositionedBox("다 체크 했어요!  →",() {
-                    bool isAnythingSelected = false;
-                    for(var i = 0; i<habitsRough.length;i++){
-                      if(habitsRough[i][2]==true) {
-                        isAnythingSelected = true;
-                        break;
+                      ],
+                    ),
+                    BottomPositionedBox("다 체크 했어요!  →",() {
+                      bool isAnythingSelected = false;
+                      for(var i = 0; i<habitsRough.length;i++){
+                        if(habitsRough[i][2]==true) {
+                          isAnythingSelected = true;
+                          break;
+                        }
                       }
-                    }
-                    if(isAnythingSelected == false){
-                      Fluttertoast.showToast(
-                          msg: "최소 한개를 선택해주세요!",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                    }else{
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(habitsRough),isFirst:widget.isFirst)));
-                    }
-                  })
-                ],
+                      if(isAnythingSelected == false){
+                        Fluttertoast.showToast(
+                            msg: "최소 한개를 선택해주세요!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                      }else{
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => InitNext(selectedItem: _selectedListGenerator(habitsRough),isFirst:widget.isFirst)));
+                      }
+                    })
+                  ],
+                ),
               ),
             );
         }else{
@@ -371,10 +383,11 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
 
   final double minExtent;
   final double maxExtent;
-
+  final bool isFirst;
   InitPageHeader({
     this.minExtent,
     @required this.maxExtent,
+    @required this.isFirst
   });
 
   @override
@@ -387,12 +400,16 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
 //              SizedBox(height: 50),
-              Container(
+              isFirst?
+                  SizedBox(height: 40,)
+             : Container(
                 height: 40,
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
-                  child: GestureDetector(behavior: HitTestBehavior.translucent,child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){}),
+                  child: GestureDetector(behavior: HitTestBehavior.translucent,child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
+                    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
+                  }),
                 ),
               ),
               SizedBox(height: 20,),
