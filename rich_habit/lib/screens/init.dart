@@ -5,11 +5,12 @@ import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:richhabit/habit_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:richhabit/main_page.dart';
 import 'package:richhabit/screens/Init_next.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'dart:math';
-
 import '../constants.dart';
 
 
@@ -24,7 +25,7 @@ class Init extends StatefulWidget {
 
 class InitState extends State<Init> with SingleTickerProviderStateMixin{
 
-  List<List<dynamic>> habitsRough; //[name,icon,isSelceted]
+  List<List<dynamic>> habitsRough = new List<List<dynamic>>(); //[name,icon,isSelceted]
 
   final textFieldController = TextEditingController();
   AnimationController controller;
@@ -34,41 +35,21 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
+
     controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this); //SingleTickerProviderSteteMixin과 연관이있는데 잘모르겠다
-
-    habitsRough = List<List<dynamic>>.generate(
-      10,(int index) => []
-    );
-
     txtstyle = TextStyle(color: kPurpleColor, fontWeight: FontWeight.w600);
-    habitsRough[0].add("음주");
-    habitsRough[1].add("음주");
-    habitsRough[2].add("커피");
-    habitsRough[3].add("커피");
-    habitsRough[4].add("음주");
-    habitsRough[5].add("커피");
-    habitsRough[6].add("흡연");
-    habitsRough[7].add("커피");
-    habitsRough[8].add("흡연");
-    habitsRough[9].add("추가");
 
-    habitsRough[1].add('assets/images/icon/beer.svg');
-    habitsRough[2].add('assets/images/icon/beer.svg');
-    habitsRough[0].add('assets/images/icon/beer.svg');
-    habitsRough[3].add('assets/images/icon/coffee.svg');
-    habitsRough[4].add('assets/images/icon/beer.svg');
-    habitsRough[5].add('assets/images/icon/smoking.svg');
-    habitsRough[6].add('assets/images/icon/smoking.svg');
-    habitsRough[7].add('assets/images/icon/coffee.svg');
-    habitsRough[8].add('assets/images/icon/smoking.svg');
-    habitsRough[9].add('assets/images/icon/plus_circle.svg');
+    for(var i = 0; i < defualtHabitList.length;i++){
 
-
-    for(var i=0;i < habitsRough.length;i++){
-      habitsRough[i].add(false);
+      if(!_isExisting(defualtHabitList[i][0])) {
+        habitsRough.add([defualtHabitList[i][0],defualtHabitList[i][1],false]);
+      }
     }
-  }
+//    for(var i = 0; i<habitsRough.length;i++){
+  //    habitsRough[i].add(false);
+    //}
 
+  }
   Future<double> whenNotZero(Stream<double> source) async{
     await for (double value in source){
       if(value>0) return value;
@@ -164,7 +145,6 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                               ),
                                               height: 160,
                                               width: 160,
-//                      margin: EdgeInsets.fromLTRB(15,10,15,10),
                                               alignment: Alignment.center,
 
                                               child: Stack(
@@ -177,6 +157,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                                         shape: BoxShape.circle,
                                                         color: Colors.black
                                                             .withOpacity(0.5),
+                                                        image: DecorationImage(image: AssetImage('assets/images/check.png'))
                                                       ),
                                                       height: 160,
                                                       width: 160
@@ -235,6 +216,18 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
       }
     );
   }
+  bool _isExisting(String name){
+    List<String> habitNameList = new List<String>();
+    context.read<HabitProvider>().weeklyHabit.forEach((k, v)=>habitNameList.add(v[0].name));
+    context.read<HabitProvider>().dailyHabit.forEach((k, v)=>habitNameList.add(v[0].name));
+    for(var i=0; i<habitNameList.length;i++){
+      if(habitNameList[i] == name){
+        return true;
+      }
+    }
+    return false;
+  }
+
   _showAddDialog(BuildContext context){
     showDialog(
         context: context,

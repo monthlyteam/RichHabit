@@ -20,7 +20,7 @@ class Trigger extends StatefulWidget {
 
 class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
 
-  List<List<dynamic>> triggersRough; //[name,icon,isSelceted]
+  List<List<dynamic>> triggersRough = new List<List<dynamic>>(); //[name,icon,isSelceted]
 
   final textFieldController = TextEditingController();
   AnimationController controller;
@@ -32,21 +32,11 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
     super.initState();
     controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this); //SingleTickerProviderSteteMixin과 연관이있는데 잘모르겠다
 
-    triggersRough = List<List<dynamic>>.generate(
-        2,(int index) => []
-    );
-
     txtstyle = TextStyle(color: kPurpleColor, fontWeight: FontWeight.w600);
-    triggersRough[0].add("양치질");
-    triggersRough[1].add("식사");
-
-
-    triggersRough[0].add('assets/images/icon/beer.svg');
-    triggersRough[1].add('assets/images/icon/plus_circle.svg');
-
-
-    for(var i=0;i < triggersRough.length;i++){
-      triggersRough[i].add(false);
+    for(var i = 0; i < triggerList.length;i++){
+      if(!_isExisting(triggerList[i][0])) {
+        triggersRough.add([triggerList[i][0],triggerList[i][1],false]);
+      }
     }
   }
 
@@ -114,15 +104,21 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                           children: <Widget>[
                             GestureDetector(behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                if(index == triggersRough.length-1){
-                                  _showAddDialog(context);
-                                }else{
-                                  setState(() {
-                                    triggersRough[index][2] =
-                                    !triggersRough[index][2];
-                                  });
-                                }
+//                                if(index == triggersRough.length-1){
+//                                  _showAddDialog(context);
+//                                }else{
+                                setState(() {
+
+                                  for(var i = 0; i<triggersRough.length;i++){
+                                    triggersRough[i][2]=false;
+                                  }
+
+                                  triggersRough[index][2] =
+                                  !triggersRough[index][2];
+
+                                });
                               },
+//                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -139,13 +135,14 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                                   [Center(child:
                                   SvgPicture.asset(triggersRough[index][1])),
                                     Container(
+                                      child: Image.asset("assets/images/check.png"),
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.black
                                               .withOpacity(0.5),
                                         ),
                                         height: 160,
-                                        width: 160
+                                        width: 160,
                                     )
                                   ]
                                       : [
@@ -337,6 +334,18 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
           );
         });
   }
+  bool _isExisting(String name){
+      List<String> habitNameList = new List<String>();
+      context.read<HabitProvider>().weeklyHabit.forEach((k, v)=>habitNameList.add(v[0].name));
+      context.read<HabitProvider>().dailyHabit.forEach((k, v)=>habitNameList.add(v[0].name));
+      for(var i=0; i<habitNameList.length;i++){
+        if(habitNameList[i] == name){
+          return true;
+        }
+      }
+      return false;
+  }
+
 }
 
 class TriggerPageHeader implements SliverPersistentHeaderDelegate{
@@ -381,8 +390,13 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
             ),
             SizedBox(height: 11),
             Container(
-                width: 280,
-                child: Text("평소에 매일 하던 행동과 함께 관리하며 기록을 더 잘 할 수 있어요!",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300))
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("평소에 매일 하던 행동과 함께 관리하며",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300)),
+                    Text("기록을 더 잘 할 수 있어요!",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300)),
+                  ],
+                )
             ),
           ],
         ),
@@ -393,6 +407,8 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
   double headerOpacity(double shrinkOffset){
     return max(0,1-shrinkOffset / (maxExtent-minExtent+70));
   }
+
+
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
