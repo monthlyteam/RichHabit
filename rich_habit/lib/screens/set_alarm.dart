@@ -64,10 +64,18 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
           CupertinoSwitch(
             value : (index==0)?isAlarmOn:isSoundOn,
             onChanged: (bool value){
-              setState(() {
-                (index==0)? isAlarmOn = value : isSoundOn=value;
-                callback;
-              });
+              if(!isAlarmOn && index == 1){ //알람이꺼져있고, 클릭한게 소리에 관한거라면 반응안함.
+              } else{
+                setState(() {
+                  if(index==0) { //알람이 움직이면 소리도 같이 움직임
+                    isAlarmOn = value;
+                    isSoundOn = isAlarmOn; //알람 바꾸면 소리도 자동으로 바뀜
+                  }else{
+                    isSoundOn = value;
+                  }
+                  callback;
+                });
+              }
             },
             activeColor: Color(0xffDE711E),
             trackColor: Color(0xff7B7B7B),
