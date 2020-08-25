@@ -8,6 +8,7 @@ import 'package:richhabit/screens/init.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'habit.dart';
 import 'test_data.dart';
 
@@ -103,8 +104,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'RichHabit',
-      theme: ThemeData(),
-      home: isEmpty ? Init(isFirst: true,) : MainPage(),
+      theme: ThemeData(
+          textTheme: GoogleFonts.notoSansTextTheme(
+        Theme.of(context).textTheme,
+      )),
+      home: isEmpty
+          ? Init(
+              isFirst: true,
+            )
+          : MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }

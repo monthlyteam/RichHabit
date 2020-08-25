@@ -37,6 +37,7 @@ dependencies:
       url: https://github.com/bkRyusim/configurable_expansion_tile.git
       ref: master
   shared_preferences: ^0.5.8
+  google_fonts: ^1.1.0
 
 dev_dependencies:
   flutter_test:
