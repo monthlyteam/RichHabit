@@ -503,7 +503,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                           child: Column(
                             children: [
                               Text(
-                                "계산할 이자율과 년 도를 입력해 주세요.",
+                                "이자율과 연도를 입력해 주세요.",
                                 style: TextStyle(
                                     color: kPurpleColor, fontSize: 16.0),
                               ),
