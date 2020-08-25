@@ -14,6 +14,8 @@ class CompoundInterest extends StatefulWidget {
 
 class _CompoundInterestState extends State<CompoundInterest> {
   int selIndex = 0;
+  int percent = 5;
+  int year = 20;
   bool goalIsWeek = false;
   DateTime addedTimeID;
   DateTime current;
@@ -84,75 +86,74 @@ class _CompoundInterestState extends State<CompoundInterest> {
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 10.0),
-                      height: 125,
+                          vertical: 10.0, horizontal: 10.0),
+                      height: 160,
                       decoration: BoxDecoration(
                         color: kIvoryColor,
                         borderRadius: BorderRadius.circular(5.0),
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: 40.0,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "${today.month}월 예상 절약 금액",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: kPurpleColor, fontSize: 14.0),
-                                  ),
+                                Text(
+                                  "${today.month}월 예상 절약 금액",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPurpleColor, fontSize: 14.0),
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "${context.watch<HabitProvider>().thisMonthExpected(addedTimeID, goalIsWeek).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: kDarkPurpleColor,
-                                          fontSize: kSubTitleFontSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                Text(
+                                  "${context.watch<HabitProvider>().thisMonthExpected(addedTimeID, goalIsWeek).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kDarkPurpleColor,
+                                      fontSize: kSubTitleFontSize,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
                           ),
                           Icon(
-                            Icons.arrow_forward_ios,
+                            Icons.keyboard_arrow_down,
                             color: kPurpleColor,
+                            size: 25.0,
                           ),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: 40.0,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "연 5% 월 복리로\n 20년후 가치",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: kPurpleColor, fontSize: 14.0),
+                                InkWell(
+                                  onTap: () {
+                                    _showDialog(context);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "연 $percent% 월 복리로 $year년 후 가치 ",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: kPurpleColor,
+                                            fontSize: 14.0),
+                                      ),
+                                      Icon(
+                                        Icons.edit,
+                                        color: kPurpleColor,
+                                        size: 15.0,
+                                      )
+                                    ],
                                   ),
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "${context.watch<HabitProvider>().compoundInterest(context.watch<HabitProvider>().thisMonthExpected(addedTimeID, goalIsWeek), 20, 5).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: kDarkPurpleColor,
-                                          fontSize: kSubTitleFontSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                Text(
+                                  "${context.watch<HabitProvider>().compoundInterest(context.watch<HabitProvider>().thisMonthExpected(addedTimeID, goalIsWeek), year, percent).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kDarkPurpleColor,
+                                      fontSize: kSubTitleFontSize,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -163,7 +164,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                     SizedBox(height: kPadding),
                     Container(
                       padding: EdgeInsets.all(10.0),
-                      height: 90,
+                      height: 100,
                       decoration: BoxDecoration(
                         color: kIvoryColor,
                         borderRadius: BorderRadius.circular(5.0),
@@ -177,6 +178,9 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                 "누적 절약 금액",
                                 style: TextStyle(
                                     fontSize: 16.0, color: kPurpleColor),
+                              ),
+                              SizedBox(
+                                height: 10.0,
                               ),
                               Text(
                                 "${context.watch<HabitProvider>().cumSaving(addedTimeID).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
@@ -412,10 +416,16 @@ class _CompoundInterestState extends State<CompoundInterest> {
               getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                 return touchedBarSpots.map((barSpot) {
                   final flSpot = barSpot;
+                  var str =
+                      '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)} %';
+                  if (flSpot.y == 100.01) {
+                    str =
+                        '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)}+ %';
+                  } else if (flSpot.y == -1) {
+                    str = '값이 없습니다';
+                  }
                   return LineTooltipItem(
-                    flSpot.y == 100.01
-                        ? '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)}+ %'
-                        : '${flSpot.x.toInt() + 1}주차 ${flSpot.y.toStringAsFixed(1)} %',
+                    str,
                     const TextStyle(
                         color: kPurpleColor, fontWeight: FontWeight.bold),
                   );
@@ -467,5 +477,265 @@ class _CompoundInterestState extends State<CompoundInterest> {
       }
     }
     return spots;
+  }
+
+  void _showDialog(BuildContext context) {
+    int diaPer = percent;
+    int diaYear = year;
+    showDialog(
+        context: context,
+        builder: (BuildContext buildContext) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Dialog(
+              backgroundColor: kIvoryColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)), //this right here
+              child: Container(
+                  height: 226,
+                  width: 320,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                          height: 176,
+                          padding: EdgeInsets.fromLTRB(26, 15, 26, 13),
+                          child: Column(
+                            children: [
+                              Text(
+                                "계산할 이자율과 년 도를 입력해 주세요.",
+                                style: TextStyle(
+                                    color: kPurpleColor, fontSize: 16.0),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "연",
+                                            style: TextStyle(
+                                                color: kPurpleColor,
+                                                fontSize: 16.0),
+                                          ),
+                                          SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  if (diaPer < 20) {
+                                                    setState(() {
+                                                      diaPer++;
+                                                    });
+                                                  }
+                                                },
+                                                child: Text(
+                                                  "+1",
+                                                  style: TextStyle(
+                                                      color: kPurpleColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Container(
+                                                width: 50.0,
+                                                alignment: Alignment.center,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5.0,
+                                                    horizontal: 10.0),
+                                                decoration: BoxDecoration(
+                                                    color: kWhiteIvoryColor),
+                                                child: Text(
+                                                  "$diaPer",
+                                                  style: TextStyle(
+                                                      color: kPurpleColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  if (diaPer > 0) {
+                                                    setState(() {
+                                                      diaPer--;
+                                                    });
+                                                  }
+                                                },
+                                                child: Text(
+                                                  "-1",
+                                                  style: TextStyle(
+                                                      color: kPurpleColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          Text(
+                                            "%",
+                                            style: TextStyle(
+                                                color: kPurpleColor,
+                                                fontSize: 16.0),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  if (diaYear < 30) {
+                                                    setState(() {
+                                                      diaYear += 5;
+                                                    });
+                                                  }
+                                                },
+                                                child: Text(
+                                                  "+5",
+                                                  style: TextStyle(
+                                                      color: kPurpleColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Container(
+                                                width: 50.0,
+                                                alignment: Alignment.center,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5.0,
+                                                    horizontal: 10.0),
+                                                decoration: BoxDecoration(
+                                                    color: kWhiteIvoryColor),
+                                                child: Text(
+                                                  "$diaYear",
+                                                  style: TextStyle(
+                                                      color: kPurpleColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  if (diaYear > 5) {
+                                                    setState(() {
+                                                      diaYear -= 5;
+                                                    });
+                                                  }
+                                                },
+                                                child: Text(
+                                                  "-5",
+                                                  style: TextStyle(
+                                                      color: kPurpleColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          Text(
+                                            "년",
+                                            style: TextStyle(
+                                                color: kPurpleColor,
+                                                fontSize: 16.0),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )),
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: kPurpleColor),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(buildContext);
+                                },
+                                child: Container(
+                                  child: Center(
+                                    child: Text(
+                                      "취소",
+                                      style: TextStyle(
+                                          fontSize: kSubTitleFontSize,
+                                          fontWeight: FontWeight.bold,
+                                          color: kIvoryColor),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 14,
+                              width: 4,
+                              child: VerticalDivider(
+                                width: 4,
+                                color: kIvoryColor,
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  _onChangedPerYear(diaPer, diaYear);
+                                  Navigator.pop(buildContext);
+                                },
+                                child: Center(
+                                  child: Text(
+                                    "저장",
+                                    style: TextStyle(
+                                        fontSize: kSubTitleFontSize,
+                                        color: kSelectedColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+            );
+          });
+        });
+  }
+
+  void _onChangedPerYear(int diaPer, int diaYear) {
+    setState(() {
+      percent = diaPer;
+      year = diaYear;
+    });
   }
 }
