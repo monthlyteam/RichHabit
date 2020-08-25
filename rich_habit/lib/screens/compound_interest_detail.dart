@@ -48,7 +48,7 @@ class _CompoundInterestDetailState extends State<CompoundInterestDetail> {
             width: double.infinity,
           ),
           Text(
-            "총 누적 절약 금액",
+            "총 누적 절약 금액",
             style: TextStyle(color: kWhiteIvoryColor, fontSize: 16),
           ),
           SizedBox(
