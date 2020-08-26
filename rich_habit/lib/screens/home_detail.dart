@@ -48,7 +48,7 @@ class HomeDetail extends StatelessWidget {
                                 habit: habit,
                               )),
                     );
-                    if (isChanged) {
+                    if (isChanged == null || isChanged) {
                       Navigator.pop(context);
                     }
                   },

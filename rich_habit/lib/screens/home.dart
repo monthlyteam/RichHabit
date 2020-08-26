@@ -144,51 +144,58 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                     Expanded(
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    habit.iconURL,
+                                    height: 25.0,
+                                  ),
+                                  Text(
+                                    habit.name,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 15.0, color: kPurpleColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              SvgPicture.asset(
-                                habit.iconURL,
-                                height: 25.0,
+                              Text(
+                                "현재 ",
+                                style: textStyle,
                               ),
                               Text(
-                                habit.name,
-                                style: TextStyle(
-                                    fontSize: 15.0, color: kPurpleColor),
+                                "${habit.nowAmount}",
+                                style: countStyle,
                               ),
+                              Text(
+                                "번  /  ",
+                                style: textStyle,
+                              ),
+                              Text(
+                                "목표 ",
+                                style: textStyle,
+                              ),
+                              Text(
+                                "${habit.goalAmount}",
+                                style: countStyle,
+                              ),
+                              Text(
+                                "번",
+                                style: textStyle,
+                              )
                             ],
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  "현재 ",
-                                  style: textStyle,
-                                ),
-                                Text(
-                                  "${habit.nowAmount}",
-                                  style: countStyle,
-                                ),
-                                Text(
-                                  "번  /  ",
-                                  style: textStyle,
-                                ),
-                                Text(
-                                  "목표 ",
-                                  style: textStyle,
-                                ),
-                                Text(
-                                  "${habit.goalAmount}",
-                                  style: countStyle,
-                                ),
-                                Text(
-                                  "번",
-                                  style: textStyle,
-                                )
-                              ],
-                            ),
                           )
                         ],
                       ),
@@ -299,6 +306,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             SizedBox(height: 10.0),
             Text(
               "${habit.name}",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 25,
                 color: kPurpleColor,
@@ -681,7 +689,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>Init(isFirst: false,)));
+                  Navigator.of(context, rootNavigator: true)
+                      .pushReplacement(MaterialPageRoute(
+                          builder: (context) => Init(
+                                isFirst: false,
+                              )));
                 },
                 iconSize: 25.0,
                 icon: Icon(
