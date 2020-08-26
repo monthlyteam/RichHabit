@@ -211,7 +211,7 @@ class _BuyOrNotState extends State<BuyOrNot> {
                     ),
                     SizedBox(height: 25.0),
                     Text(
-                      "${_price.toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
+                      "${_price.toStringAsFixed(0).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
                       style: TextStyle(color: kWhiteIvoryColor, fontSize: 40.0),
                       textAlign: TextAlign.center,
                     ),
