@@ -430,7 +430,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                   child: Text(
                                     "취소",
                                     style: TextStyle(
-                                        fontSize: kSubTitleFontSize,
+                                        fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
                                         color: kIvoryColor),
                                   ),
@@ -459,7 +459,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                 child: Text(
                                   "삭제",
                                   style: TextStyle(
-                                      fontSize: kSubTitleFontSize,
+                                      fontSize: 16.0,
                                       color: kSelectedColor,
                                       fontWeight: FontWeight.bold),
                                 ),

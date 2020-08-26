@@ -9,6 +9,7 @@ class BuyOrNot extends StatefulWidget {
 class _BuyOrNotState extends State<BuyOrNot> {
   var priceController = TextEditingController(text: "2000000");
   var maintainController = TextEditingController(text: "0");
+  var focus = FocusNode();
   var _percent = 5;
   var _year = 20;
   var _cycle = 1;
@@ -217,7 +218,7 @@ class _BuyOrNotState extends State<BuyOrNot> {
                     SizedBox(height: 90.0),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 20.0),
+                          vertical: 20.0, horizontal: 20.0),
                       decoration: BoxDecoration(
                           color: kIvoryColor,
                           borderRadius: BorderRadius.circular(10.0)),
@@ -246,7 +247,8 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                             enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
                                                   width: 0.5,
-                                                  color: kDarkPurpleColor),
+                                                  color: kDarkPurpleColor
+                                                      .withOpacity(0.4)),
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -255,6 +257,7 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                             ),
                                           ),
                                           keyboardType: TextInputType.number,
+                                          textInputAction: TextInputAction.next,
                                           style: TextStyle(
                                               fontSize: 18.0,
                                               color: kPurpleColor,
@@ -264,6 +267,9 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                               _calPrice();
                                             }
                                           },
+                                          onSubmitted: (_) =>
+                                              FocusScope.of(context)
+                                                  .requestFocus(focus),
                                         ),
                                       ),
                                     ),
@@ -279,7 +285,7 @@ class _BuyOrNotState extends State<BuyOrNot> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 5.0),
+                          SizedBox(height: 15.0),
                           Row(
                             children: [
                               Text(
@@ -363,14 +369,17 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                         height: 30.0,
                                         child: TextField(
                                           controller: maintainController,
+                                          focusNode: focus,
                                           textAlign: TextAlign.end,
+                                          textInputAction: TextInputAction.done,
                                           maxLength: 14,
                                           decoration: InputDecoration(
                                             counterText: "",
                                             enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
                                                   width: 0.5,
-                                                  color: kDarkPurpleColor),
+                                                  color: kDarkPurpleColor
+                                                      .withOpacity(0.4)),
                                             ),
                                             focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
