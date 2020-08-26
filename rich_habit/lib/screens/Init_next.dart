@@ -438,7 +438,7 @@ class _InitNextState extends State<InitNext> {
                                 child:
                                 Column(
                                   children: [
-                                    Text("\"평소 습관 보다 매달 ${saveAmount[index]}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                    Text("\"평소 습관 보다 매달 ${saveAmount[index].toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                     Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
                                   ],
                                 )
