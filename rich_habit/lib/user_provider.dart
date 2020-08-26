@@ -26,12 +26,15 @@ class UserProvider with ChangeNotifier {
     var initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
 
-    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     _flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     //for when notification pressed.
     //_flutterLocalNotificationsPlugin.initialize(initializationSettings,
     //    onSelectNotification: onSelectNotification);
+  }
+
+  void setNotiPlugin(FlutterLocalNotificationsPlugin plugin) {
+    this._flutterLocalNotificationsPlugin = plugin;
   }
 
   Future<void> setTriggerNotification() async {
