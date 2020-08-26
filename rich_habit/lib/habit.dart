@@ -9,10 +9,10 @@ class Habit {
   bool isTrigger;
 
   bool usualIsWeek; // 평상시 횟수 단위 Daily = false, Weekly = true
-  int usualAmount; //평상시 습관 양
+  double usualAmount; //평상시 습관 양
 
   bool goalIsWeek; // 목표 횟수 단위 Daily = false, Weekly = true
-  int goalAmount; // 목표 습관 양
+  double goalAmount; // 목표 습관 양
 
   int nowAmount = 0; // 현재 습관 양
 
@@ -76,7 +76,7 @@ class Habit {
     this.goalIsWeek = isWeek;
   }
 
-  void modifyGoalAmount(int goalAmount) {
+  void modifyGoalAmount(double goalAmount) {
     this.goalAmount = goalAmount;
   }
 

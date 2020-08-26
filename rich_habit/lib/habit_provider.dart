@@ -154,7 +154,7 @@ class HabitProvider with ChangeNotifier {
 
   //주기가 바뀐경우 Weekly => daily는 호출 없다고 가정
   void modifyHabit(DateTime addedTimeID, bool goalIsWeek, bool newCycle,
-      int newAmount, double newPrice) {
+      double newAmount, double newPrice) {
     if (goalIsWeek == newCycle) {
       //주기가 바뀐게 아니라면
       if (goalIsWeek) {

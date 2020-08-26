@@ -468,9 +468,9 @@ class _InitNextState extends State<InitNext> {
                   "iconURL": _selectedItem[index][1],
                   "price": double.parse(controllers[1].text),
                   "usualIsWeek": usualIsWeek,
-                  "usualAmount": int.parse(controllers[0].text),
+                  "usualAmount": (usualIsWeek)? double.parse(controllers[0].text) / 7 : int.parse(controllers[0].text),
                   "goalIsWeek": goalIsWeek,
-                  "goalAmount": int.parse(controllers[2].text),
+                  "goalAmount": (goalIsWeek) ? double.parse(controllers[2].text) / 7 : int.parse(controllers[2].text),
                   "isTrigger": false
                 });
                 for (var i = 0; i < habitList.length; i++) {
@@ -485,7 +485,6 @@ class _InitNextState extends State<InitNext> {
                           usualAmount: habitList[i]['usualAmount'],
                           usualIsWeek: habitList[i]['usualIsWeek'],
                           goalIsWeek: habitList[i]['goalIsWeek'],
-
                           goalAmount: habitList[i]['goalAmount']
                       )
                   );
@@ -548,7 +547,16 @@ class _InitNextState extends State<InitNext> {
               );
             }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){//목표량이 현재보다 낮은경우
               if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {
-                habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
+                habitList[index] = ({
+                  "name": _selectedItem[index][0],
+                  "iconURL": _selectedItem[index][1],
+                  "price": double.parse(controllers[1].text),
+                  "usualIsWeek": usualIsWeek,
+                  "usualAmount": (usualIsWeek)? double.parse(controllers[0].text) / 7 : int.parse(controllers[0].text),
+                  "goalIsWeek": goalIsWeek,
+                  "goalAmount": (goalIsWeek) ? double.parse(controllers[2].text) / 7 : int.parse(controllers[2].text),
+                  "isTrigger": false
+                });
                 goalIsWeek = false;
                 usualIsWeek = false;
                 nodes[0].requestFocus();

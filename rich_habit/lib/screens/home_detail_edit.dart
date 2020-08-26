@@ -331,7 +331,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                             widget.habit.addedTimeID,
                             widget.habit.goalIsWeek,
                             _goalIsWeek,
-                            int.parse(_goalAmountCont.text),
+                            double.parse(_goalAmountCont.text),
                             double.parse(_priceCont.text));
                       }
                       Navigator.pop(context, false);

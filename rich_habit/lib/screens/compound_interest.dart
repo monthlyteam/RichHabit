@@ -22,7 +22,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
   DateTime today;
   List<Habit> dailyHabit;
   List<Habit> weeklyHabit;
-  List<Habit> total;
+  List<Habit> total = new List<Habit>();
 
   List<FlSpot> spots = [
     FlSpot(0, 80),
