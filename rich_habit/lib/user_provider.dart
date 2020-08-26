@@ -33,6 +33,10 @@ class UserProvider with ChangeNotifier {
     //    onSelectNotification: onSelectNotification);
   }
 
+  void resetNotification() async {
+    await _flutterLocalNotificationsPlugin.cancelAll();
+  }
+
   void setNotiPlugin(FlutterLocalNotificationsPlugin plugin) {
     this._flutterLocalNotificationsPlugin = plugin;
   }
