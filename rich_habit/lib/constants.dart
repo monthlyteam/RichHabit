@@ -36,20 +36,19 @@ const kCustomWaringList = [
   "(대충 유명한 명언7)",
 ];
 
-
 const defualtHabitList = [
-  ["흡연",'assets/images/icon/smoking.svg'],
-  ["커피(음료)",'assets/images/icon/coffee.svg'],
-  ["음주",'assets/images/icon/beer.svg'],
-  ["외식",'assets/images/icon/eatingout.svg'],
-  ["택시",'assets/images/icon/taxi.svg'],
-  ["군것질",'assets/images/icon/snacks.svg'],
-  ["피씨방",'assets/images/icon/pcroom.svg'],
-  ["추가",'assets/images/icon/plus_habit.svg']
+  ["흡연", 'assets/images/icon/smoking.svg'],
+  ["커피(음료)", 'assets/images/icon/coffee.svg'],
+  ["음주", 'assets/images/icon/beer.svg'],
+  ["외식", 'assets/images/icon/eatingout.svg'],
+  ["택시", 'assets/images/icon/taxi.svg'],
+  ["군것질", 'assets/images/icon/snacks.svg'],
+  ["피씨방", 'assets/images/icon/pcroom.svg'],
+  ["추가", 'assets/images/icon/custom_coin.svg']
 ];
 
 const triggerList = [
-  ["양치질","assets/images/icon/teeth.svg"],
-  ["식사","assets/images/icon/meal.svg"],
-  ["샤워","assets/images/icon/shower.svg"],
+  ["양치질", "assets/images/icon/teeth.svg"],
+  ["식사", "assets/images/icon/meal.svg"],
+  ["샤워", "assets/images/icon/shower.svg"],
 ];
