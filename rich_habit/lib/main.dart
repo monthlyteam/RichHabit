@@ -103,16 +103,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) {
+        return MediaQuery(
+          child: child,
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        );
+      },
       title: 'RichHabit',
       theme: ThemeData(
           textTheme: GoogleFonts.notoSansTextTheme(
         Theme.of(context).textTheme,
       )),
-      home: isEmpty
-          ? Init(
-              isFirst: true,
-            )
-          : MainPage(),
+      home: isEmpty ? Init(isFirst: true) : MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }
