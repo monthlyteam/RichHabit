@@ -227,7 +227,18 @@ class _BuyOrNotState extends State<BuyOrNot> {
                           Row(
                             children: [
                               Text(
-                                "가    격 : ",
+                                "가",
+                                style: TextStyle(
+                                    fontSize: 18.0, color: kPurpleColor),
+                              ),
+                              Text(
+                                "지",
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: kPurpleColor.withOpacity(0.0)),
+                              ),
+                              Text(
+                                "격 :",
                                 style: TextStyle(
                                     fontSize: 18.0, color: kPurpleColor),
                               ),
@@ -256,7 +267,8 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                                   color: kDarkPurpleColor),
                                             ),
                                           ),
-                                          keyboardType: TextInputType.number,
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(),
                                           textInputAction: TextInputAction.next,
                                           style: TextStyle(
                                               fontSize: 18.0,
