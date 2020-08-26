@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:richhabit/constants.dart';
@@ -44,45 +46,48 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: kPurpleColor,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
-        child: IndexedStack(
-          index: _selectedIndex,
-          children: <Widget>[
-            Navigator(
-              key: _home,
-              onGenerateRoute: (route) => MaterialPageRoute(
-                settings: route,
-                builder: (context) => Home(),
+        child: WillPopScope(
+          onWillPop: _willPopCallback,
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: <Widget>[
+              Navigator(
+                key: _home,
+                onGenerateRoute: (route) => MaterialPageRoute(
+                  settings: route,
+                  builder: (context) => Home(),
+                ),
               ),
-            ),
-            Navigator(
-              key: _buyOrNot,
-              onGenerateRoute: (route) => MaterialPageRoute(
-                settings: route,
-                builder: (context) => BuyOrNot(),
+              Navigator(
+                key: _buyOrNot,
+                onGenerateRoute: (route) => MaterialPageRoute(
+                  settings: route,
+                  builder: (context) => BuyOrNot(),
+                ),
               ),
-            ),
-            Navigator(
-              key: _compoundInterest,
-              onGenerateRoute: (route) => MaterialPageRoute(
-                settings: route,
-                builder: (context) => CompoundInterest(),
+              Navigator(
+                key: _compoundInterest,
+                onGenerateRoute: (route) => MaterialPageRoute(
+                  settings: route,
+                  builder: (context) => CompoundInterest(),
+                ),
               ),
-            ),
-            Navigator(
-              key: _invest,
-              onGenerateRoute: (route) => MaterialPageRoute(
-                settings: route,
-                builder: (context) => Invest(),
+              Navigator(
+                key: _invest,
+                onGenerateRoute: (route) => MaterialPageRoute(
+                  settings: route,
+                  builder: (context) => Invest(),
+                ),
               ),
-            ),
-            Navigator(
-              key: _profile,
-              onGenerateRoute: (route) => MaterialPageRoute(
-                settings: route,
-                builder: (context) => Profile(),
+              Navigator(
+                key: _profile,
+                onGenerateRoute: (route) => MaterialPageRoute(
+                  settings: route,
+                  builder: (context) => Profile(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Container(
@@ -243,11 +248,103 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  Future<bool> _willPopCallback() async {
+    var flag = false;
+    var cnt = 0;
+    setState(() {
+      switch (_selectedIndex) {
+        case 0:
+          _home.currentState.popUntil((route) {
+            print("route : ${route.settings.name}");
+            print("cnt : $cnt");
+            if (route.settings.name == null && cnt == 0) {
+              cnt = 1;
+              return route.isFirst;
+            } else if (cnt == 0) {
+              flag = true;
+            } else {
+              cnt = 1;
+            }
+            return true;
+          });
+          break;
+        case 1:
+          _buyOrNot.currentState.popUntil((route) {
+            if (route.settings.name == null) {
+              cnt = 1;
+              return route.isFirst;
+            } else if (cnt == 0) {
+              _selectedIndex = 0;
+            } else {
+              cnt = 0;
+            }
+            return route.isFirst;
+          });
+          break;
+        case 2:
+          _compoundInterest.currentState.popUntil((route) {
+            if (route.settings.name == null) {
+              cnt = 1;
+              return route.isFirst;
+            } else if (cnt == 0) {
+              _selectedIndex = 0;
+            } else {
+              cnt = 0;
+            }
+            return route.isFirst;
+          });
+          break;
+        case 3:
+          _invest.currentState.popUntil((route) {
+            if (route.settings.name == null) {
+              cnt = 1;
+              return route.isFirst;
+            } else if (cnt == 0) {
+              _selectedIndex = 0;
+            } else {
+              cnt = 0;
+            }
+            return route.isFirst;
+          });
+          break;
+        case 4:
+          _profile.currentState.popUntil((route) {
+            if (route.settings.name == null) {
+              cnt = 1;
+              return route.isFirst;
+            } else if (cnt == 0) {
+              _selectedIndex = 0;
+            } else {
+              cnt = 0;
+            }
+            return route.isFirst;
+          });
+          break;
+        default:
+      }
+    });
+    if (flag == true) {
+      exit(0);
+    }
+    return Future(() => false);
+  }
+
   void _onTap(int val) {
+    var cnt = 0;
     if (_selectedIndex == val) {
       switch (val) {
         case 0:
-          _home.currentState.popUntil((route) => route.isFirst);
+          _home.currentState.popUntil((route) {
+            print("route : ${route.settings.name}");
+            print("cnt : $cnt");
+            if (route.settings.name == null && cnt == 0) {
+              cnt = 1;
+              return route.isFirst;
+            } else {
+              cnt = 1;
+            }
+            return true;
+          });
           break;
         case 1:
           _buyOrNot.currentState.popUntil((route) => route.isFirst);

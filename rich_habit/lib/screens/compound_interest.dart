@@ -463,7 +463,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
     }
     print("len : ${spotList.length}");
     if (spotList == null || spotList.length == 0) {
-      spots = [FlSpot(0, 0)];
+      spots = [FlSpot(0, -1)];
     } else {
       spots = [];
       for (int i = 0; i < spotList.length; i++) {
