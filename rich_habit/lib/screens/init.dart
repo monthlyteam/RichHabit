@@ -102,13 +102,13 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                           pinned : true,
                           floating: true,
                           delegate: InitPageHeader(
-                            minExtent : 220.0,
+                            minExtent : 290.0,
                             maxExtent : 300.0,
                             isFirst: widget.isFirst
                           ),
                         ),
                         SliverGroupBuilder(
-                          padding: EdgeInsets.only(bottom: 80),
+                          padding: EdgeInsets.only(bottom: 60),
                           decoration: BoxDecoration(
                             color: kIvoryColor,
                             borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
@@ -439,7 +439,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
   }
 
   double headerOpacity(double shrinkOffset){
-    return max(0,1-shrinkOffset / (maxExtent-minExtent+70));
+    return max(0,1-shrinkOffset / (maxExtent-minExtent+150));
   }
 
   @override
