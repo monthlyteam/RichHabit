@@ -155,14 +155,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 children: <Widget>[
                                   SvgPicture.asset(
                                     habit.iconURL,
-                                    height: 25.0,
+                                    height: 45.0,
                                   ),
                                   Text(
                                     habit.name,
-                                    maxLines: 2,
+                                    maxLines: 1,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: 15.0, color: kPurpleColor),
+                                        fontSize: 14.0, color: kPurpleColor),
                                   ),
                                 ],
                               ),
@@ -663,30 +663,34 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ),
             ),
             actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: GestureDetector(
-                  onTap: () {
-                    print("오늘");
-                    setState(() {
-                      _selDay = _selDay =
-                          DateTime(current.year, current.month, current.day);
-                      selWeekOfYear =
-                          context.read<HabitProvider>().isoWeekNumber(_selDay);
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: kDarkPurpleColor,
-                        borderRadius: BorderRadius.all(Radius.circular(40.0))),
-                    child: Text(
-                      "오늘",
+              _isNow(_selDay)
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          print("오늘");
+                          setState(() {
+                            _selDay = _selDay = DateTime(
+                                current.year, current.month, current.day);
+                            selWeekOfYear = context
+                                .read<HabitProvider>()
+                                .isoWeekNumber(_selDay);
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: kDarkPurpleColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40.0))),
+                          child: Text(
+                            "오늘",
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               IconButton(
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true)

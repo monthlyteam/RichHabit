@@ -317,13 +317,31 @@ class _CompoundInterestState extends State<CompoundInterest> {
               ),
             ),
             Positioned.fill(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    right: 35.0, left: 15.0, top: 50, bottom: 12),
-                child: LineChart(
-                  _lineData(),
-                ),
-              ),
+              child: _isEmpty(addedTimeID)
+                  ? Opacity(
+                      opacity: 0.3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/question_mark.png',
+                            height: 100.0,
+                          ),
+                          Text(
+                            "정보가 충분히 쌓이지 않았습니다.",
+                            style:
+                                TextStyle(color: kPurpleColor, fontSize: 14.0),
+                          )
+                        ],
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                          right: 35.0, left: 15.0, top: 50, bottom: 12),
+                      child: LineChart(
+                        _lineData(),
+                      ),
+                    ),
             ),
           ],
         ),
@@ -435,7 +453,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
       maxY: 100,
       lineBarsData: [
         LineChartBarData(
-          spots: getFlSpot(addedTimeID),
+          spots: _getFlSpot(addedTimeID),
           colors: gradientColors,
           isCurved: true,
           isStrokeCapRound: true,
@@ -453,8 +471,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
     );
   }
 
-  List<FlSpot> getFlSpot(DateTime addedTimeID) {
-    print("ID : $addedTimeID---");
+  List<FlSpot> _getFlSpot(DateTime addedTimeID) {
     List<double> spotList;
     try {
       spotList = context.watch<HabitProvider>().getRetention(addedTimeID);
@@ -477,6 +494,19 @@ class _CompoundInterestState extends State<CompoundInterest> {
       }
     }
     return spots;
+  }
+
+  bool _isEmpty(DateTime addedTimeID) {
+    List<double> spotList;
+    try {
+      spotList = context.watch<HabitProvider>().getRetention(addedTimeID);
+    } catch (e) {
+      spotList = null;
+    }
+    if (spotList == null || spotList.length == 0) {
+      return true;
+    }
+    return false;
   }
 
   void _showDialog(BuildContext context) {
