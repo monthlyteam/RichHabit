@@ -238,8 +238,18 @@ class Profile extends StatelessWidget {
                             SizedBox(height: 10,),
                             Text("정말 초기화 하시겠습니까?.",style: TextStyle(color: kPurpleColor,fontSize: kSubTitleFontSize),),
                             SizedBox(height: 20,),
-                            Text("데이터를 초기화하면",style: TextStyle(color: kPurpleColor,fontSize: 18),),
-                            Text("모든 기록이 지워집니다.",style: TextStyle(color: kPurpleColor,fontSize: 18),),
+                            Container(
+                              height: 45,
+                              child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Column(
+                                  children: [
+                                    Text("데이터를 초기화하면",style: TextStyle(color: kPurpleColor)),
+                                    Text("모든 기록이 지워집니다.",style: TextStyle(color: kPurpleColor)),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -258,7 +268,7 @@ class Profile extends StatelessWidget {
                                   Navigator.pop(context);
                                 },
                                 child: Container(
-                                  child : Center(child: Text("취소", style: TextStyle(fontSize: kSubTitleFontSize,fontWeight: FontWeight.bold,color: kWhiteIvoryColor),)),
+                                  child : Center(child: Text("취소", style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: kWhiteIvoryColor),)),
                                 ),
                               )
                           ),
@@ -287,7 +297,7 @@ class Profile extends StatelessWidget {
                                     Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>Init(isFirst: true,)));
                                   },
                                   child: Center(
-                                    child: Text("초기화",style: TextStyle(fontSize: kSubTitleFontSize,color: Color(0xFFDE711E),fontWeight: FontWeight.bold),),
+                                    child: Text("초기화",style: TextStyle(fontSize: 16,color: Color(0xFFDE711E),fontWeight: FontWeight.bold),),
                                   )
                               )
                           )

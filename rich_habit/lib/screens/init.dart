@@ -157,10 +157,16 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                                         shape: BoxShape.circle,
                                                         color: Colors.black
                                                             .withOpacity(0.5),
-                                                        image: DecorationImage(image: AssetImage('assets/images/check.png'))
+                                                      ),
+                                                      child: SvgPicture.asset(
+                                                          "assets/images/check.svg",
+                                                          height: 80,
+                                                          width:80,
+                                                          color:kPurpleColor
                                                       ),
                                                       height: 160,
-                                                      width: 160
+                                                      width: 160,
+                                                      alignment: Alignment.center,
                                                   )
                                                 ]
                                                     : [
@@ -216,10 +222,14 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
       }
     );
   }
+
   bool _isExisting(String name){
     List<String> habitNameList = new List<String>();
-    context.read<HabitProvider>().weeklyHabit.forEach((k, v)=>habitNameList.add(v[0].name));
-    context.read<HabitProvider>().dailyHabit.forEach((k, v)=>habitNameList.add(v[0].name));
+    DateTime current = DateTime.now();
+    DateTime _today = DateTime(DateTime.now().year, current.month, current.day);
+    int _thisWeek = context.read<HabitProvider>().isoWeekNumber(current);
+    context.read<HabitProvider>().weeklyHabit.forEach((k, v)=>(k ==_today)?print("existing habit"):habitNameList.add(v[0].name));
+    context.read<HabitProvider>().dailyHabit.forEach((k, v)=> (k ==_thisWeek)?print("existing habit"):habitNameList.add(v[0].name));
     for(var i=0; i<habitNameList.length;i++){
       if(habitNameList[i] == name){
         return true;
@@ -327,7 +337,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                             },
                             child: Container(
 
-                              child : Center(child: Text("취소", style: TextStyle(fontSize: kSubTitleFontSize,fontWeight: FontWeight.bold,color: Color(0xFFDE711E)),)),
+                              child : Center(child: Text("취소", style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Color(0xFFDE711E)),)),
                             ),
                           )
                         ),
@@ -357,7 +367,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                               }
                             },
                             child: Center(
-                              child: Text("저장",style: TextStyle(fontSize: kSubTitleFontSize,color: kIvoryColor,fontWeight: FontWeight.bold),),
+                              child: Text("저장",style: TextStyle(fontSize: 16,color: kIvoryColor,fontWeight: FontWeight.bold),),
                             )
                           )
                         )
@@ -399,7 +409,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
                 height: 40,
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: FittedBox(
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
                   child: GestureDetector(behavior: HitTestBehavior.translucent,child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
                     Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
                   }),

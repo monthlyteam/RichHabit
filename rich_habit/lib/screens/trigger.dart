@@ -135,12 +135,12 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                                   [Center(child:
                                   SvgPicture.asset(triggersRough[index][1])),
                                     Container(
-                                      child: Image.asset("assets/images/check.png"),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.black
-                                              .withOpacity(0.5),
-                                        ),
+                                      child: SvgPicture.asset(
+                                          "assets/images/check.svg",
+                                          height: 80,
+                                          width:80,
+                                          color:kPurpleColor
+                                      ),
                                         height: 160,
                                         width: 160,
                                     )
