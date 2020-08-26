@@ -229,7 +229,9 @@ class _BuyOrNotState extends State<BuyOrNot> {
                               Text(
                                 "가",
                                 style: TextStyle(
-                                    fontSize: 18.0, color: kPurpleColor),
+                                  fontSize: 18.0,
+                                  color: kPurpleColor,
+                                ),
                               ),
                               Text(
                                 "지",
@@ -238,7 +240,12 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                     color: kPurpleColor.withOpacity(0.0)),
                               ),
                               Text(
-                                "격 :",
+                                "격",
+                                style: TextStyle(
+                                    fontSize: 18.0, color: kPurpleColor),
+                              ),
+                              Text(
+                                " : ",
                                 style: TextStyle(
                                     fontSize: 18.0, color: kPurpleColor),
                               ),
