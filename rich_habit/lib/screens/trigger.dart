@@ -135,6 +135,11 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                                   [Center(child:
                                   SvgPicture.asset(triggersRough[index][1])),
                                     Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.black
+                                            .withOpacity(0.5),
+                                      ),
                                       child: SvgPicture.asset(
                                           "assets/images/check.svg",
                                           height: 80,
@@ -143,6 +148,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                                       ),
                                         height: 160,
                                         width: 160,
+                                      alignment:Alignment.center
                                     )
                                   ]
                                       : [

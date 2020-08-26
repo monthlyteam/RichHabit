@@ -52,6 +52,7 @@ class _InitNextState extends State<InitNext> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: kIvoryColor,
       body: Stack(
         children: [
@@ -76,7 +77,8 @@ class _InitNextState extends State<InitNext> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 20, top: 50, bottom: 10),
-              child: GestureDetector(behavior: HitTestBehavior.translucent,
+              child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   child: Container(
                       width: 50,
                       height: 50,
@@ -164,10 +166,6 @@ class _InitNextState extends State<InitNext> {
                           margin: EdgeInsets.only(left: 8),
                           padding:
                               EdgeInsets.only(left: 20, top: 5, bottom: 15),
-                          decoration: BoxDecoration(
-                              border: Border(
-                            left: BorderSide(width: 1, color: kPurpleColor),
-                          )),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -332,10 +330,6 @@ class _InitNextState extends State<InitNext> {
                         Container(
                           margin: EdgeInsets.only(left: 8),
                           padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
-                          decoration: BoxDecoration(
-                              border: Border(
-                            left: BorderSide(width: 1, color: kPurpleColor),
-                          )),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -434,17 +428,17 @@ class _InitNextState extends State<InitNext> {
                                 ],
                               ),
                               SizedBox(height: 50),
-                              Center(
-                                child:
-                                Column(
-                                  children: [
-                                    Text("\"평소 습관 보다 매달 ${saveAmount[index].toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
-                                    Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 16, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
-                                  ],
-                                )
-                              )
                             ]
                           )
+                        ),
+                        Center(
+                            child:
+                            Column(
+                              children: [
+                                Text("\"평소 습관 보다 매달 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
+                              ],
+                            )
                         )
                       ]
                     )

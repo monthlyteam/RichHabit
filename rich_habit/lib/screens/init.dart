@@ -176,7 +176,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                             ),
                                           ),
                                           SizedBox(height: 10,),
-                                          FittedBox(fit:BoxFit.fitHeight,child: Text(habitsRough[index][0],style: txtstyle,)),
+                                          FittedBox(fit:BoxFit.cover,child: Text(habitsRough[index][0],style: txtstyle,)),
                                         ],
                                       ),
                                     );
@@ -228,8 +228,8 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
     DateTime current = DateTime.now();
     DateTime _today = DateTime(DateTime.now().year, current.month, current.day);
     int _thisWeek = context.read<HabitProvider>().isoWeekNumber(current);
-    context.read<HabitProvider>().weeklyHabit.forEach((k, v)=>(k ==_today)?print("existing habit"):habitNameList.add(v[0].name));
-    context.read<HabitProvider>().dailyHabit.forEach((k, v)=> (k ==_thisWeek)?print("existing habit"):habitNameList.add(v[0].name));
+    context.read<HabitProvider>().weeklyHabit.forEach((k, v)=>(k ==_today)?print("existing habit: ${v[0].name}"):habitNameList.add(v[0].name));
+    context.read<HabitProvider>().dailyHabit.forEach((k, v)=> (k ==_thisWeek)?print("existing habit: ${v[0].name}"):habitNameList.add(v[0].name));
     for(var i=0; i<habitNameList.length;i++){
       if(habitNameList[i] == name){
         return true;
@@ -298,6 +298,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                                 return Container(
                                   padding: EdgeInsets.only(left: offsetAnimation.value + 15.0, right: 15.0 - offsetAnimation.value),
                                   child: CupertinoTextField(
+                                    maxLength: 9,
                                     decoration: new BoxDecoration(
                                       color: Colors.white,
                                     ),
