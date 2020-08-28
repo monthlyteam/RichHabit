@@ -35,8 +35,16 @@ class Habit {
   double get saveMoney //절약 금액
       => (usualAmount - nowAmount) * price;
 
-  double get expectedSaveMoney //예상 절약 금액
-      => (usualAmount - goalAmount) * price;
+  double get expectedSaveMoney {
+    if (usualIsWeek != goalIsWeek) {
+      if (usualIsWeek)
+        return (usualAmount - (goalAmount * 7)) * price;
+      else
+        return ((usualAmount * 7) - goalAmount) * price;
+    } else {
+      return (usualAmount - goalAmount) * price;
+    }
+  } //예상 절약 금액
 
   factory Habit.fromJson(Map<String, dynamic> json) => Habit(
         addedTimeID: DateTime.parse(json['addedTimeID']),
@@ -63,24 +71,4 @@ class Habit {
         'goalAmount': goalAmount,
         'nowAmount': nowAmount,
       };
-
-  void addNowAmount() {
-    nowAmount++;
-  }
-
-  void subNowAmount() {
-    nowAmount--;
-  }
-
-  void modifyGoalCycle(bool isWeek) {
-    this.goalIsWeek = isWeek;
-  }
-
-  void modifyGoalAmount(int goalAmount) {
-    this.goalAmount = goalAmount;
-  }
-
-  void modifyPrice(double price) {
-    this.price = price;
-  }
 }

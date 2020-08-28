@@ -283,35 +283,39 @@ class HabitProvider with ChangeNotifier {
         .subtract(Duration(days: 1))
         .day;
 
-    if (addedTimeID == null) {
-      double sum = 0;
-      if (weeklyHabit[nowWeekOfYear] != null) {
-        weeklyHabit[nowWeekOfYear].forEach((element) {
-          sum += (element.expectedSaveMoney / 7) * maxDayOfMonth;
-        });
-      }
-      if (dailyHabit[nowDate] != null) {
-        dailyHabit[nowDate].forEach((element) {
-          sum += element.expectedSaveMoney * maxDayOfMonth;
-        });
-      }
+    try {
+      if (addedTimeID == null) {
+        double sum = 0;
+        if (weeklyHabit[nowWeekOfYear] != null) {
+          weeklyHabit[nowWeekOfYear].forEach((element) {
+            sum += (element.expectedSaveMoney / 7) * maxDayOfMonth;
+          });
+        }
+        if (dailyHabit[nowDate] != null) {
+          dailyHabit[nowDate].forEach((element) {
+            sum += element.expectedSaveMoney * maxDayOfMonth;
+          });
+        }
 
-      return sum;
-    } else {
-      if (goalIsWeek) {
-        //Weekly
-        int index = weeklyHabit[nowWeekOfYear]
-            .indexWhere((element) => element.addedTimeID == addedTimeID);
-
-        return (weeklyHabit[nowWeekOfYear][index].expectedSaveMoney / 7) *
-            maxDayOfMonth;
+        return sum;
       } else {
-        //daily
-        int index = dailyHabit[nowDate]
-            .indexWhere((element) => element.addedTimeID == addedTimeID);
+        if (goalIsWeek) {
+          //Weekly
+          int index = weeklyHabit[nowWeekOfYear]
+              .indexWhere((element) => element.addedTimeID == addedTimeID);
 
-        return dailyHabit[nowDate][index].expectedSaveMoney * maxDayOfMonth;
+          return (weeklyHabit[nowWeekOfYear][index].expectedSaveMoney / 7) *
+              maxDayOfMonth;
+        } else {
+          //daily
+          int index = dailyHabit[nowDate]
+              .indexWhere((element) => element.addedTimeID == addedTimeID);
+
+          return dailyHabit[nowDate][index].expectedSaveMoney * maxDayOfMonth;
+        }
       }
+    } catch (e) {
+      return 0.0;
     }
   }
 
