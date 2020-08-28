@@ -176,25 +176,30 @@ class HabitProvider with ChangeNotifier {
       //주기가 바뀐거 경우라면(Daily -> Weekly)
       int index = dailyHabit[nowDate]
           .indexWhere((element) => element.addedTimeID == addedTimeID);
-
       Habit changedHabit = dailyHabit[nowDate][index];
       changedHabit.goalIsWeek = true;
       changedHabit.goalAmount = newAmount;
       changedHabit.price = newPrice;
 
       int sum = 0;
-      while (index != -1 || weekDay > 0) {
+      while (index != -1 && weekDay > 0) {
         sum += dailyHabit[date][index].nowAmount;
         dailyHabit[date].removeAt(index);
         date = date.subtract(Duration(days: 1));
         weekDay--;
-
+        if (dailyHabit[date] == null) {
+          break;
+        }
         index = dailyHabit[date]
             .indexWhere((element) => element.addedTimeID == addedTimeID);
       }
 
       changedHabit.nowAmount = sum;
-      weeklyHabit[nowWeekOfYear].add(changedHabit);
+      if (weeklyHabit.containsKey(nowWeekOfYear)) {
+        weeklyHabit[nowWeekOfYear].add(changedHabit);
+      } else {
+        weeklyHabit[nowWeekOfYear] = [changedHabit];
+      }
     }
 
     _setLocalDB();
@@ -581,7 +586,8 @@ class HabitProvider with ChangeNotifier {
           for (int i = nowDate.weekday; i > 0; i--) {
             tempTime = nowDate.subtract(Duration(days: nowDate.weekday - i));
 
-            if (calendarIcon[tempTime][0] != 0) calendarIcon[tempTime] = [2];
+            if (calendarIcon[tempTime] != null &&
+                calendarIcon[tempTime][0] != 0) calendarIcon[tempTime] = [2];
           }
         }
       });

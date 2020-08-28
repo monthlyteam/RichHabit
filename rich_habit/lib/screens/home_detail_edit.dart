@@ -178,75 +178,76 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                               ),
                               Row(
                                 children: [
+                                  widget.habit.goalIsWeek
+                                      ? Container()
+                                      : Padding(
+                                          padding: EdgeInsets.only(right: 20.0),
+                                          child: GestureDetector(
+                                            behavior:
+                                                HitTestBehavior.translucent,
+                                            child: Row(
+                                              children: [
+                                                _goalIsWeek
+                                                    ? Icon(
+                                                        Icons
+                                                            .radio_button_unchecked,
+                                                        color: kPurpleColor,
+                                                        size: 16,
+                                                      )
+                                                    : Icon(
+                                                        Icons
+                                                            .radio_button_checked,
+                                                        color: kPurpleColor,
+                                                        size: 16,
+                                                      ),
+                                                SizedBox(width: 5.5),
+                                                Text("매일",
+                                                    style: TextStyle(
+                                                        color: kPurpleColor,
+                                                        fontSize: 16,
+                                                        fontWeight: _goalIsWeek
+                                                            ? FontWeight.normal
+                                                            : FontWeight.bold)),
+                                              ],
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                _goalIsWeek = false;
+                                              });
+                                            },
+                                          ),
+                                        ),
                                   GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     child: Row(
                                       children: [
                                         _goalIsWeek
                                             ? Icon(
-                                                Icons.radio_button_unchecked,
+                                                Icons.radio_button_checked,
                                                 color: kPurpleColor,
                                                 size: 16,
                                               )
                                             : Icon(
-                                                Icons.radio_button_checked,
+                                                Icons.radio_button_unchecked,
                                                 color: kPurpleColor,
                                                 size: 16,
                                               ),
                                         SizedBox(width: 5.5),
-                                        Text("매일",
+                                        Text("매주",
                                             style: TextStyle(
                                                 color: kPurpleColor,
                                                 fontSize: 16,
                                                 fontWeight: _goalIsWeek
-                                                    ? FontWeight.normal
-                                                    : FontWeight.bold)),
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal)),
                                       ],
                                     ),
                                     onTap: () {
                                       setState(() {
-                                        _goalIsWeek = false;
+                                        _goalIsWeek = true;
                                       });
                                     },
-                                  ),
-                                  SizedBox(
-                                    width: 20.5,
-                                  ),
-                                  widget.habit.goalIsWeek
-                                      ? GestureDetector(
-                                          behavior: HitTestBehavior.translucent,
-                                          child: Row(
-                                            children: [
-                                              _goalIsWeek
-                                                  ? Icon(
-                                                      Icons
-                                                          .radio_button_checked,
-                                                      color: kPurpleColor,
-                                                      size: 16,
-                                                    )
-                                                  : Icon(
-                                                      Icons
-                                                          .radio_button_unchecked,
-                                                      color: kPurpleColor,
-                                                      size: 16,
-                                                    ),
-                                              SizedBox(width: 5.5),
-                                              Text("매주",
-                                                  style: TextStyle(
-                                                      color: kPurpleColor,
-                                                      fontSize: 16,
-                                                      fontWeight: _goalIsWeek
-                                                          ? FontWeight.bold
-                                                          : FontWeight.normal)),
-                                            ],
-                                          ),
-                                          onTap: () {
-                                            setState(() {
-                                              _goalIsWeek = true;
-                                            });
-                                          },
-                                        )
-                                      : Container(),
+                                  )
                                 ],
                               ),
                               Row(
