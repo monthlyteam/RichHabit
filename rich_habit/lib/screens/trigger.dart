@@ -58,143 +58,152 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
         }
       });
     return Scaffold(
-      backgroundColor: kIvoryColor,
-      resizeToAvoidBottomPadding: false,
-      body : Stack(
-        children: [
-          Positioned(
-            left: 0,
-            top: 290,
-            height: 100,
-            width: size.width,
-            child: Container(
-              color: kPurpleColor,
-            ),
-          ),
-          CustomScrollView(
-            slivers: <Widget>[
-              SliverPersistentHeader(
-                pinned : true,
-                floating: true,
-                delegate: TriggerPageHeader(
-                  minExtent : 220.0,
-                  maxExtent : 300.0,
-                ),
+      backgroundColor: kPurpleColor,
+      body: WillPopScope(
+        onWillPop: () async{
+          context.read<HabitProvider>().resetData();
+          Navigator.of(context).pop();
+        },
+        child:Stack(
+          children: [
+            Positioned(
+              left: 0,
+              top: 290,
+              height: 290,
+              width: size.width,
+              child: Container(
+                color: kPurpleColor,
               ),
-              SliverGroupBuilder(
-                padding: EdgeInsets.only(bottom: 80),
-                decoration: BoxDecoration(
-                  color: kIvoryColor,
-                  borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
-                ),
-
-                child: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent:size.width/2,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing:10.0,
-//                            childAspectRatio: size.width-40/(190+15), // 가로/세로
-                    childAspectRatio: 0.85, // 가로/세로
+            ),
+            CustomScrollView(
+              shrinkWrap: false,
+              slivers: <Widget>[
+                SliverPersistentHeader(
+                  pinned : true,
+                  floating: true,
+                  delegate: TriggerPageHeader(
+                    minExtent : 290.0,
+                    maxExtent : 300.0,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      return Container(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Column(
-                          children: <Widget>[
-                            GestureDetector(behavior: HitTestBehavior.translucent,
-                              onTap: () {
-//                                if(index == triggersRough.length-1){
-//                                  _showAddDialog(context);
-//                                }else{
-                                setState(() {
+                ),
+                SliverGroupBuilder(
+                  decoration: BoxDecoration(
+                    color: kIvoryColor,
+                    borderRadius: BorderRadius.vertical(top:Radius.circular(20)),
+                  ),
 
-                                  for(var i = 0; i<triggersRough.length;i++){
-                                    triggersRough[i][2]=false;
-                                  }
+                  child: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent:size.width/2,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing:10.0,
+  //                            childAspectRatio: size.width-40/(190+15), // 가로/세로
+                      childAspectRatio: 0.85, // 가로/세로
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                        return Container(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: <Widget>[
+                              GestureDetector(behavior: HitTestBehavior.translucent,
+                                onTap: () {
+  //                                if(index == triggersRough.length-1){
+  //                                  _showAddDialog(context);
+  //                                }else{
+                                  setState(() {
 
-                                  triggersRough[index][2] =
-                                  !triggersRough[index][2];
+                                    for(var i = 0; i<triggersRough.length;i++){
+                                      triggersRough[i][2]=false;
+                                    }
 
-                                });
-                              },
-//                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: kWhiteIvoryColor,
-                                ),
-                                height: 160,
-                                width: 160,
-//                      margin: EdgeInsets.fromLTRB(15,10,15,10),
-                                alignment: Alignment.center,
+                                    triggersRough[index][2] =
+                                    !triggersRough[index][2];
 
-                                child: Stack(
-                                  children:
-                                  triggersRough[index][2] ?
-                                  [Center(child:
-                                  SvgPicture.asset(triggersRough[index][1])),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black
-                                            .withOpacity(0.5),
-                                      ),
-                                      child: SvgPicture.asset(
-                                          "assets/images/check.svg",
-                                          height: 80,
-                                          width:80,
-                                          color:kPurpleColor
-                                      ),
-                                        height: 160,
-                                        width: 160,
-                                      alignment:Alignment.center
-                                    )
-                                  ]
-                                      : [
-                                    Center(child: SvgPicture.asset(triggersRough[index][1]))
-                                  ],
+                                  });
+                                },
+  //                              },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: kWhiteIvoryColor,
+                                  ),
+                                  height: 160,
+                                  width: 160,
+  //                      margin: EdgeInsets.fromLTRB(15,10,15,10),
+                                  alignment: Alignment.center,
+
+                                  child: Stack(
+                                    children:
+                                    triggersRough[index][2] ?
+                                    [Center(child:
+                                    SvgPicture.asset(triggersRough[index][1])),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.black
+                                              .withOpacity(0.5),
+                                        ),
+                                        child: SvgPicture.asset(
+                                            "assets/images/check.svg",
+                                            height: 80,
+                                            width:80,
+                                            color:kPurpleColor
+                                        ),
+                                          height: 160,
+                                          width: 160,
+                                        alignment:Alignment.center
+                                      )
+                                    ]
+                                        : [
+                                      Center(child: SvgPicture.asset(triggersRough[index][1]))
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 10,),
-                            FittedBox(fit:BoxFit.fitHeight,child: Text(triggersRough[index][0],style: txtstyle,)),
-                          ],
-                        ),
-                      );
-                    },
-                    childCount: triggersRough.length,
+                              SizedBox(height: 10,),
+                              FittedBox(fit:BoxFit.fitHeight,child: Text(triggersRough[index][0],style: txtstyle,)),
+                            ],
+                          ),
+                        );
+                      },
+                      childCount: triggersRough.length,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          BottomPositionedBox("다음",() {
-            bool isAnythingSelected = false;
-            for(var i = 0; i<triggersRough.length;i++){
-              if(triggersRough[i][2]==true) {
-                isAnythingSelected = true;
-                break;
+                SliverAppBar(
+                  leading: null,
+                  backgroundColor: kIvoryColor,
+                )
+              ],
+            ),
+            BottomPositionedBox("다음",() {
+              bool isAnythingSelected = false;
+              for(var i = 0; i<triggersRough.length;i++){
+                if(triggersRough[i][2]==true) {
+                  isAnythingSelected = true;
+                  break;
+                }
               }
-            }
-            if(isAnythingSelected == false){
-              Fluttertoast.showToast(
-                  msg: "최소 한개를 선택해주세요!",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey,
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
-            }else{
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TriggerNext(selectedItem: _selectedListGenerator(triggersRough))));
-            }
-          })
-        ],
-      ),
+              if(isAnythingSelected == false){
+                Fluttertoast.showToast(
+                    msg: "최소 한개를 선택해주세요!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.grey,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                );
+              }else{
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TriggerNext(selectedItem: _selectedListGenerator(triggersRough))));
+              }
+            })
+          ],
+        ),
+      )
     );
   }
   _showAddDialog(BuildContext context){
@@ -353,12 +362,10 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
   }
 
 }
-
 class TriggerPageHeader implements SliverPersistentHeaderDelegate{
 
   final double minExtent;
   final double maxExtent;
-
   TriggerPageHeader({
     this.minExtent,
     @required this.maxExtent,
@@ -367,54 +374,51 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     Color txtColor = kWhiteIvoryColor.withOpacity(headerOpacity(shrinkOffset));
-    return WillPopScope(
-      onWillPop: () async{
-        context.read<HabitProvider>().resetData();
-        Navigator.of(context).pop();
-      },
-      child: Container(
-        color: kPurpleColor,
-        padding: EdgeInsets.only(left: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 50),
-            GestureDetector(behavior: HitTestBehavior.translucent,child:Icon(Icons.arrow_back_ios, color: txtColor,size: 20), onTap: (){
-              context.read<HabitProvider>().resetData();
-              Navigator.of(context).pop();
-            }),
-            SizedBox(height: 20,),
-            Text("습관 동반자",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
-            SizedBox(height: 11,),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(1)),
-                  color: txtColor
-              ),
-              height: 3,
-              width: 33,
+    return Container(
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 60, bottom: 10),
+            child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: Icon(Icons.arrow_back_ios,
+                    color: kIvoryColor, size: 25),
+                onTap: () {
+                  context.read<HabitProvider>().resetData();
+                  Navigator.of(context).pop();
+                }),
+          ),
+          SizedBox(height: 20,),
+          Text("습관 동반자",style: TextStyle(fontSize: kTitleFontSize, color:txtColor, fontWeight: FontWeight.bold)),
+          SizedBox(height: 11,),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(1)),
+                color: txtColor
             ),
-            SizedBox(height: 11),
-            Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("평소에 매일 하던 행동과 함께 관리하며",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300)),
-                    Text("기록을 더 잘 할 수 있어요!",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300)),
-                  ],
-                )
-            ),
-          ],
-        ),
+            height: 3,
+            width: 33,
+          ),
+          SizedBox(height: 11),
+          Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("평소에 매일 하던 행동과 함께 관리하며",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300)),
+                  Text("기록을 더 잘 할 수 있어요!",style: TextStyle(fontSize: 17,color: txtColor,fontWeight: FontWeight.w300)),
+                ],
+              )
+          ),
+        ],
       ),
     );
   }
 
   double headerOpacity(double shrinkOffset){
-    return max(0,1-shrinkOffset / (maxExtent-minExtent+70));
+    return max(0,1-shrinkOffset / (maxExtent-minExtent+150));
   }
-
-
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
@@ -428,5 +432,6 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
   OverScrollHeaderStretchConfiguration get stretchConfiguration => null;
 
 }
+
 
 

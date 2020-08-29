@@ -54,18 +54,22 @@ class _InitNextState extends State<InitNext> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: kIvoryColor,
-      body: Stack(
-        children: [
-          PageView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, position) {
-              return _buildPage(context, position);
-            },
-            itemCount: _selectedItem.length,
-            controller: pageController,
-          ),
-        ],
-      ),
+      body: GestureDetector(
+        onTap: (){FocusScope.of(context).requestFocus(new FocusNode());},
+        child: Stack(
+          children: [
+            PageView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, position) {
+                return _buildPage(context, position);
+              },
+              itemCount: _selectedItem.length,
+              controller: pageController,
+            ),
+          ],
+        ),
+
+      )
     );
   }
 
@@ -76,17 +80,10 @@ class _InitNextState extends State<InitNext> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 20, top: 50, bottom: 10),
+              padding: EdgeInsets.only(left: 20, top: 60, bottom: 10),
               child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: kIvoryColor),
-                      child: Center(
-                          child: Icon(Icons.arrow_back_ios,
-                              color: kPurpleColor, size: 20))),
+                  child: Icon(Icons.arrow_back_ios, color: kPurpleColor, size: 25),
                   onTap: () {
                     if (index == 0) {
                       Navigator.of(context).pop();
@@ -435,7 +432,7 @@ class _InitNextState extends State<InitNext> {
                             child:
                             Column(
                               children: [
-                                Text("\"평소 습관 보다 매달 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                Text("\"평소 습관 보다 매달 약 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                 Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
                               ],
                             )
