@@ -82,7 +82,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin{
                   pinned : true,
                   floating: true,
                   delegate: TriggerPageHeader(
-                    minExtent : 290.0,
+                    minExtent : 260.0,
                     maxExtent : 300.0,
                   ),
                 ),
@@ -384,7 +384,7 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
             child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: Icon(Icons.arrow_back_ios,
-                    color: kIvoryColor, size: 25),
+                    color: txtColor, size: 25),
                 onTap: () {
                   context.read<HabitProvider>().resetData();
                   Navigator.of(context).pop();
@@ -417,7 +417,7 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate{
   }
 
   double headerOpacity(double shrinkOffset){
-    return max(0,1-shrinkOffset / (maxExtent-minExtent+150));
+    return max(0,1-shrinkOffset / (maxExtent-minExtent+50));
   }
 
   @override

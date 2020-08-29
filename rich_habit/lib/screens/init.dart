@@ -107,7 +107,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin{
                           pinned : true,
                           floating: true,
                           delegate: InitPageHeader(
-                              minExtent : 290.0,
+                              minExtent : 260.0,
                               maxExtent : 300.0,
                               isFirst: widget.isFirst
                           ),
@@ -432,7 +432,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
             child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: Icon(Icons.arrow_back_ios,
-                    color: kIvoryColor, size: 25),
+                    color: txtColor, size: 25),
                 onTap: () {
                   Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
                 }),
@@ -464,7 +464,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate{
   }
 
   double headerOpacity(double shrinkOffset){
-    return max(0,1-shrinkOffset / (maxExtent-minExtent+150));
+    return max(0,1-shrinkOffset / (maxExtent-minExtent+50));
   }
 
   @override
