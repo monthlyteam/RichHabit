@@ -59,16 +59,10 @@ class _TriggerNextState extends State<TriggerNext> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 20, top: 50, bottom: 10),
-              child: GestureDetector(behavior: HitTestBehavior.translucent,
-                  child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: kIvoryColor),
-                      child: Center(
-                          child: Icon(Icons.arrow_back_ios,
-                              color: kPurpleColor, size: 20))),
+              padding: EdgeInsets.only(left: 20, top: 60, bottom: 10),
+              child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: Icon(Icons.arrow_back_ios, color: kPurpleColor, size: 25),
                   onTap: () {
                     if (index == 0) {
                       Navigator.of(context).pop();
