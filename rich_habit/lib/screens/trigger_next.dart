@@ -215,7 +215,6 @@ class _TriggerNextState extends State<TriggerNext> {
                   context
                       .read<UserProvider>()
                       .setAlarmData(triggerList[i]['name'], _dateTime);
-                  context.read<UserProvider>().setTriggerNotification();
                 }
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => MainPage()));

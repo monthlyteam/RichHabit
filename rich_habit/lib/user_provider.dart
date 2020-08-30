@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider with ChangeNotifier {
   bool isLogin = false;
@@ -15,12 +18,34 @@ class UserProvider with ChangeNotifier {
 
   String language = 'KO';
 
+  SharedPreferences sp;
+
+  UserProvider(
+      {this.sp, this.pushTriggerName, this.pushAlarmTime, this.isAlarm}) {}
+
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   void setAlarmData(String name, DateTime time) {
     this.pushTriggerName = name;
     this.pushAlarmTime = time;
+
+    saveAlarmData();
+
+    if (isAlarm) {
+      setTriggerNotification();
+    }
+  }
+
+  void saveAlarmData() {
+    Map<String, dynamic> map = {
+      'name': pushTriggerName,
+      'time': pushAlarmTime.toString(),
+      'isAlarm': isAlarm ? 1 : 0
+    };
+    String json = jsonEncode(map);
+    sp.setString('alarm', json);
+    notifyListeners();
   }
 
   void resetNotification() async {

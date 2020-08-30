@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/screens/buy_or_not.dart';
@@ -10,6 +11,7 @@ import 'package:richhabit/screens/home.dart';
 import 'package:richhabit/screens/invest.dart';
 import 'package:richhabit/screens/profile.dart';
 import 'package:provider/provider.dart';
+import 'package:richhabit/user_provider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -28,11 +30,37 @@ class _MainPageState extends State<MainPage> {
   final _invest = GlobalKey<NavigatorState>();
   final _profile = GlobalKey<NavigatorState>();
 
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  Future onNotiSelected(String payload) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MainPage()),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     var current = DateTime.now();
     _current = DateTime(current.year, current.month, current.day);
+
+    //Android
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    //IOS
+    var initializationSettingsIOS = IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+
+    //for when notification pressed.
+    _flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onNotiSelected);
+
+    context
+        .read<UserProvider>()
+        .setNotiPlugin(_flutterLocalNotificationsPlugin);
   }
 
   @override

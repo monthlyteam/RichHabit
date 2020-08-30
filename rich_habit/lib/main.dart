@@ -33,6 +33,10 @@ void main() async {
   Map<int, List<Habit>> weeklyHabit = Map<int, List<Habit>>();
   Map<DateTime, List<int>> calendarIcon = Map<DateTime, List<int>>();
 
+  String pushTriggerName;
+  DateTime pushAlarmTime;
+  bool isAlarm = true;
+
   if (!isEmpty) {
     List<Habit> habitList = [];
 
@@ -72,6 +76,14 @@ void main() async {
       json.forEach((key, value) {
         calendarIcon[DateTime.parse(key)] = [value[0]];
       });
+
+      if (sp.containsKey('alarm')) {
+        Map<String, dynamic> json = jsonDecode(sp.getString('alarm'));
+
+        pushTriggerName = json['name'];
+        pushAlarmTime = DateTime.parse(json['time']);
+        isAlarm = json['isalarm'] == 1 ? true : false;
+      }
     }
   }
 
@@ -87,7 +99,12 @@ void main() async {
                   dailyHabit: dailyHabit,
                   weeklyHabit: weeklyHabit,
                   calendarIcon: calendarIcon)),
-          ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(
+              create: (_) => UserProvider(
+                  sp: sp,
+                  pushTriggerName: pushTriggerName,
+                  pushAlarmTime: pushAlarmTime,
+                  isAlarm: isAlarm)),
         ],
         child: MyApp(isEmpty),
       ),

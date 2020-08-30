@@ -324,7 +324,9 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                   GestureDetector(
                     onTap: () {
                       if (widget.habit.isTrigger) {
-                        context.read<UserProvider>().pushAlarmTime = _dateTime;
+                        context
+                            .read<UserProvider>()
+                            .setAlarmData(widget.habit.name, _dateTime);
                         print(
                             "time : ${context.read<UserProvider>().pushAlarmTime}");
                       } else {

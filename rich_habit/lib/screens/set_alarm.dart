@@ -11,15 +11,14 @@ class SetAlarmPage extends StatefulWidget {
 }
 
 class _SetAlarmPageState extends State<SetAlarmPage> {
-  bool isAlarmOn = true;
+  bool isAlarmOn;
   bool isSoundOn = true;
-  VoidCallback callback;
 
   @override
   void initState() {
     super.initState();
 
-    callback = context.read<UserProvider>().showNotification;
+    isAlarmOn = context.read<UserProvider>().isAlarm;
   }
 
   @override
@@ -54,14 +53,15 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
       body: Column(
         children: [
           _buildContents(Icons.notifications, "알람", () {
-            print("alarm is on");
+            context.read<UserProvider>().isAlarm = isAlarmOn;
+            context.read<UserProvider>().saveAlarmData();
+            if (isAlarmOn) {
+              context.read<UserProvider>().setTriggerNotification();
+            } else {
+              context.read<UserProvider>().resetNotification();
+            }
+            print("aaaa");
           }, 0),
-          _buildContents(Icons.notifications, "소리", () {
-            print("sound is on");
-          }, 1),
-
-          //TODO: remove after test
-          RaisedButton(child: Text("test"), onPressed: callback),
         ],
       ),
     );
@@ -102,7 +102,7 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
                   } else {
                     isSoundOn = value;
                   }
-                  callback;
+                  callback();
                 });
               }
             },
