@@ -54,9 +54,8 @@ class _InitNextState extends State<InitNext> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: kIvoryColor,
-      body: GestureDetector(
-        onTap: (){FocusScope.of(context).requestFocus(new FocusNode());},
-        child: Stack(
+      body: SingleChildScrollView(
+        child: PageView(
           children: [
             PageView.builder(
               physics: NeverScrollableScrollPhysics(),
@@ -68,7 +67,6 @@ class _InitNextState extends State<InitNext> {
             ),
           ],
         ),
-
       )
     );
   }
@@ -76,70 +74,72 @@ class _InitNextState extends State<InitNext> {
   Stack _buildPage(BuildContext context, int index) {
     return Stack(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20, top: 60, bottom: 10),
-              child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  child: Icon(Icons.arrow_back_ios, color: kPurpleColor, size: 25),
-                  onTap: () {
-                    if (index == 0) {
-                      Navigator.of(context).pop();
-                    } else {
-                      pageController.animateToPage(index - 1,
-                          duration: Duration(milliseconds: 400),
-                          curve: Curves.easeInOut);
-                      controllers[0]
-                        ..text = habitList[index - 1]['usualAmount'].toString();
-                      controllers[1]
-                        ..text = habitList[index - 1]['price'].toString();
-                      controllers[2]
-                        ..text = habitList[index - 1]['goalAmount'].toString();
-                    }
-                  }),
-            ),
-            Center(
-              child: Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: kWhiteIvoryColor),
-                child: Center(
-                  child: SvgPicture.asset(_selectedItem[index][1]),
+        GestureDetector(
+          onTap: (){FocusScope.of(context).requestFocus(new FocusNode());},
+          child:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 20, top: 60, bottom: 10),
+                child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    child: Icon(Icons.arrow_back_ios, color: kPurpleColor, size: 25),
+                    onTap: () {
+                      if (index == 0) {
+                        Navigator.of(context).pop();
+                      } else {
+                        pageController.animateToPage(index - 1,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.easeInOut);
+                        controllers[0]
+                          ..text = habitList[index - 1]['usualAmount'].toString();
+                        controllers[1]
+                          ..text = habitList[index - 1]['price'].toString();
+                        controllers[2]
+                          ..text = habitList[index - 1]['goalAmount'].toString();
+                      }
+                    }),
+              ),
+              Center(
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: kWhiteIvoryColor),
+                  child: Center(
+                    child: SvgPicture.asset(_selectedItem[index][1]),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: Text(
-                _selectedItem[index][0],
-                style: TextStyle(
-                    fontSize: 25,
-                    color: kPurpleColor,
-                    fontWeight: FontWeight.bold),
+              SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(
-              height: 9.5,
-            ),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(1)),
-                    color: kPurpleColor),
-                height: 3,
-                width: 33,
+              Center(
+                child: Text(
+                  _selectedItem[index][0],
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: kPurpleColor,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 13.5,
-            ),
-            Expanded(
-              child: Container(
+              SizedBox(
+                height: 9.5,
+              ),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(1)),
+                      color: kPurpleColor),
+                  height: 3,
+                  width: 33,
+                ),
+              ),
+              SizedBox(
+                height: 13.5,
+              ),
+              Container(
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(25)),
@@ -314,136 +314,131 @@ class _InitNextState extends State<InitNext> {
                         ),
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "② 앞으로의 목표치를 정해주세요!",
-                          style: TextStyle(color: kPurpleColor, fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 5.5,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 8),
-                          padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    Text(
+                      "② 앞으로의 목표치를 정해주세요!",
+                      style: TextStyle(color: kPurpleColor, fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 5.5,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  GestureDetector(behavior: HitTestBehavior.translucent,
-                                    child: Row(
-                                      children:[
-                                        usualIsWeek?
-                                          Icon(Icons.radio_button_unchecked,color: Colors.grey,size: 16,)
-                                         :goalIsWeek?
-                                            Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,)
-                                           :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,)
-                                        ,
-                                        SizedBox(width:5.5),
-                                        Text("매일", style: TextStyle(
-                                            color: usualIsWeek?Colors.grey:kPurpleColor,
-                                            fontSize: 16,
-                                            fontWeight: goalIsWeek?FontWeight.normal:FontWeight.bold
+                              GestureDetector(behavior: HitTestBehavior.translucent,
+                                child: Row(
+                                  children:[
+                                    usualIsWeek?
+                                      Icon(Icons.radio_button_unchecked,color: Colors.grey,size: 16,)
+                                     :goalIsWeek?
+                                        Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,)
+                                       :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,)
+                                    ,
+                                    SizedBox(width:5.5),
+                                    Text("매일", style: TextStyle(
+                                        color: usualIsWeek?Colors.grey:kPurpleColor,
+                                        fontSize: 16,
+                                        fontWeight: goalIsWeek?FontWeight.normal:FontWeight.bold
+                                      )
+                                    ),
+                                  ],
+                                ),
+                                onTap: (){
+                                  if(!usualIsWeek)
+                                  setState(() {
+                                    goalIsWeek = false;
+                                    _onInputChanged(index);
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: 20.5,
+                              ),
+                              GestureDetector(behavior: HitTestBehavior.translucent,
+                                child: Row(
+                                  children: [
+                                    goalIsWeek
+                                        ? Icon(
+                                            Icons.radio_button_checked,
+                                            color: kPurpleColor,
+                                            size: 16,
                                           )
-                                        ),
-                                      ],
-                                    ),
-                                    onTap: (){
-                                      if(!usualIsWeek)
-                                      setState(() {
-                                        goalIsWeek = false;
-                                        _onInputChanged(index);
-                                      });
-                                    },
-                                  ),
-                                  SizedBox(
-                                    width: 20.5,
-                                  ),
-                                  GestureDetector(behavior: HitTestBehavior.translucent,
-                                    child: Row(
-                                      children: [
-                                        goalIsWeek
-                                            ? Icon(
-                                                Icons.radio_button_checked,
-                                                color: kPurpleColor,
-                                                size: 16,
-                                              )
-                                            : Icon(
-                                                Icons.radio_button_unchecked,
-                                                color: kPurpleColor,
-                                                size: 16,
-                                              ),
-                                        SizedBox(width: 5.5),
-                                        Text("매주",
-                                            style: TextStyle(
-                                                color: kPurpleColor,
-                                                fontSize: 16,
-                                                fontWeight : goalIsWeek?FontWeight.bold:FontWeight.normal)),
-                                      ],
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        goalIsWeek = true;
-                                        _onInputChanged(index);
-                                      });
-                                    },
-                                  ),
-                                ],
+                                        : Icon(
+                                            Icons.radio_button_unchecked,
+                                            color: kPurpleColor,
+                                            size: 16,
+                                          ),
+                                    SizedBox(width: 5.5),
+                                    Text("매주",
+                                        style: TextStyle(
+                                            color: kPurpleColor,
+                                            fontSize: 16,
+                                            fontWeight : goalIsWeek?FontWeight.bold:FontWeight.normal)),
+                                  ],
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    goalIsWeek = true;
+                                    _onInputChanged(index);
+                                  });
+                                },
                               ),
-                              SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 152,
-                                    height: 23,
-                                    child: CupertinoTextField(
-                                      maxLength: 2,
-                                      focusNode: nodes[2],
-                                      controller: controllers[2],
-                                      onChanged: (text){
-                                        setState(() {
-                                          _onInputChanged(index);
-                                        },
-                                        );
-                                      },
-                                      maxLines: 1,
-                                      padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
-                                      textAlign: TextAlign.end,
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 5.5,
-                                  ),
-                                  Text(
-                                    "회",
-                                    style: TextStyle(color: kPurpleColor),
-                                  )
-                                ],
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Container(
+                                width: 152,
+                                height: 23,
+                                child: CupertinoTextField(
+                                  maxLength: 2,
+                                  focusNode: nodes[2],
+                                  controller: controllers[2],
+                                  onChanged: (text){
+                                    setState(() {
+                                      _onInputChanged(index);
+                                    },
+                                    );
+                                  },
+                                  maxLines: 1,
+                                  padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+                                  textAlign: TextAlign.end,
+                                  keyboardType:
+                                      TextInputType.numberWithOptions(),
+                                ),
                               ),
-                              SizedBox(height: 50),
-                            ]
-                          )
-                        ),
-                        Center(
-                            child:
-                            Column(
-                              children: [
-                                Text("\"평소 습관 보다 매달 약 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
-                                Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
-                              ],
-                            )
+                              SizedBox(
+                                width: 5.5,
+                              ),
+                              Text(
+                                "회",
+                                style: TextStyle(color: kPurpleColor),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 50),
+                        ]
+                      )
+                    ),
+                    Center(
+                        child:
+                        Column(
+                          children: [
+                            Text("\"평소 습관 보다 매달 약 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                            Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
+                          ],
                         )
-                      ]
                     )
                   ]
                 )
               )
-            )
-          ]
+            ]
+          ),
         ),
         (index == _selectedItem.length-1)?
         BottomPositionedBox("완료", (){
