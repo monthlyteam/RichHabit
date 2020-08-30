@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/screens/trigger.dart';
 import 'package:richhabit/user_provider.dart';
 
 import '../habit.dart';
@@ -69,15 +70,30 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                     style: TextStyle(color: kWhiteIvoryColor, fontSize: 16.0),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    _showDelDialog(context);
-                  },
-                  child: Text(
-                    "삭제",
-                    style: TextStyle(color: kSelectedColor, fontSize: 16.0),
-                  ),
-                )
+                widget.habit.isTrigger
+                    ? GestureDetector(
+                        onTap: () {
+                          size = MediaQuery.of(context).size; //나중에 지워야함
+                          Navigator.of(context, rootNavigator: true)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => Trigger()));
+                        },
+                        child: Text(
+                          "변경",
+                          style:
+                              TextStyle(color: kSelectedColor, fontSize: 16.0),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          _showDelDialog(context);
+                        },
+                        child: Text(
+                          "삭제",
+                          style:
+                              TextStyle(color: kSelectedColor, fontSize: 16.0),
+                        ),
+                      )
               ],
             ),
             SizedBox(
