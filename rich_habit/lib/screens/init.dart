@@ -491,7 +491,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate {
                       }),
                 ),
           SizedBox(
-            height: 80,
+            height: 40,
           ),
           Text("습관 입력하기",
               style: TextStyle(

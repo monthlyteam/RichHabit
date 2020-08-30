@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/main.dart';
 import 'package:richhabit/screens/buy_or_not.dart';
 import 'package:richhabit/screens/compound_interest.dart';
 import 'package:richhabit/screens/home.dart';
@@ -36,7 +37,7 @@ class _MainPageState extends State<MainPage> {
   Future onNotiSelected(String payload) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MainPage()),
+      MaterialPageRoute(builder: (context) => MyApp()),
     );
   }
 
