@@ -10,6 +10,7 @@ class UserProvider with ChangeNotifier {
   String profileURL = '';
 
   bool isAlarm = false;
+  String pushTriggerName;
   DateTime pushAlarmTime;
 
   String language = 'KO';
@@ -17,20 +18,9 @@ class UserProvider with ChangeNotifier {
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  UserProvider() {
-    //Android
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    //IOS
-    var initializationSettingsIOS = IOSInitializationSettings();
-    var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    //for when notification pressed.
-    //_flutterLocalNotificationsPlugin.initialize(initializationSettings,
-    //    onSelectNotification: onSelectNotification);
+  void setAlarmData(String name, DateTime time) {
+    this.pushTriggerName = name;
+    this.pushAlarmTime = time;
   }
 
   void resetNotification() async {
@@ -39,6 +29,16 @@ class UserProvider with ChangeNotifier {
 
   void setNotiPlugin(FlutterLocalNotificationsPlugin plugin) {
     this._flutterLocalNotificationsPlugin = plugin;
+  }
+
+  //for test
+  Future<void> showNotification() async {
+    var android = AndroidNotificationDetails(
+        'channelId', 'channelName', 'channelDescription');
+    var iOS = IOSNotificationDetails();
+    var platform = NotificationDetails(android, iOS);
+
+    await FlutterLocalNotificationsPlugin().show(0, 'title', 'body', platform);
   }
 
   Future<void> setTriggerNotification() async {
@@ -51,11 +51,12 @@ class UserProvider with ChangeNotifier {
 
     var ios = IOSNotificationDetails();
     var detail = NotificationDetails(android, ios);
-
+    print(
+        "${pushAlarmTime.hour}, ${pushAlarmTime.minute}, ${pushAlarmTime.second}");
     await _flutterLocalNotificationsPlugin.showDailyAtTime(
       0,
       'RichHabit',
-      '빨리 양치해!',
+      '$pushTriggerName 할 시간입니다!!',
       time,
       detail,
       payload: 'trigger',
