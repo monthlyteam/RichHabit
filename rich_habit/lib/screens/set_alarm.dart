@@ -1,18 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:richhabit/constants.dart';
+
+import '../user_provider.dart';
 
 class SetAlarmPage extends StatefulWidget {
   @override
   _SetAlarmPageState createState() => _SetAlarmPageState();
 }
 
-
-
 class _SetAlarmPageState extends State<SetAlarmPage> {
-  bool isAlarmOn =true;
-  bool isSoundOn =true;
+  bool isAlarmOn = true;
+  bool isSoundOn = true;
+  VoidCallback callback;
 
+  @override
+  void initState() {
+    super.initState();
+
+    callback = context.read<UserProvider>().showNotification;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +33,47 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
           backgroundColor: kPurpleColor,
           elevation: 0,
           leading: IconButton(
-            padding: EdgeInsets.only(left: 20),
-            icon: Icon(Icons.arrow_back_ios,color: kWhiteIvoryColor,size: 25,),
-            onPressed: (){Navigator.of(context).pop();}
+              padding: EdgeInsets.only(left: 20),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: kWhiteIvoryColor,
+                size: 25,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
+          title: Text(
+            "알림",
+            style: TextStyle(
+                color: kWhiteIvoryColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
           ),
-          title:Text("알림",style: TextStyle(color: kWhiteIvoryColor,fontSize: 20,fontWeight: FontWeight.bold),),
         ),
       ),
       body: Column(
         children: [
-          _buildContents(Icons.notifications, "알람", () {print("alarm is on");}, 0),
-          _buildContents(Icons.notifications, "소리", () {print("sound is on");}, 1),
+          _buildContents(Icons.notifications, "알람", () {
+            print("alarm is on");
+          }, 0),
+          _buildContents(Icons.notifications, "소리", () {
+            print("sound is on");
+          }, 1),
+
+          //TODO: remove after test
+          RaisedButton(child: Text("test"), onPressed: callback),
         ],
       ),
     );
   }
-  _buildContents(IconData icon, String text, VoidCallback callback,index) {
+
+  _buildContents(IconData icon, String text, VoidCallback callback, index) {
     return Container(
       decoration: BoxDecoration(
           color: kIvoryColor,
           border: Border.symmetric(
               vertical:
-              BorderSide(color: Colors.grey.withOpacity(0.1), width: 1))),
+                  BorderSide(color: Colors.grey.withOpacity(0.1), width: 1))),
       height: 45,
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
@@ -62,15 +89,17 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
                   fontSize: kSubTitleFontSize - 3, color: kPurpleColor)),
           Expanded(child: SizedBox()),
           CupertinoSwitch(
-            value : (index==0)?isAlarmOn:isSoundOn,
-            onChanged: (bool value){
-              if(!isAlarmOn && index == 1){ //알람이꺼져있고, 클릭한게 소리에 관한거라면 반응안함.
-              } else{
+            value: (index == 0) ? isAlarmOn : isSoundOn,
+            onChanged: (bool value) {
+              if (!isAlarmOn && index == 1) {
+                //알람이꺼져있고, 클릭한게 소리에 관한거라면 반응안함.
+              } else {
                 setState(() {
-                  if(index==0) { //알람이 움직이면 소리도 같이 움직임
+                  if (index == 0) {
+                    //알람이 움직이면 소리도 같이 움직임
                     isAlarmOn = value;
                     isSoundOn = isAlarmOn; //알람 바꾸면 소리도 자동으로 바뀜
-                  }else{
+                  } else {
                     isSoundOn = value;
                   }
                   callback;

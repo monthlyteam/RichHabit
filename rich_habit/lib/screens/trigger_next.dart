@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/habit.dart';
@@ -7,6 +8,8 @@ import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/main_page.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'package:provider/provider.dart';
+
+import '../user_provider.dart';
 
 class TriggerNext extends StatefulWidget {
   final List<List<dynamic>> selectedItem;
@@ -19,9 +22,19 @@ class TriggerNext extends StatefulWidget {
 
 class _TriggerNextState extends State<TriggerNext> {
   List<List<dynamic>> _selectedItem;
+  DateTime _dateTime = DateTime.now();
 
   PageController pageController;
   List<Map> triggerList;
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  Future onNotiSelected(String payload) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MainPage()),
+    );
+  }
 
   @override
   void initState() {
@@ -29,6 +42,24 @@ class _TriggerNextState extends State<TriggerNext> {
     this._selectedItem = widget.selectedItem;
     triggerList = new List<Map>(_selectedItem.length);
     pageController = new PageController();
+
+    //Android
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    //IOS
+    var initializationSettingsIOS = IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+
+    // _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    //for when notification pressed.
+    _flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onNotiSelected);
+
+    context
+        .read<UserProvider>()
+        .setNotiPlugin(_flutterLocalNotificationsPlugin);
   }
 
   @override
@@ -51,8 +82,6 @@ class _TriggerNextState extends State<TriggerNext> {
   }
 
   Stack _buildPage(BuildContext context, int index) {
-    DateTime _dateTime = DateTime.now();
-
     return Stack(
       children: [
         Column(
@@ -60,7 +89,8 @@ class _TriggerNextState extends State<TriggerNext> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 20, top: 50, bottom: 10),
-              child: GestureDetector(behavior: HitTestBehavior.translucent,
+              child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   child: Container(
                       width: 50,
                       height: 50,
@@ -170,29 +200,42 @@ class _TriggerNextState extends State<TriggerNext> {
             ),
           ],
         ),
-        (index == _selectedItem.length-1)?
-        BottomPositionedBox("완료", (){
-          triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
-          for(var i = 0; i<triggerList.length ; i++){
-            context.read<HabitProvider>().addHabit(Habit(
-                addedTimeID: DateTime.now(),
-                isTrigger: triggerList[i]['isTrigger'],
-                name: triggerList[i]['name'],
-                iconURL: triggerList[i]['iconURL'],
-                price: 0,
-                usualAmount: 1,
-                usualIsWeek: false,
-                goalIsWeek: false,
-                goalAmount: 1
-              )
-            );
-          }
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-        })
-            :BottomPositionedBox("다음",(){
-            triggerList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1],"isTrigger":true});
-            pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);//다음페이지로 넘어가는거 만들면됨
-        })
+        (index == _selectedItem.length - 1)
+            ? BottomPositionedBox("완료", () {
+                triggerList[index] = ({
+                  "name": _selectedItem[index][0],
+                  "iconURL": _selectedItem[index][1],
+                  "isTrigger": true
+                });
+                for (var i = 0; i < triggerList.length; i++) {
+                  context.read<HabitProvider>().addHabit(Habit(
+                      addedTimeID: DateTime.now(),
+                      isTrigger: triggerList[i]['isTrigger'],
+                      name: triggerList[i]['name'],
+                      iconURL: triggerList[i]['iconURL'],
+                      price: 0,
+                      usualAmount: 1,
+                      usualIsWeek: false,
+                      goalIsWeek: false,
+                      goalAmount: 1));
+                  context
+                      .read<UserProvider>()
+                      .setAlarmData(triggerList[i]['name'], _dateTime);
+                  context.read<UserProvider>().setTriggerNotification();
+                }
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MainPage()));
+              })
+            : BottomPositionedBox("다음", () {
+                triggerList[index] = ({
+                  "name": _selectedItem[index][0],
+                  "iconURL": _selectedItem[index][1],
+                  "isTrigger": true
+                });
+                pageController.animateToPage(index + 1,
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeInOut); //다음페이지로 넘어가는거 만들면됨
+              })
       ],
     );
   }
