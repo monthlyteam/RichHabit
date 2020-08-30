@@ -252,7 +252,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       case "흡연":
         warn = kWarningList[0];
         break;
-      case "커피":
+      case "커피(음료)":
         warn = kWarningList[1];
         break;
       case "음주":
@@ -269,6 +269,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         break;
       case "피씨방":
         warn = kWarningList[6];
+        break;
+      case "게임":
+        warn = kWarningList[7];
         break;
       default:
         warn =
