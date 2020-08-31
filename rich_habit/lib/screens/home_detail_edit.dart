@@ -514,6 +514,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                     children: [
                       Expanded(
                         child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onTap: () {
                             Navigator.pop(buildContext);
                           },
@@ -540,6 +541,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                       ),
                       Expanded(
                         child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onTap: () {
                             if (mode == "삭제") {
                               context.read<HabitProvider>().deleteHabit(
