@@ -22,7 +22,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
   DateTime today;
   List<Habit> dailyHabit;
   List<Habit> weeklyHabit;
-  List<Habit> total = new List<Habit>();
+  List<Habit> total;
 
   List<FlSpot> spots = [
     FlSpot(0, 80),
@@ -238,6 +238,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
     weeklyHabit = context
         .watch<HabitProvider>()
         .weeklyHabit[context.watch<HabitProvider>().isoWeekNumber(today)];
+    total = new List<Habit>();
     if (dailyHabit != null) {
       total = dailyHabit;
     }

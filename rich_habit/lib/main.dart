@@ -21,11 +21,13 @@ void main() async {
 
   //TODO: Must Erase Test Data after debug
   //testData Start
+  /*
   if (isEmpty) {
     TestData.getData(sp);
     isEmpty = false;
     print("main.dart: Get TestData DONE");
   }
+   */
   //TestData Finish
 
   Map<DateTime, List<Habit>> triggerHabit = Map<DateTime, List<Habit>>();
