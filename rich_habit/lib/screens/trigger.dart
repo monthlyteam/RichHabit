@@ -68,7 +68,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
               controller.reverse();
             }
           });
-    return FutureBuilder(
+    return FutureBuilder<double>(
       future: whenNotZero(Stream<double>.periodic(Duration(microseconds: 100),
               (x) => MediaQuery.of(context).size.width)),
       builder: (context, snapshot) {
@@ -243,6 +243,8 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
               ],
             ),
           ));
+        }else {
+          return CircularProgressIndicator();
         }
       }
     );

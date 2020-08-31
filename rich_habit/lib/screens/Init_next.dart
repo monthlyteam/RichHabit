@@ -152,176 +152,170 @@ class _InitNextState extends State<InitNext> {
                                 BorderRadius.vertical(top: Radius.circular(25)),
                                 color: kWhiteIvoryColor),
                             padding: EdgeInsets.fromLTRB(20, 20, 20, 100),
-                            child: ListView(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "①  평소 얼마나 자주 소비하십니까?",
-                                        style: TextStyle(color: kPurpleColor, fontSize: 16),
-                                      ),
-                                      SizedBox(
-                                        height: 5.5,
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 8),
-                                        padding:
-                                        EdgeInsets.only(left: 20, top: 5, bottom: 15),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                  Text(
+                                    "①  평소 얼마나 자주 소비하십니까?",
+                                    style: TextStyle(color: kPurpleColor, fontSize: 16),
+                                  ),
+                                  SizedBox(
+                                    height: 5.5,
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 8),
+                                    padding:
+                                    EdgeInsets.only(left: 20, top: 5, bottom: 15),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
                                           children: [
-                                            Row(
-                                              children: [
-                                                GestureDetector(behavior: HitTestBehavior.translucent,
-                                                  child: Row(
-                                                    children: [
-                                                      usualIsWeek
-                                                          ? Icon(
-                                                        Icons.radio_button_unchecked,
-                                                        color: kPurpleColor,
-                                                        size: 16,
-                                                      )
-                                                          : Icon(
-                                                        Icons.radio_button_checked,
-                                                        color: kPurpleColor,
-                                                        size: 16,
-                                                      ),
-                                                      SizedBox(width: 5.5,height: 1,),
-                                                      Text("매일",
-                                                          style: TextStyle(
-                                                              color: kPurpleColor,
-                                                              fontSize: 16,
-                                                              fontWeight: usualIsWeek?FontWeight.normal:FontWeight.bold)),
-                                                    ],
+                                            GestureDetector(behavior: HitTestBehavior.translucent,
+                                              child: Row(
+                                                children: [
+                                                  usualIsWeek
+                                                      ? Icon(
+                                                    Icons.radio_button_unchecked,
+                                                    color: kPurpleColor,
+                                                    size: 16,
+                                                  )
+                                                      : Icon(
+                                                    Icons.radio_button_checked,
+                                                    color: kPurpleColor,
+                                                    size: 16,
                                                   ),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      usualIsWeek = false;
-                                                      _onInputChanged(index);
-                                                    });
-                                                  },
-                                                ),
-                                                SizedBox(
-                                                  width: 20.5,
-                                                  height: 1,
-                                                ),
-                                                GestureDetector(behavior: HitTestBehavior.translucent,
-                                                  child: Row(
-                                                    children: [
-                                                      usualIsWeek
-                                                          ? Icon(
-                                                        Icons.radio_button_checked,
-                                                        color: kPurpleColor,
-                                                        size: 16,
-                                                      )
-                                                          : Icon(
-                                                        Icons.radio_button_unchecked,
-                                                        color: kPurpleColor,
-                                                        size: 16,
-                                                      ),
-                                                      SizedBox(width: 5.5,height: 1,),
-                                                      Text("매주",
-                                                          style: TextStyle(
-                                                              color: kPurpleColor,
-                                                              fontSize: 16,
-                                                              fontWeight: usualIsWeek?FontWeight.bold:FontWeight.normal)),
-                                                    ],
-                                                  ),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      usualIsWeek = true;
-                                                      goalIsWeek = true;
-                                                      _onInputChanged(index);
-                                                    });
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 4),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 152,
-                                                  height: 23,
-                                                  child: CupertinoTextField(
-                                                    maxLength: 2,
-                                                    onChanged: (text){
-                                                      setState(() {
-                                                        _onInputChanged(index);
-                                                      },
-                                                      );
-                                                    },
-                                                    onEditingComplete: (){
-                                                      nodes[0].unfocus();
-                                                      FocusScope.of(context).requestFocus(nodes[1]);
-                                                    },
-                                                    textInputAction: TextInputAction.next,
-                                                    controller: controllers[0],
-                                                    padding: EdgeInsets.symmetric(
-                                                        vertical: 2, horizontal: 2),
-                                                    textAlign: TextAlign.end,
-                                                    maxLines: 1,
-                                                    keyboardType: TextInputType.numberWithOptions(),
-                                                    focusNode: nodes[0],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 5.5,
-                                                  height: 1,
-                                                ),
-                                                Text(
-                                                  "회",
-                                                  style: TextStyle(color: kPurpleColor),
-                                                )
-                                              ],
+                                                  SizedBox(width: 5.5,height: 1,),
+                                                  Text("매일",
+                                                      style: TextStyle(
+                                                          color: kPurpleColor,
+                                                          fontSize: 16,
+                                                          fontWeight: usualIsWeek?FontWeight.normal:FontWeight.bold)),
+                                                ],
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  usualIsWeek = false;
+                                                  _onInputChanged(index);
+                                                });
+                                              },
                                             ),
                                             SizedBox(
-                                              height: 19.5,
+                                              width: 20.5,
+                                              height: 1,
                                             ),
-                                            Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 12),),
-                                            SizedBox(height: 2.5,),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 152,
-                                                  height: 23,
-                                                  child: CupertinoTextField(
-                                                    maxLength: 8,
-                                                    focusNode: nodes[1],
-                                                    controller: controllers[1],
-                                                    onChanged: (text){
-                                                      setState(() {
-                                                        _onInputChanged(index);
-                                                      },
-                                                      );
-                                                    },onEditingComplete: (){
-                                                    nodes[1].unfocus();
-                                                    FocusScope.of(context).requestFocus(nodes[2]);}
-                                                    ,
-                                                    textInputAction: TextInputAction.next,
-                                                    maxLines: 1,
-                                                    padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
-                                                    textAlign: TextAlign.end,
-                                                    keyboardType:
-                                                    TextInputType.numberWithOptions(),
+                                            GestureDetector(behavior: HitTestBehavior.translucent,
+                                              child: Row(
+                                                children: [
+                                                  usualIsWeek
+                                                      ? Icon(
+                                                    Icons.radio_button_checked,
+                                                    color: kPurpleColor,
+                                                    size: 16,
+                                                  )
+                                                      : Icon(
+                                                    Icons.radio_button_unchecked,
+                                                    color: kPurpleColor,
+                                                    size: 16,
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: 5.5,height: 1,
-                                                ),
-                                                Text(
-                                                  "원",
-                                                  style: TextStyle(color: kPurpleColor),
-                                                )
-                                              ],
+                                                  SizedBox(width: 5.5,height: 1,),
+                                                  Text("매주",
+                                                      style: TextStyle(
+                                                          color: kPurpleColor,
+                                                          fontSize: 16,
+                                                          fontWeight: usualIsWeek?FontWeight.bold:FontWeight.normal)),
+                                                ],
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  usualIsWeek = true;
+                                                  goalIsWeek = true;
+                                                  _onInputChanged(index);
+                                                });
+                                              },
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 152,
+                                              height: 23,
+                                              child: CupertinoTextField(
+                                                maxLength: 2,
+                                                onChanged: (text){
+                                                  setState(() {
+                                                    _onInputChanged(index);
+                                                  },
+                                                  );
+                                                },
+                                                onEditingComplete: (){
+                                                  nodes[0].unfocus();
+                                                  FocusScope.of(context).requestFocus(nodes[1]);
+                                                },
+                                                textInputAction: TextInputAction.next,
+                                                controller: controllers[0],
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 2, horizontal: 2),
+                                                textAlign: TextAlign.end,
+                                                maxLines: 1,
+                                                keyboardType: TextInputType.numberWithOptions(),
+                                                focusNode: nodes[0],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 5.5,
+                                              height: 1,
+                                            ),
+                                            Text(
+                                              "회",
+                                              style: TextStyle(color: kPurpleColor),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 19.5,
+                                        ),
+                                        Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 12),),
+                                        SizedBox(height: 2.5,),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 152,
+                                              height: 23,
+                                              child: CupertinoTextField(
+                                                maxLength: 8,
+                                                focusNode: nodes[1],
+                                                controller: controllers[1],
+                                                onChanged: (text){
+                                                  setState(() {
+                                                    _onInputChanged(index);
+                                                  },
+                                                  );
+                                                },onEditingComplete: (){
+                                                nodes[1].unfocus();
+                                                FocusScope.of(context).requestFocus(nodes[2]);}
+                                                ,
+                                                textInputAction: TextInputAction.next,
+                                                maxLines: 1,
+                                                padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+                                                textAlign: TextAlign.end,
+                                                keyboardType:
+                                                TextInputType.numberWithOptions(),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 5.5,height: 1,
+                                            ),
+                                            Text(
+                                              "원",
+                                              style: TextStyle(color: kPurpleColor),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Text(
                                     "② 앞으로의 목표치를 정해주세요!",
@@ -439,13 +433,14 @@ class _InitNextState extends State<InitNext> {
                                       Column(
                                         children: [
                                           Text("\"평소 습관 보다 매달 약 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
-                                          Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),)
+                                          Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                          SizedBox(height: 100),
                                         ],
                                       )
-                                  )
+                                  ),
                                 ]
                             )
-                          ),
+                        ),
                       ]
                   ),
                 ),
@@ -493,59 +488,37 @@ class _InitNextState extends State<InitNext> {
     }else{
       return (index != _selectedItem.length-1)
           ?BottomPositionedBox("다음",(){
-            try{
-              if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
-                Fluttertoast.showToast(
-                    msg: "정보를 빠짐없이 입력해주세요!",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.grey,
-                    textColor: Colors.white,
-                    fontSize: 16.0
-                );
-              }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){//목표량이 현재보다 낮은경우
-                if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {
-                  habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
-                  goalIsWeek = false;
-                  usualIsWeek = false;
-                  nodes[0].requestFocus();
-                  pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);
-                  if(habitList[index+1] != null){
-                    controllers[0]..text = habitList[index+1]['usualAmount'].toString();
-                    controllers[1]..text = habitList[index+1]['price'].toString();
-                    controllers[2]..text = habitList[index+1]['goalAmount'].toString();
-                  }else{
-                    controllers[0].clear();
-                    controllers[1].clear();
-                    controllers[2].clear();
-                  }
-
-                }else{
-                  Fluttertoast.showToast(
-                      msg: "목표치를 확인해주세요",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.grey,
-                      textColor: Colors.white,
-                      fontSize: 16.0
-                  );
-                }
+        try{
+          if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
+            Fluttertoast.showToast(
+                msg: "정보를 빠짐없이 입력해주세요!",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.grey,
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
+          }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){//목표량이 현재보다 낮은경우
+            if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {
+              habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
+              goalIsWeek = false;
+              usualIsWeek = false;
+              nodes[0].requestFocus();
+              pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);
+              if(habitList[index+1] != null){
+                controllers[0]..text = habitList[index+1]['usualAmount'].toString();
+                controllers[1]..text = habitList[index+1]['price'].toString();
+                controllers[2]..text = habitList[index+1]['goalAmount'].toString();
               }else{
-                Fluttertoast.showToast(
-                    msg: "올바른 값을 입력해주세요!",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.grey,
-                    textColor: Colors.white,
-                    fontSize: 16.0
-                );
+                controllers[0].clear();
+                controllers[1].clear();
+                controllers[2].clear();
               }
-            }catch(e){
+
+            }else{
               Fluttertoast.showToast(
-                  msg: "올바른 값을 입력해주세요.\n숫자만 입력할 수 있습니다.",
+                  msg: "목표치를 확인해주세요",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
@@ -554,91 +527,113 @@ class _InitNextState extends State<InitNext> {
                   fontSize: 16.0
               );
             }
-          })
-              :BottomPositionedBox("완료",(){
-            try{//try-catch로 숫자가 아닌것이 입력되는걸 잡음
-              if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){//값이 비어있는경우
-                Fluttertoast.showToast(
-                    msg: "정보를 빠짐없이 입력해주세요!",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.grey,
-                    textColor: Colors.white,
-                    fontSize: 16.0
-                );
-              }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){ //값이 최솟값 이상인경우
-                if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {//목표량이 현재보다 낮은경우
-                  habitList[index] = ({
-                    "name": _selectedItem[index][0],
-                    "iconURL": _selectedItem[index][1],
-                    "price": double.parse(controllers[1].text),
-                    "usualIsWeek": usualIsWeek,
-                    "usualAmount": int.parse(controllers[0].text),
-                    "goalIsWeek": goalIsWeek,
-                    "goalAmount": int.parse(controllers[2].text),
-                    "isTrigger": false
-                  });
-                  for (var i = 0; i < habitList.length; i++) {
+          }else{
+            Fluttertoast.showToast(
+                msg: "올바른 값을 입력해주세요!",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.grey,
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
+          }
+        }catch(e){
+          Fluttertoast.showToast(
+              msg: "올바른 값을 입력해주세요.\n숫자만 입력할 수 있습니다.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.grey,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+        }
+      })
+          :BottomPositionedBox("완료",(){
+        try{//try-catch로 숫자가 아닌것이 입력되는걸 잡음
+          if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){//값이 비어있는경우
+            Fluttertoast.showToast(
+                msg: "정보를 빠짐없이 입력해주세요!",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.grey,
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
+          }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){ //값이 최솟값 이상인경우
+            if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {//목표량이 현재보다 낮은경우
+              habitList[index] = ({
+                "name": _selectedItem[index][0],
+                "iconURL": _selectedItem[index][1],
+                "price": double.parse(controllers[1].text),
+                "usualIsWeek": usualIsWeek,
+                "usualAmount": int.parse(controllers[0].text),
+                "goalIsWeek": goalIsWeek,
+                "goalAmount": int.parse(controllers[2].text),
+                "isTrigger": false
+              });
+              for (var i = 0; i < habitList.length; i++) {
 
-                    context.read<HabitProvider>().addHabit(
-                        Habit(
-                            addedTimeID: DateTime.now(),
-                            isTrigger: habitList[i]['isTrigger'],
-                            name: habitList[i]['name'],
-                            iconURL: habitList[i]['iconURL'],
-                            price: habitList[i]['price'],
-                            usualAmount: habitList[i]['usualAmount'],
-                            usualIsWeek: habitList[i]['usualIsWeek'],
-                            goalIsWeek: habitList[i]['goalIsWeek'],
+                context.read<HabitProvider>().addHabit(
+                    Habit(
+                        addedTimeID: DateTime.now(),
+                        isTrigger: habitList[i]['isTrigger'],
+                        name: habitList[i]['name'],
+                        iconURL: habitList[i]['iconURL'],
+                        price: habitList[i]['price'],
+                        usualAmount: habitList[i]['usualAmount'],
+                        usualIsWeek: habitList[i]['usualIsWeek'],
+                        goalIsWeek: habitList[i]['goalIsWeek'],
 
-                            goalAmount: habitList[i]['goalAmount']
-                        )
-                    );
-                  }
-                  print("Weekly :${context.read<HabitProvider>().weeklyHabit}");
-                  print("Daily : ${context.read<HabitProvider>().dailyHabit}");
-                  if(widget.isFirst){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
-                  }else{
-                    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
-                  }
-                }else{//목표량이 현재보다 높은경우
-                  Fluttertoast.showToast(
-                      msg: "목표치를 확인해주세요",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.grey,
-                      textColor: Colors.white,
-
-                      fontSize: 16.0
-                  );
-                }
-              }else {//값이 최소값 미만인경우
-                Fluttertoast.showToast(
-                    msg: "올바른 값을 입력해주세요!",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.grey,
-                    textColor: Colors.white,
-                    fontSize: 16.0
+                        goalAmount: habitList[i]['goalAmount']
+                    )
                 );
               }
-            }catch(e){
-              print(e);
+              print("Weekly :${context.read<HabitProvider>().weeklyHabit}");
+              print("Daily : ${context.read<HabitProvider>().dailyHabit}");
+              if(widget.isFirst){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
+              }else{
+                Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
+              }
+            }else{//목표량이 현재보다 높은경우
               Fluttertoast.showToast(
-                  msg: "올바른 값을 입력해주세요!\n숫자만 입력할 수 있습니다.",
+                  msg: "목표치를 확인해주세요",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
                   backgroundColor: Colors.grey,
                   textColor: Colors.white,
+
                   fontSize: 16.0
               );
             }
-          });
+          }else {//값이 최소값 미만인경우
+            Fluttertoast.showToast(
+                msg: "올바른 값을 입력해주세요!",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.grey,
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
+          }
+        }catch(e){
+          print(e);
+          Fluttertoast.showToast(
+              msg: "올바른 값을 입력해주세요!\n숫자만 입력할 수 있습니다.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.grey,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+        }
+      });
     }
   }
 
