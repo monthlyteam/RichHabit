@@ -61,6 +61,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
+                            behavior: HitTestBehavior.translucent,
                             onTap: () {
                               Navigator.pop(context, false);
                             },
@@ -72,6 +73,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                           ),
                           widget.habit.isTrigger
                               ? GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     Navigator.of(context, rootNavigator: true)
                                         .pushReplacement(MaterialPageRoute(
@@ -86,6 +88,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                   ),
                                 )
                               : GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     _showDelDialog(context);
                                   },

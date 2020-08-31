@@ -40,6 +40,7 @@ class HomeDetail extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () async {
                     var isChanged = await Navigator.push(
                       context,
