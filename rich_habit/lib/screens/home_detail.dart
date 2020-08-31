@@ -55,7 +55,10 @@ class HomeDetail extends StatelessWidget {
                   },
                   child: Text(
                     "편집",
-                    style: TextStyle(color: kWhiteIvoryColor, fontSize: 16.0),
+                    style: TextStyle(
+                        color: kWhiteIvoryColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               ],

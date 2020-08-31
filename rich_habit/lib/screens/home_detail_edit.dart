@@ -68,7 +68,9 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                             child: Text(
                               "취소",
                               style: TextStyle(
-                                  color: kWhiteIvoryColor, fontSize: 16.0),
+                                  color: kWhiteIvoryColor,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           widget.habit.isTrigger
@@ -84,7 +86,10 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                   child: Text(
                                     "변경",
                                     style: TextStyle(
-                                        color: kSelectedColor, fontSize: 16.0),
+                                      color: kSelectedColor,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 )
                               : GestureDetector(
@@ -95,7 +100,9 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                   child: Text(
                                     "삭제",
                                     style: TextStyle(
-                                        color: kSelectedColor, fontSize: 16.0),
+                                        color: kSelectedColor,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 )
                         ],
