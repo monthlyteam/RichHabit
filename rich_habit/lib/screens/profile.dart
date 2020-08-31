@@ -259,7 +259,7 @@ class Profile extends StatelessWidget {
                               height: 10,
                             ),
                             Container(
-                              height: 30,
+                              height: 25,
                               child: FittedBox(
                                 child: Text(
                                   "정말 초기화 하시겠습니까?",
@@ -273,7 +273,7 @@ class Profile extends StatelessWidget {
                               height: 20,
                             ),
                             Container(
-                              height: 45,
+                              height: 40,
                               child: FittedBox(
                                 fit: BoxFit.cover,
                                 child: Column(

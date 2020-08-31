@@ -260,7 +260,7 @@ class _InitNextState extends State<InitNext> {
                                                     vertical: 2, horizontal: 2),
                                                 textAlign: TextAlign.end,
                                                 maxLines: 1,
-                                                keyboardType: TextInputType.numberWithOptions(),
+                                                keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                                                 focusNode: nodes[0],
                                               ),
                                             ),
@@ -302,7 +302,7 @@ class _InitNextState extends State<InitNext> {
                                                 padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                                 textAlign: TextAlign.end,
                                                 keyboardType:
-                                                TextInputType.numberWithOptions(),
+                                                TextInputType.numberWithOptions(signed: true, decimal: true),
                                               ),
                                             ),
                                             SizedBox(
@@ -412,7 +412,7 @@ class _InitNextState extends State<InitNext> {
                                                     padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                                     textAlign: TextAlign.end,
                                                     keyboardType:
-                                                    TextInputType.numberWithOptions(),
+                                                    TextInputType.numberWithOptions(signed: true, decimal: true),
                                                   ),
                                                 ),
                                                 SizedBox(
