@@ -7,7 +7,7 @@ class BuyOrNot extends StatefulWidget {
 }
 
 class _BuyOrNotState extends State<BuyOrNot> {
-  var priceController = TextEditingController(text: "2000000");
+  var priceController = TextEditingController(text: "0");
   var maintainController = TextEditingController(text: "0");
   var focus = FocusNode();
   var _percent = 5;
