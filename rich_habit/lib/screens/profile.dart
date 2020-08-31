@@ -3,9 +3,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/screens/init.dart';
 import 'package:richhabit/screens/set_alarm.dart';
-import 'package:richhabit/screens/set_language.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/user_provider.dart';
 import '../constants.dart';
 
 class Profile extends StatelessWidget {
@@ -18,11 +18,10 @@ class Profile extends StatelessWidget {
 //  ProfileData profileData;
 //  Profile({this.profileData});
   Profile() {
-    profileMessage = "절약해서 100억 한번 벌어보자";
-    profileImage = AssetImage("assets/example/profileImage.jpg");
-    name = "장영환";
-    language = "한국어";
-    isAlarmOn = true;
+//    profileMessage = "절약해서 100억 한번 벌어보자";
+//    profileImage = AssetImage("assets/example/profileImage.jpg");
+//    name = "장영환";
+//    language = "한국어";
   }
 
   @override
@@ -32,7 +31,6 @@ class Profile extends StatelessWidget {
 //    name = profileData.name;
 //    language = profileData.language;
 //    bool isAlarmOn = profileData.isAlarmOn;
-
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(color: kPurpleColor),
@@ -45,7 +43,7 @@ class Profile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "내 계정",
+                      "설정",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: kTitleFontSize,
@@ -54,72 +52,72 @@ class Profile extends StatelessWidget {
                     SizedBox(
                       height: 30,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            padding: null,
-                            height: 80,
-                            width: 80,
-                            decoration: BoxDecoration(
-                                border: null,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: profileImage,
-                                  fit: BoxFit.cover,
-                                ))),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  name,
-                                  style: TextStyle(
-                                      fontSize: kTitleFontSize,
-                                      color: kWhiteIvoryColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                GestureDetector(
-                                  child: Icon(
-                                    Icons.edit,
-                                    size: kTitleFontSize,
-                                    color: kWhiteIvoryColor,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "\"$profileMessage\"",
-                              style: TextStyle(
-                                  fontSize: kNormalFontSize,
-                                  fontWeight: FontWeight.w200,
-                                  color: kWhiteIvoryColor),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+//                    Row( //프로필 사진, 이름 ,메시지 표시하는 부분
+//                      crossAxisAlignment: CrossAxisAlignment.start,
+//                      children: [
+//                        Container(
+//                            padding: null,
+//                            height: 80,
+//                            width: 80,
+//                            decoration: BoxDecoration(
+//                                border: null,
+//                                shape: BoxShape.circle,
+//                                image: DecorationImage(
+//                                  image: profileImage,
+//                                  fit: BoxFit.cover,
+//                                ))),
+//                        SizedBox(
+//                          width: 10,
+//                        ),
+//                        Column(
+//                          crossAxisAlignment: CrossAxisAlignment.start,
+//                          children: [
+//                            Row(
+//                              children: [
+//                                Text(
+//                                  name,
+//                                  style: TextStyle(
+//                                      fontSize: kTitleFontSize,
+//                                      color: kWhiteIvoryColor,
+//                                      fontWeight: FontWeight.bold),
+//                                ),
+//                                SizedBox(
+//                                  width: 6,
+//                                ),
+//                                GestureDetector(
+//                                  child: Icon(
+//                                    Icons.edit,
+//                                    size: kTitleFontSize,
+//                                    color: kWhiteIvoryColor,
+//                                  ),
+//                                )
+//                              ],
+//                            ),
+//                            SizedBox(
+//                              height: 5,
+//                            ),
+//                            Text(
+//                              "\"$profileMessage\"",
+//                              style: TextStyle(
+//                                  fontSize: kNormalFontSize,
+//                                  fontWeight: FontWeight.w200,
+//                                  color: kWhiteIvoryColor),
+//                            )
+//                          ],
+//                        )
+//                      ],
+//                    ),
                   ],
                 )),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildContents(Icons.lock, "계정", () {}),
+//                _buildContents(Icons.lock, "계정", () {}),
                 _buildContents(Icons.cached, "문의 & 피드백", () {}),
-                Container(
-                  color: kPurpleColor,
-                  height: 25,
-                ),
+//                Container( //컨텐츠별 간격
+//                  color: kPurpleColor,
+//                  height: 25,
+//                ),
                 _buildContents(
                     Icons.notifications,
                     "알람",
@@ -128,10 +126,11 @@ class Profile extends StatelessWidget {
                           context,
                           MaterialPageRoute(builder: (context) => SetAlarmPage()));
                     },
-                    subData: isAlarmOn ? "켜짐" : "꺼짐"),
-                _buildContents(Icons.language, "언어", () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SetLanguagePage()));
-                }, subData: language),
+                    subData: context.watch<UserProvider>().isAlarm ? "켜짐" : "꺼짐"),
+//                    subData: true ? "켜짐" : "꺼짐"),
+//                _buildContents(Icons.language, "언어", () {
+//                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SetLanguagePage()));
+//                }, subData: language),
                 Container(
                   color: kPurpleColor,
                   height: 25,
@@ -283,7 +282,7 @@ class Profile extends StatelessWidget {
                           Expanded(
                               child: GestureDetector(behavior: HitTestBehavior.translucent,
                                   onTap: (){
-                                    context.read<HabitProvider>().resetData();
+                                    context.watch<HabitProvider>().resetData();
                                     Fluttertoast.showToast(
                                         msg: "데이터가 초기화 되었습니다.",
                                         toastLength: Toast.LENGTH_SHORT,
