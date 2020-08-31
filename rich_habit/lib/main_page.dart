@@ -72,6 +72,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
+    kKeyboardIsOpened = keyboardIsOpened;
     print("key : $keyboardIsOpened");
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: kPurpleColor,
