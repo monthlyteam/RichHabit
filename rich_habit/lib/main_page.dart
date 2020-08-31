@@ -36,7 +36,7 @@ class _MainPageState extends State<MainPage> {
   Future onNotiSelected(String payload) async {
     print("noti");
     setState(() {
-      _selectedIndex = 0;
+      _onTap(0);
     });
   }
 
