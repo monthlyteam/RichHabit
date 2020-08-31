@@ -118,15 +118,12 @@ class Profile extends StatelessWidget {
 //                  color: kPurpleColor,
 //                  height: 25,
 //                ),
-                _buildContents(
-                    Icons.notifications,
-                    "알람",
-                    () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SetAlarmPage()));
-                    },
-                    subData: context.watch<UserProvider>().isAlarm ? "켜짐" : "꺼짐"),
+                _buildContents(Icons.notifications, "알람", () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SetAlarmPage()));
+                },
+                    subData:
+                        context.watch<UserProvider>().isAlarm ? "켜짐" : "꺼짐"),
 //                    subData: true ? "켜짐" : "꺼짐"),
 //                _buildContents(Icons.language, "언어", () {
 //                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SetLanguagePage()));
@@ -295,17 +292,11 @@ class Profile extends StatelessWidget {
                                 color: kIvoryColor,
                               )),
                           Expanded(
-<<<<<<< HEAD
-                              child: GestureDetector(behavior: HitTestBehavior.translucent,
-                                  onTap: (){
-                                    context.watch<HabitProvider>().resetData();
-=======
                               child: GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
                                     context.read<UserProvider>().resetData();
                                     context.read<HabitProvider>().resetData();
->>>>>>> CIDNoData
                                     Fluttertoast.showToast(
                                         msg: "데이터가 초기화 되었습니다.",
                                         toastLength: Toast.LENGTH_SHORT,
