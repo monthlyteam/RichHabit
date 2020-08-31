@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/habit.dart';
@@ -174,6 +173,7 @@ class _TriggerNextState extends State<TriggerNext> {
                   "iconURL": _selectedItem[index][1],
                   "isTrigger": true
                 });
+                context.read<HabitProvider>().triggerHabit.clear();
                 for (var i = 0; i < triggerList.length; i++) {
                   context.read<HabitProvider>().addHabit(Habit(
                       addedTimeID: DateTime.now(),
