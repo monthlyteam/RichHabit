@@ -53,8 +53,7 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
       body: Column(
         children: [
           _buildContents(Icons.notifications, "알람", () {
-            context.read<UserProvider>().isAlarm = isAlarmOn;
-            context.read<UserProvider>().saveAlarmData();
+            context.read<UserProvider>().setisAlarm(isAlarmOn);
             if (isAlarmOn) {
               context.read<UserProvider>().setTriggerNotification();
             } else {
