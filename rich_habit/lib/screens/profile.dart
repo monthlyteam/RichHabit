@@ -127,7 +127,6 @@ class Profile extends StatelessWidget {
                 },
                     subData:
                         context.watch<UserProvider>().isAlarm ? "켜짐" : "꺼짐"),
-//                    subData: true ? "켜짐" : "꺼짐"),
 //                _buildContents(Icons.language, "언어", () {
 //                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SetLanguagePage()));
 //                }, subData: language),
@@ -259,11 +258,16 @@ class Profile extends StatelessWidget {
                             SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              "정말 초기화 하시겠습니까?.",
-                              style: TextStyle(
-                                  color: kPurpleColor,
-                                  fontSize: kSubTitleFontSize),
+                            Container(
+                              height: 30,
+                              child: FittedBox(
+                                child: Text(
+                                  "정말 초기화 하시겠습니까?",
+                                  style: TextStyle(
+                                      color: kPurpleColor,
+                                  ),
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 20,

@@ -128,7 +128,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                                   crossAxisCount: 2,
                                   mainAxisSpacing: 10.0,
                                   crossAxisSpacing: 10.0,
-                                  childAspectRatio: ((size.width-10)/2)/205, // 가로/세로
+                                  childAspectRatio: ((size.width-10)/2)/208, // 가로/세로
                             ),
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
@@ -206,7 +206,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                                         height: 10,
                                       ),
                                       Container(
-                                        height:15,
+                                        height:18,
                                         child: FittedBox(
                                             fit: BoxFit.fitHeight,
                                             child: Text(
