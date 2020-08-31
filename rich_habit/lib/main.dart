@@ -111,7 +111,7 @@ void main() async {
                   isAlarm: isAlarm,
                   isInit: isInit)),
         ],
-        child: MyApp(isEmpty),
+        child: MyApp(!(sp.containsKey('alarm'))),
       ),
     );
   });
