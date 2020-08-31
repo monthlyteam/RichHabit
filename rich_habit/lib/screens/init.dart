@@ -123,12 +123,11 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                           ),
                           child: SliverGrid(
                             gridDelegate:
-                                SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: size.width / 2,
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 10.0,
-//                            childAspectRatio: size.width-40/(190+15), // 가로/세로
-                              childAspectRatio: 0.85, // 가로/세로
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10.0,
+                                  crossAxisSpacing: 10.0,
+                                  childAspectRatio: ((size.width-10)/2)/205, // 가로/세로
                             ),
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
@@ -205,12 +204,15 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      FittedBox(
-                                          fit: BoxFit.cover,
-                                          child: Text(
-                                            habitsRough[index][0],
-                                            style: txtstyle,
-                                          )),
+                                      Container(
+                                        height:15,
+                                        child: FittedBox(
+                                            fit: BoxFit.fitHeight,
+                                            child: Text(
+                                              habitsRough[index][0],
+                                              style: txtstyle,
+                                            )),
+                                      ),
                                     ],
                                   ),
                                 );
@@ -491,7 +493,7 @@ class InitPageHeader implements SliverPersistentHeaderDelegate {
                       }),
                 ),
           SizedBox(
-            height: 80,
+            height: 20,
           ),
           Text("습관 입력하기",
               style: TextStyle(
