@@ -222,7 +222,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                     ),
                     SizedBox(height: kPadding),
                     _buildChart(addedTimeID),
-                    SizedBox(height: 800),
+                    SizedBox(height: 60),
                   ],
                 ),
               ),
