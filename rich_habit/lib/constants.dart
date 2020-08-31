@@ -12,6 +12,7 @@ const kNormalFontSize = 12.0;
 
 const kPadding = 20.0;
 Size size;
+bool kKeyboardIsOpened;
 
 const kWarningList = [
   "담배는 돈뿐만 아니라 건강에도 최악!", //흡연
