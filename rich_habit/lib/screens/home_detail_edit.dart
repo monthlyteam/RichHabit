@@ -76,7 +76,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                           size = MediaQuery.of(context).size; //나중에 지워야함
                           Navigator.of(context, rootNavigator: true)
                               .pushReplacement(MaterialPageRoute(
-                                  builder: (context) => Trigger()));
+                                  builder: (context) => Trigger(isFirst: false,)));
                         },
                         child: Text(
                           "변경",

@@ -80,12 +80,12 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
           body: WillPopScope(
             onWillPop: () async {
               if(widget.isFirst) {
+                context.read<HabitProvider>().resetData();
+                Navigator.of(context).pop();
+              }else{
                 Navigator.of(context, rootNavigator: true)
                     .pushReplacement(MaterialPageRoute(
                     builder: (context) => MainPage()));
-              }else{
-                context.read<HabitProvider>().resetData();
-                Navigator.of(context).pop();
               }
               return true;
             },
@@ -109,6 +109,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
                       delegate: TriggerPageHeader(
                         minExtent: 260.0,
                         maxExtent: 300.0,
+                        isFirst: widget.isFirst
                       ),
                     ),
                     SliverGroupBuilder(
@@ -272,9 +273,11 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
 class TriggerPageHeader implements SliverPersistentHeaderDelegate {
   final double minExtent;
   final double maxExtent;
+  final bool isFirst;
   TriggerPageHeader({
     this.minExtent,
     @required this.maxExtent,
+    @required this.isFirst,
   });
 
   @override
@@ -292,8 +295,14 @@ class TriggerPageHeader implements SliverPersistentHeaderDelegate {
                 behavior: HitTestBehavior.translucent,
                 child: Icon(Icons.arrow_back_ios, color: txtColor, size: 25),
                 onTap: () {
-                  context.read<HabitProvider>().resetData();
-                  Navigator.of(context).pop();
+                  if(isFirst) {
+                    context.read<HabitProvider>().resetData();
+                    Navigator.of(context).pop();
+                  }else{
+                    Navigator.of(context, rootNavigator: true)
+                        .pushReplacement(MaterialPageRoute(
+                        builder: (context) => MainPage()));
+                  }
                 }),
           ),
           SizedBox(

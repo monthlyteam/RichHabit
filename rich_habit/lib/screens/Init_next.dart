@@ -594,7 +594,7 @@ class _InitNextState extends State<InitNext> {
               print("Weekly :${context.read<HabitProvider>().weeklyHabit}");
               print("Daily : ${context.read<HabitProvider>().dailyHabit}");
               if(widget.isFirst){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Trigger(isFirst: widget.isFirst,)));
               }else{
                 Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
               }
