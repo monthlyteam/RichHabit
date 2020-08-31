@@ -101,6 +101,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                       : Navigator.of(context, rootNavigator: true)
                           .pushReplacement(MaterialPageRoute(
                               builder: (context) => MainPage()));
+                  return true;
                 },
                 child: Stack(
                   children: [
@@ -185,7 +186,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                                                           "assets/images/check.svg",
                                                           height: 80,
                                                           width: 80,
-                                                          color: kPurpleColor),
+                                                          color: kWhiteIvoryColor),
                                                       height: 160,
                                                       width: 160,
                                                       alignment:

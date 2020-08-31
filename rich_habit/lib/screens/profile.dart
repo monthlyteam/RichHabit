@@ -10,20 +10,20 @@ import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
 
 class Profile extends StatelessWidget {
-  String profileMessage;
-  String name;
-  String language;
-  AssetImage profileImage;
+//  String profileMessage;
+//  String name;
+//  String language;
+//  AssetImage profileImage;
   bool isAlarmOn;
 
 //  ProfileData profileData;
 //  Profile({this.profileData});
-  Profile() {
+//  Profile() {
 //    profileMessage = "절약해서 100억 한번 벌어보자";
 //    profileImage = AssetImage("assets/example/profileImage.jpg");
 //    name = "장영환";
 //    language = "한국어";
-  }
+//  }
 
   @override
   Widget build(BuildContext context) {

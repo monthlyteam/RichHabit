@@ -49,27 +49,7 @@ class _SetLanguagePageState extends State<SetLanguagePage> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: kPurpleColor,
-            size: kTitleFontSize,
-          ),
-          SizedBox(width: 12),
-          Text(text,
-              style: TextStyle(
-                  fontSize: kSubTitleFontSize - 3, color: kPurpleColor)),
-          Expanded(child: SizedBox()),
-          CupertinoSwitch(
-            value : (index==0)?isAlarmOn:isSoundOn,
-            onChanged: (bool value){
-              setState(() {
-                (index==0)? isAlarmOn = value : isSoundOn=value;
-                callback;
-              });
-            },
-            activeColor: Color(0xffDE711E),
-            trackColor: Color(0xff7B7B7B),
-          )
+
         ],
       ),
     );

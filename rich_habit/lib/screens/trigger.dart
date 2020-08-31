@@ -4,6 +4,7 @@ import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:richhabit/main_page.dart';
 import 'package:richhabit/screens/trigger_next.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'dart:math';
@@ -12,6 +13,9 @@ import 'package:provider/provider.dart';
 import '../constants.dart';
 
 class Trigger extends StatefulWidget {
+  final bool isFirst;
+  Trigger({this.isFirst});
+
   @override
   State createState() => _TriggerState();
 }
@@ -41,14 +45,19 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
   }
 
   List<List<dynamic>> _selectedListGenerator(
-      List<List<dynamic>> triggersRough) {
-    List<List<dynamic>> list = List<List<dynamic>>();
-    for (var i = 0; i < triggersRough.length; i++) {
-      if (triggersRough[i][2] == true) list.add(triggersRough[i].sublist(0, 2));
-    }
+    List<List<dynamic>> triggersRough) {
+      List<List<dynamic>> list = List<List<dynamic>>();
+      for (var i = 0; i < triggersRough.length; i++) {
+        if (triggersRough[i][2] == true) list.add(triggersRough[i].sublist(0, 2));
+      }
     return list;
   }
 
+  Future<double> whenNotZero(Stream<double> source) async {
+    await for (double value in source) {
+      if (value > 0) return value;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     offsetAnimation = Tween(begin: 0.0, end: 10.0)
@@ -59,337 +68,184 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
               controller.reverse();
             }
           });
-    return Scaffold(
-        backgroundColor: kPurpleColor,
-        body: WillPopScope(
-          onWillPop: () async {
-            context.read<HabitProvider>().resetData();
-            Navigator.of(context).pop();
-          },
-          child: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                top: 290,
-                height: 290,
-                width: size.width,
-                child: Container(
-                  color: kPurpleColor,
-                ),
-              ),
-              CustomScrollView(
-                shrinkWrap: false,
-                slivers: <Widget>[
-                  SliverPersistentHeader(
-                    pinned: true,
-                    floating: false,
-                    delegate: TriggerPageHeader(
-                      minExtent: 260.0,
-                      maxExtent: 300.0,
-                    ),
+    return FutureBuilder(
+      future: whenNotZero(Stream<double>.periodic(Duration(microseconds: 100),
+              (x) => MediaQuery.of(context).size.width)),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+        size = MediaQuery.of(context).size; //새로운 핸드폰이지만 init을 거치지 않는다면? ex)login기능 구현시.. 오류가능성있음.
+
+        return Scaffold(
+          backgroundColor: kPurpleColor,
+          body: WillPopScope(
+            onWillPop: () async {
+              if(widget.isFirst) {
+                Navigator.of(context, rootNavigator: true)
+                    .pushReplacement(MaterialPageRoute(
+                    builder: (context) => MainPage()));
+              }else{
+                context.read<HabitProvider>().resetData();
+                Navigator.of(context).pop();
+              }
+              return true;
+            },
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 290,
+                  height: 290,
+                  width: size.width,
+                  child: Container(
+                    color: kPurpleColor,
                   ),
-                  SliverGroupBuilder(
-                    decoration: BoxDecoration(
-                      color: kIvoryColor,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
-                    ),
-                    child: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: size.width / 2,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        //                            childAspectRatio: size.width-40/(190+15), // 가로/세로
-                        childAspectRatio: 0.85, // 가로/세로
+                ),
+                CustomScrollView(
+                  shrinkWrap: false,
+                  slivers: <Widget>[
+                    SliverPersistentHeader(
+                      pinned: true,
+                      floating: false,
+                      delegate: TriggerPageHeader(
+                        minExtent: 260.0,
+                        maxExtent: 300.0,
                       ),
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return Container(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Column(
-                              children: <Widget>[
-                                GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    //                                if(index == triggersRough.length-1){
-                                    //                                  _showAddDialog(context);
-                                    //                                }else{
-                                    setState(() {
-                                      for (var i = 0;
-                                          i < triggersRough.length;
-                                          i++) {
-                                        triggersRough[i][2] = false;
-                                      }
+                    ),
+                    SliverGroupBuilder(
+                      decoration: BoxDecoration(
+                        color: kIvoryColor,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      child: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: size.width / 2,
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0,
+                          //                            childAspectRatio: size.width-40/(190+15), // 가로/세로
+                          childAspectRatio: 0.85, // 가로/세로
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return Container(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Column(
+                                children: <Widget>[
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      //                                if(index == triggersRough.length-1){
+                                      //                                  _showAddDialog(context);
+                                      //                                }else{
+                                      setState(() {
+                                        for (var i = 0;
+                                            i < triggersRough.length;
+                                            i++) {
+                                          triggersRough[i][2] = false;
+                                        }
 
-                                      triggersRough[index][2] =
-                                          !triggersRough[index][2];
-                                    });
-                                  },
-                                  //                              },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: kWhiteIvoryColor,
-                                    ),
-                                    height: 160,
-                                    width: 160,
-                                    //                      margin: EdgeInsets.fromLTRB(15,10,15,10),
-                                    alignment: Alignment.center,
+                                        triggersRough[index][2] =
+                                            !triggersRough[index][2];
+                                      });
+                                    },
+                                    //                              },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: kWhiteIvoryColor,
+                                      ),
+                                      height: 160,
+                                      width: 160,
+                                      //                      margin: EdgeInsets.fromLTRB(15,10,15,10),
+                                      alignment: Alignment.center,
 
-                                    child: Stack(
-                                      children: triggersRough[index][2]
-                                          ? [
-                                              Center(
-                                                  child: SvgPicture.asset(
-                                                      triggersRough[index][1])),
-                                              Container(
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.black
-                                                        .withOpacity(0.5),
-                                                  ),
-                                                  child: SvgPicture.asset(
-                                                      "assets/images/check.svg",
-                                                      height: 80,
-                                                      width: 80,
-                                                      color: kPurpleColor),
-                                                  height: 160,
-                                                  width: 160,
-                                                  alignment: Alignment.center)
-                                            ]
-                                          : [
-                                              Center(
-                                                  child: SvgPicture.asset(
-                                                      triggersRough[index][1]))
-                                            ],
+                                      child: Stack(
+                                        children: triggersRough[index][2]
+                                            ? [
+                                                Center(
+                                                    child: SvgPicture.asset(
+                                                        triggersRough[index][1])),
+                                                Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.black
+                                                          .withOpacity(0.5),
+                                                    ),
+                                                    child: SvgPicture.asset(
+                                                        "assets/images/check.svg",
+                                                        height: 80,
+                                                        width: 80,
+                                                        color: kPurpleColor),
+                                                    height: 160,
+                                                    width: 160,
+                                                    alignment: Alignment.center)
+                                              ]
+                                            : [
+                                                Center(
+                                                    child: SvgPicture.asset(
+                                                        triggersRough[index][1]))
+                                              ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                FittedBox(
-                                    fit: BoxFit.fitHeight,
-                                    child: Text(
-                                      triggersRough[index][0],
-                                      style: txtstyle,
-                                    )),
-                              ],
-                            ),
-                          );
-                        },
-                        childCount: triggersRough.length,
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      color: kIvoryColor,
-                      height: 80,
-                      width: size.width,
-                    ),
-                  ),
-                ],
-              ),
-              BottomPositionedBox("다음", () {
-                bool isAnythingSelected = false;
-                for (var i = 0; i < triggersRough.length; i++) {
-                  if (triggersRough[i][2] == true) {
-                    isAnythingSelected = true;
-                    break;
-                  }
-                }
-                if (isAnythingSelected == false) {
-                  Fluttertoast.showToast(
-                      msg: "최소 한개를 선택해주세요!",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.grey,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TriggerNext(
-                              selectedItem:
-                                  _selectedListGenerator(triggersRough))));
-                }
-              })
-            ],
-          ),
-        ));
-  }
-
-  _showAddDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            backgroundColor: kIvoryColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)), //this right here
-            child: Container(
-                height: 226,
-                width: 320,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 176,
-                      padding: EdgeInsets.fromLTRB(26, 15, 26, 13),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 80,
-                            width: 80,
-                            padding: EdgeInsets.all(0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: kWhiteIvoryColor,
-                            ),
-                            child: Center(
-                                child: SvgPicture.asset(
-                                    'assets/images/icon/custom_coin.svg',
-                                    width: 44)),
-                          ),
-                          SizedBox(
-                            height: 10.5,
-                          ),
-                          Container(
-                            width: 204,
-//                          padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: RichText(
-                                text: TextSpan(
-                                    text: '새로운 습관의 ',
-                                    style: TextStyle(
-                                      color: kPurpleColor,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: '이름',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      TextSpan(text: '을 입력해 주세요!')
-                                    ]),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  FittedBox(
+                                      fit: BoxFit.fitHeight,
+                                      child: Text(
+                                        triggersRough[index][0],
+                                        style: txtstyle,
+                                      )),
+                                ],
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8.5,
-                          ),
-                          Container(
-                            height: 25,
-                            width: 264,
-                            child: AnimatedBuilder(
-                                animation: offsetAnimation,
-                                builder: (buildContext, child) {
-                                  return Container(
-                                    padding: EdgeInsets.only(
-                                        left: offsetAnimation.value + 15.0,
-                                        right: 15.0 - offsetAnimation.value),
-                                    child: CupertinoTextField(
-                                      decoration: new BoxDecoration(
-                                        color: Colors.white,
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 5),
-                                      style: TextStyle(
-                                          color: kPurpleColor,
-                                          textBaseline: null),
-                                      controller: textFieldController,
-//                                    decoration: new InputDecoration(
-//                                      fillColor: Colors.white,
-//                                      filled: true,
-//                                      focusedBorder: OutlineInputBorder(
-//                                        borderSide: BorderSide(color: kPurpleColor, width: 1.0),
-//                                      ),
-//                                      enabledBorder: OutlineInputBorder(
-//                                        borderSide: BorderSide(color: kPurpleColor.withOpacity(0.5), width: 1.0),
-//                                      ),
-//                                    ),
-                                    ),
-                                  );
-                                }),
-                          )
-                        ],
+                            );
+                          },
+                          childCount: triggersRough.length,
+                        ),
                       ),
                     ),
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          color: kPurpleColor),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              textFieldController.clear();
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              child: Center(
-                                  child: Text(
-                                "취소",
-                                style: TextStyle(
-                                    fontSize: kSubTitleFontSize,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFDE711E)),
-                              )),
-                            ),
-                          )),
-                          Container(
-                              height: 14,
-                              width: 4,
-                              child: VerticalDivider(
-                                width: 4,
-                                color: kIvoryColor,
-                              )),
-                          Expanded(
-                              child: GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    if (textFieldController.text
-                                        .trim()
-                                        .isNotEmpty) {
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        triggersRough.insert(
-                                            triggersRough.length - 1, [
-                                          textFieldController.text,
-                                          'assets/images/icon/custom_coin.svg',
-                                          true
-                                        ]);
-                                      });
-                                      textFieldController.clear();
-                                    } else if (textFieldController.text
-                                        .trim()
-                                        .isEmpty) {
-                                      controller.forward(from: 0.0);
-                                    }
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      "저장",
-                                      style: TextStyle(
-                                          fontSize: kSubTitleFontSize,
-                                          color: kIvoryColor,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )))
-                        ],
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: kIvoryColor,
+                        height: 80,
+                        width: size.width,
                       ),
                     ),
                   ],
-                )),
-          );
-        });
+                ),
+                BottomPositionedBox("다음", () {
+                  bool isAnythingSelected = false;
+                  for (var i = 0; i < triggersRough.length; i++) {
+                    if (triggersRough[i][2] == true) {
+                      isAnythingSelected = true;
+                      break;
+                    }
+                  }
+                  if (isAnythingSelected == false) {
+                    Fluttertoast.showToast(
+                        msg: "최소 한개를 선택해주세요!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.grey,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TriggerNext(
+                                selectedItem:
+                                    _selectedListGenerator(triggersRough))));
+                  }
+                })
+              ],
+            ),
+          ));
+        }
+      }
+    );
   }
 
   bool _isExisting(String name) {
