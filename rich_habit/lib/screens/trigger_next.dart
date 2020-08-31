@@ -21,6 +21,7 @@ class TriggerNext extends StatefulWidget {
 
 class _TriggerNextState extends State<TriggerNext> {
   List<List<dynamic>> _selectedItem;
+
   DateTime _dateTime = DateTime.now();
 
   PageController pageController;
@@ -64,7 +65,7 @@ class _TriggerNextState extends State<TriggerNext> {
               child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   child:
-                      Icon(Icons.arrow_back_ios, color: kPurpleColor, size: 25),
+                  Icon(Icons.arrow_back_ios, color: kPurpleColor, size: 25),
                   onTap: () {
                     if (index == 0) {
                       Navigator.of(context).pop();
@@ -117,7 +118,7 @@ class _TriggerNextState extends State<TriggerNext> {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(25)),
+                    BorderRadius.vertical(top: Radius.circular(25)),
                     color: kWhiteIvoryColor),
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 100),
                 child: ListView(
@@ -168,40 +169,41 @@ class _TriggerNextState extends State<TriggerNext> {
         ),
         (index == _selectedItem.length - 1)
             ? BottomPositionedBox("완료", () {
-                triggerList[index] = ({
-                  "name": _selectedItem[index][0],
-                  "iconURL": _selectedItem[index][1],
-                  "isTrigger": true
-                });
-                context.read<HabitProvider>().triggerHabit.clear();
-                for (var i = 0; i < triggerList.length; i++) {
-                  context.read<HabitProvider>().addHabit(Habit(
-                      addedTimeID: DateTime.now(),
-                      isTrigger: triggerList[i]['isTrigger'],
-                      name: triggerList[i]['name'],
-                      iconURL: triggerList[i]['iconURL'],
-                      price: 0,
-                      usualAmount: 1,
-                      usualIsWeek: false,
-                      goalIsWeek: false,
-                      goalAmount: 1));
-                  context
-                      .read<UserProvider>()
-                      .setAlarmData(triggerList[i]['name'], _dateTime);
-                }
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainPage()));
-              })
+          triggerList[index] = ({
+            "name": _selectedItem[index][0],
+            "iconURL": _selectedItem[index][1],
+            "isTrigger": true
+          });
+          DateTime _today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+          context.read<HabitProvider>().triggerHabit[_today].clear();
+          for (var i = 0; i < triggerList.length; i++) {
+            context.read<HabitProvider>().addHabit(Habit(
+                addedTimeID: DateTime.now(),
+                isTrigger: triggerList[i]['isTrigger'],
+                name: triggerList[i]['name'],
+                iconURL: triggerList[i]['iconURL'],
+                price: 0,
+                usualAmount: 1,
+                usualIsWeek: false,
+                goalIsWeek: false,
+                goalAmount: 1));
+            context
+                .read<UserProvider>()
+                .setAlarmData(triggerList[i]['name'], _dateTime);
+          }
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MainPage()));
+        })
             : BottomPositionedBox("다음", () {
-                triggerList[index] = ({
-                  "name": _selectedItem[index][0],
-                  "iconURL": _selectedItem[index][1],
-                  "isTrigger": true
-                });
-                pageController.animateToPage(index + 1,
-                    duration: Duration(milliseconds: 400),
-                    curve: Curves.easeInOut); //다음페이지로 넘어가는거 만들면됨
-              })
+          triggerList[index] = ({
+            "name": _selectedItem[index][0],
+            "iconURL": _selectedItem[index][1],
+            "isTrigger": true
+          });
+          pageController.animateToPage(index + 1,
+              duration: Duration(milliseconds: 400),
+              curve: Curves.easeInOut); //다음페이지로 넘어가는거 만들면됨
+        })
       ],
     );
   }
