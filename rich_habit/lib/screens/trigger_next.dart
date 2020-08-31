@@ -12,8 +12,8 @@ import '../user_provider.dart';
 
 class TriggerNext extends StatefulWidget {
   final List<List<dynamic>> selectedItem;
-
-  TriggerNext({@required this.selectedItem});
+  final bool isFirst;
+  TriggerNext({@required this.selectedItem,this.isFirst});
 
   @override
   State createState() => _TriggerNextState();
@@ -174,8 +174,10 @@ class _TriggerNextState extends State<TriggerNext> {
             "iconURL": _selectedItem[index][1],
             "isTrigger": true
           });
-          DateTime _today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-          context.read<HabitProvider>().triggerHabit[_today].clear();
+          if(!widget.isFirst){
+            DateTime _today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+            context.read<HabitProvider>().triggerHabit[_today].clear();
+          }
           for (var i = 0; i < triggerList.length; i++) {
             context.read<HabitProvider>().addHabit(Habit(
                 addedTimeID: DateTime.now(),

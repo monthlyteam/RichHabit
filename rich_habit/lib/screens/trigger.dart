@@ -107,8 +107,8 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
                       pinned: true,
                       floating: false,
                       delegate: TriggerPageHeader(
-                        minExtent: 260.0,
-                        maxExtent: 300.0,
+                        minExtent: 280.0,
+                        maxExtent: 330.0,
                         isFirst: widget.isFirst
                       ),
                     ),
@@ -124,7 +124,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
                           mainAxisSpacing: 10.0,
                           crossAxisSpacing: 10.0,
                           //                            childAspectRatio: size.width-40/(190+15), // 가로/세로
-                          childAspectRatio: 0.85, // 가로/세로
+                          childAspectRatio: ((size.width-10)/2)/208, // 가로/세로
                         ),
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
@@ -192,12 +192,15 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  FittedBox(
-                                      fit: BoxFit.fitHeight,
-                                      child: Text(
-                                        triggersRough[index][0],
-                                        style: txtstyle,
-                                      )),
+                                  Container(
+                                    height:18,
+                                    child: FittedBox(
+                                        fit: BoxFit.fitHeight,
+                                        child: Text(
+                                          triggersRough[index][0],
+                                          style: txtstyle,
+                                        )),
+                                  ),
                                 ],
                               ),
                             );
@@ -238,7 +241,8 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
                         MaterialPageRoute(
                             builder: (context) => TriggerNext(
                                 selectedItem:
-                                    _selectedListGenerator(triggersRough))));
+                                    _selectedListGenerator(triggersRough), isFirst:widget.isFirst)));
+
                   }
                 })
               ],
