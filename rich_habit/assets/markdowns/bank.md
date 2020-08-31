@@ -1,5 +1,5 @@
 # 적금
-![Flutter logo](resource:assets/images/bank.jpg)
+![Flutter logo](resource:assets/images/bank.png)
 
 
 적금은 소비자가 가장 쉽게 접근할 수 있는 금융상품입니다. 각 은행에서 적금 계좌를 개설하고 매 달 돈을 만기까지 꾸준히 입금하면 이자를 챙길 수 있습니다. 

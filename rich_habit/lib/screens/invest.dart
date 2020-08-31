@@ -17,7 +17,7 @@ class _InvestState extends State<Invest> {
       'summary':
           '적금은 소비자가 가장 쉽게 접근할 수 있는 금융상품입니다. 각 은행에서 적금 계좌를 개설하고 매 달 돈을 만기까지 꾸준히 입금하면 이자를 챙길 수 있습니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/bank.jpg',
+      'imagepath': 'assets/images/bank.png',
       'mdpath': 'assets/markdowns/bank.md'
     },
     {
@@ -25,14 +25,14 @@ class _InvestState extends State<Invest> {
       'summary':
           '주식 투자는 기업의 분할된 소유권에 대해 투자하는 방법입니다. 주식은 코스피, 코스닥과 같은 주식 시장에서 거래할 수 있는데, 증권사에 계좌를 만들면 각 증권사를 통해 매매할 수 있습니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/stock.jpg',
+      'imagepath': 'assets/images/stock.png',
       'mdpath': 'assets/markdowns/stock.md'
     },
     {
       'title': '채권',
       'summary': '채권은 기업이나 국가에 돈을 빌려주고, 그 이자를 벌어들이는 방식입니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/bond.jpg',
+      'imagepath': 'assets/images/bond.png',
       'mdpath': 'assets/markdowns/bond.md'
     },
     {
@@ -40,14 +40,14 @@ class _InvestState extends State<Invest> {
       'summary':
           '펀드는 주식과 채권에 대해 간접적으로 투자하는 방법입니다. 다수의 인원으로부터 투자 자금을 모으고 그 돈으로 다시 금융 상품에 투자하여 그 수익을 각 투자자들에게 분배합니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/fund.jpg',
+      'imagepath': 'assets/images/fund.png',
       'mdpath': 'assets/markdowns/fund.md'
     },
     {
       'title': 'ETF',
       'summary': 'ETF는 주식시장에서 주식처럼 주식 시장에서 자유롭게 매수, 매매할 수 있는 펀드입니다.',
       'author': 'RichHabitTeam',
-      'imagepath': 'assets/images/etf.jpg',
+      'imagepath': 'assets/images/etf.png',
       'mdpath': 'assets/markdowns/etf.md'
     },
   ];

@@ -1,5 +1,5 @@
 # 채권
-![Flutter logo](resource:assets/images/bond.jpg)
+![Flutter logo](resource:assets/images/bond.png)
 
 
 채권은 기업이나 국가에 돈을 빌려주고, 그 이자를 벌어들이는 방식입니다. 

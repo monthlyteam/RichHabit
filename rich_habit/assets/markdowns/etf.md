@@ -1,5 +1,5 @@
 # ETF(Exchange Traded Fund)
-![Flutter logo](resource:assets/images/etf.jpg)
+![Flutter logo](resource:assets/images/etf.png)
 
 
 ETF는 주식시장에서 주식처럼 주식 시장에서 자유롭게 매수, 매매할 수 있는 펀드입니다. ETF는 펀드에 비해 거래가 자유롭기 때문에 현금화에 유리하고, 주식처럼 거래하지만 소액을 보유하더라도 분산 투자가 되는 효과가 있습니다. 또한 주식처럼 월, 분기마다 배당을 받을 수도 있어 배당 투자에도 좋습니다. 
