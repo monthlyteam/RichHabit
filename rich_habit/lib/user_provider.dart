@@ -43,6 +43,12 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  void setisAlarm(bool isAlarm) {
+    this.isAlarm = isAlarm;
+    saveAlarmData();
+    notifyListeners();
+  }
+
   void setisInit(bool isInit) {
     this.isInit = isInit;
     saveAlarmData();
@@ -95,7 +101,7 @@ class UserProvider with ChangeNotifier {
     await _flutterLocalNotificationsPlugin.showDailyAtTime(
       0,
       'RichHabit',
-      '$pushTriggerName 할 시간입니다!!',
+      '$pushTriggerName 할 시간입니다!! 오늘의 소비습관을 기록해 봐요.',
       time,
       detail,
       payload: 'trigger',
