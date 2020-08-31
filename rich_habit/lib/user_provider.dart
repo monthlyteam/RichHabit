@@ -26,7 +26,7 @@ class UserProvider with ChangeNotifier {
       this.pushTriggerName,
       this.pushAlarmTime,
       this.isAlarm,
-      this.isInit}) {}
+      this.isInit});
 
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -35,7 +35,8 @@ class UserProvider with ChangeNotifier {
     this.pushTriggerName = name;
     this.pushAlarmTime = time;
 
-    await saveAlarmData();
+    saveAlarmData();
+    notifyListeners();
 
     if (isAlarm && !isInit) {
       await setTriggerNotification();
@@ -47,7 +48,7 @@ class UserProvider with ChangeNotifier {
     saveAlarmData();
   }
 
-  Future<void> saveAlarmData() async {
+  void saveAlarmData() {
     Map<String, dynamic> map = {
       'name': pushTriggerName,
       'time': pushAlarmTime.toString(),
@@ -56,7 +57,6 @@ class UserProvider with ChangeNotifier {
     };
     String json = jsonEncode(map);
     sp.setString('alarm', json);
-    notifyListeners();
   }
 
   void resetNotification() async {
