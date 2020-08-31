@@ -6,6 +6,7 @@ import 'package:richhabit/screens/set_alarm.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/user_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
 
 class Profile extends StatelessWidget {
@@ -113,7 +114,9 @@ class Profile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
 //                _buildContents(Icons.lock, "계정", () {}),
-                _buildContents(Icons.cached, "문의 & 피드백", () {}),
+                _buildContents(Icons.cached, "메일문의 & 피드백", () {
+                  _launchURL(context);
+                }),
 //                Container( //컨텐츠별 간격
 //                  color: kPurpleColor,
 //                  height: 25,
@@ -162,6 +165,29 @@ class Profile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _launchURL(BuildContext context) async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'youngthly@gmail.com',
+      query:
+          'subject=리치해빗 문의 메일 &body=문의 내용을 아래에 써서 보내주시면 최대한 빠르게 응답하겠습니다!\n >',
+    );
+
+    var url = params.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(
+          msg: "기본 메일 앱이 없습니다 \n문의 메일: youngthly@gmail.com",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   _buildContents(IconData icon, String text, VoidCallback callback,
