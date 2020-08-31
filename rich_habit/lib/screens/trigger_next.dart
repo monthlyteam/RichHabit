@@ -26,15 +26,6 @@ class _TriggerNextState extends State<TriggerNext> {
 
   PageController pageController;
   List<Map> triggerList;
-  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  Future onNotiSelected(String payload) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MainPage()),
-    );
-  }
 
   @override
   void initState() {
@@ -42,24 +33,6 @@ class _TriggerNextState extends State<TriggerNext> {
     this._selectedItem = widget.selectedItem;
     triggerList = new List<Map>(_selectedItem.length);
     pageController = new PageController();
-
-    //Android
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    //IOS
-    var initializationSettingsIOS = IOSInitializationSettings();
-    var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-
-    // _flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    //for when notification pressed.
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onNotiSelected);
-
-    context
-        .read<UserProvider>()
-        .setNotiPlugin(_flutterLocalNotificationsPlugin);
   }
 
   @override

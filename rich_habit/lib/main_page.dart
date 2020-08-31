@@ -34,17 +34,15 @@ class _MainPageState extends State<MainPage> {
       FlutterLocalNotificationsPlugin();
 
   Future onNotiSelected(String payload) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MainPage()),
-    );
+    print("noti");
+    setState(() {
+      _selectedIndex = 0;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    var current = DateTime.now();
-    _current = DateTime(current.year, current.month, current.day);
 
     //Android
     var initializationSettingsAndroid =
@@ -61,6 +59,14 @@ class _MainPageState extends State<MainPage> {
     context
         .read<UserProvider>()
         .setNotiPlugin(_flutterLocalNotificationsPlugin);
+
+    if (context.read<UserProvider>().isInit) {
+      context.read<UserProvider>().setTriggerNotification();
+      context.read<UserProvider>().setisInit(false);
+    }
+
+    var current = DateTime.now();
+    _current = DateTime(current.year, current.month, current.day);
   }
 
   @override
@@ -204,13 +210,13 @@ class _MainPageState extends State<MainPage> {
     final double height = 60.0;
     final double iconSize = 24.0;
     var barItem = [
-      FABBottomAppBarItem(iconData: Icons.question_answer),
+      FABBottomAppBarItem(iconData: Icons.monetization_on),
       FABBottomAppBarItem(iconData: Icons.insert_chart),
       FABBottomAppBarItem(
         iconData: Icons.chrome_reader_mode,
       ),
       FABBottomAppBarItem(
-        iconData: Icons.person,
+        iconData: Icons.settings,
       ),
     ];
     Widget _buildTabItem({

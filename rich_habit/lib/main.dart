@@ -36,6 +36,7 @@ void main() async {
   String pushTriggerName;
   DateTime pushAlarmTime;
   bool isAlarm = true;
+  bool isInit = true;
 
   if (!isEmpty) {
     List<Habit> habitList = [];
@@ -81,8 +82,11 @@ void main() async {
         Map<String, dynamic> json = jsonDecode(sp.getString('alarm'));
 
         pushTriggerName = json['name'];
-        pushAlarmTime = DateTime.parse(json['time']);
+        try {
+          pushAlarmTime = DateTime.parse(json['time']);
+        } catch (Exception) {}
         isAlarm = json['isalarm'] == 1 ? true : false;
+        isInit = json['isinit'] == 1 ? true : false;
       }
     }
   }
@@ -104,7 +108,8 @@ void main() async {
                   sp: sp,
                   pushTriggerName: pushTriggerName,
                   pushAlarmTime: pushAlarmTime,
-                  isAlarm: isAlarm)),
+                  isAlarm: isAlarm,
+                  isInit: isInit)),
         ],
         child: MyApp(isEmpty),
       ),

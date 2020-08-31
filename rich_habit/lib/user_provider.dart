@@ -12,7 +12,8 @@ class UserProvider with ChangeNotifier {
   String title = '';
   String profileURL = '';
 
-  bool isAlarm = false;
+  bool isAlarm = true;
+  bool isInit; //when navigated from InitNext true
   String pushTriggerName;
   DateTime pushAlarmTime;
 
@@ -21,27 +22,37 @@ class UserProvider with ChangeNotifier {
   SharedPreferences sp;
 
   UserProvider(
-      {this.sp, this.pushTriggerName, this.pushAlarmTime, this.isAlarm}) {}
+      {this.sp,
+      this.pushTriggerName,
+      this.pushAlarmTime,
+      this.isAlarm,
+      this.isInit}) {}
 
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  void setAlarmData(String name, DateTime time) {
+  void setAlarmData(String name, DateTime time) async {
     this.pushTriggerName = name;
     this.pushAlarmTime = time;
 
-    saveAlarmData();
+    await saveAlarmData();
 
-    if (isAlarm) {
-      setTriggerNotification();
+    if (isAlarm && !isInit) {
+      await setTriggerNotification();
     }
   }
 
-  void saveAlarmData() {
+  void setisInit(bool isInit) {
+    this.isInit = isInit;
+    saveAlarmData();
+  }
+
+  Future<void> saveAlarmData() async {
     Map<String, dynamic> map = {
       'name': pushTriggerName,
       'time': pushAlarmTime.toString(),
-      'isAlarm': isAlarm ? 1 : 0
+      'isalarm': isAlarm ? 1 : 0,
+      'isinit': isInit ? 1 : 0
     };
     String json = jsonEncode(map);
     sp.setString('alarm', json);
@@ -72,7 +83,10 @@ class UserProvider with ChangeNotifier {
 
     var android = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High);
+        importance: Importance.Max,
+        priority: Priority.High,
+        icon: '@mipmap/ic_launcher',
+        largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'));
 
     var ios = IOSNotificationDetails();
     var detail = NotificationDetails(android, ios);
@@ -86,5 +100,13 @@ class UserProvider with ChangeNotifier {
       detail,
       payload: 'trigger',
     );
+  }
+
+  void resetData() {
+    isAlarm = true;
+    isInit = true;
+    pushTriggerName = "";
+    pushAlarmTime = null;
+    resetNotification();
   }
 }
