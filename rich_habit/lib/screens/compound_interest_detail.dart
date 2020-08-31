@@ -17,13 +17,14 @@ class CompoundInterestDetail extends StatefulWidget {
 class _CompoundInterestDetailState extends State<CompoundInterestDetail> {
   DateTime addedTimeID;
   Map<int, dynamic> history;
+  bool isEmpty = false;
 
   @override
   void initState() {
     super.initState();
     addedTimeID = widget.addedTimeID;
     history = context.read<HabitProvider>().showCumSavingHistory(addedTimeID);
-    print(history);
+    if (history.length == 0) isEmpty = true;
   }
 
   @override
@@ -83,12 +84,32 @@ class _CompoundInterestDetailState extends State<CompoundInterestDetail> {
             ),
             width: double.infinity,
             height: 80,
-            child: SingleChildScrollView(
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _showHitsoryList(history)),
-            ),
+            child: isEmpty
+                ? Center(
+                    child: Opacity(
+                      opacity: 0.3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/question_mark.png',
+                            height: 100.0,
+                          ),
+                          Text(
+                            "정보가 충분히 쌓이지 않았습니다.",
+                            style:
+                                TextStyle(color: kPurpleColor, fontSize: 14.0),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _showHitsoryList(history)),
+                  ),
           ))
         ]));
   }
