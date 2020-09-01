@@ -518,24 +518,64 @@ class _InitNextState extends State<InitNext> {
                 border: Border(top: BorderSide(
                     color: Colors.grey.withOpacity(0.4), width: 1))
             ),
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                nodes[currentNode].unfocus();
-                if (currentNode == 0 || currentNode == 1) {
-                  FocusScope.of(context).requestFocus(nodes[currentNode + 1]);
-                }
-              },
-              child: Container(
-                  height: 20,
-                  child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: (currentNode == 2) ? Text(
-                      "완료", style: TextStyle(color: Colors.blueAccent),) : Text(
-                        "다음", style: TextStyle(color: Colors.blueAccent)),
-                  )
-              ),
+            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+            child: Row(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    if (currentNode != 0) {
+                      nodes[currentNode].unfocus();
+                      FocusScope.of(context).requestFocus(nodes[currentNode - 1]);
+                    }
+                  },
+                  child: Container(
+                      height: 34,
+                      child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: Icon(Icons.keyboard_arrow_up,color: (currentNode == 0) ? Colors.grey.withOpacity(0.6):Colors.blueAccent)
+                      )
+                  ),
+                ),
+                SizedBox(width: 5,),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    if (currentNode != 2) {
+                      nodes[currentNode].unfocus();
+                      FocusScope.of(context).requestFocus(nodes[currentNode + 1]);
+                    }
+                  },
+                  child: Container(
+                      height: 34,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: Icon(Icons.keyboard_arrow_down,color: (currentNode == 2) ? Colors.grey.withOpacity(0.6):Colors.blueAccent)
+                      )
+                  ),
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    nodes[currentNode].unfocus();
+                    if (currentNode == 0 || currentNode == 1) {
+                      FocusScope.of(context).requestFocus(nodes[currentNode + 1]);
+                    }
+                  },
+                  child: Container(
+                      height: 20,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: (currentNode == 2) ? Text(
+                          "완료", style: TextStyle(color: Colors.blueAccent),) : Text(
+                            "다음", style: TextStyle(color: Colors.blueAccent)),
+                      )
+                  ),
+                ),
+              ],
             ),
           ),
         );
