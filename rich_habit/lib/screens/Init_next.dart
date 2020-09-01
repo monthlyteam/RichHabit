@@ -11,6 +11,7 @@ import 'package:richhabit/screens/trigger.dart';
 import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
+import 'dart:io' show Platform;
 
 
 class InitNext extends StatefulWidget{
@@ -46,10 +47,24 @@ class _InitNextState extends State<InitNext> {
     controllers = List<TextEditingController>.generate(3, (index) => TextEditingController());
     nodes = List<FocusNode>.generate(3, (index) => FocusNode());
     pageController = new PageController();
+
+
   }
 
   @override
   Widget build(BuildContext context) {
+    nodes[0].addListener(() {
+      setState(() {
+      });
+    });
+    nodes[1].addListener(() {
+      setState(() {
+      });
+    });
+    nodes[2].addListener(() {
+      setState(() {
+      });
+    });
     keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -260,7 +275,7 @@ class _InitNextState extends State<InitNext> {
                                                     vertical: 2, horizontal: 2),
                                                 textAlign: TextAlign.end,
                                                 maxLines: 1,
-                                                keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                                                keyboardType: TextInputType.numberWithOptions(),
                                                 focusNode: nodes[0],
                                               ),
                                             ),
@@ -302,7 +317,7 @@ class _InitNextState extends State<InitNext> {
                                                 padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                                 textAlign: TextAlign.end,
                                                 keyboardType:
-                                                TextInputType.numberWithOptions(signed: true, decimal: true),
+                                                TextInputType.numberWithOptions(),
                                               ),
                                             ),
                                             SizedBox(
@@ -412,7 +427,7 @@ class _InitNextState extends State<InitNext> {
                                                     padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
                                                     textAlign: TextAlign.end,
                                                     keyboardType:
-                                                    TextInputType.numberWithOptions(signed: true, decimal: true),
+                                                    TextInputType.numberWithOptions(),
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -484,7 +499,47 @@ class _InitNextState extends State<InitNext> {
 
   Widget bottomWidget(int index){
     if(keyboardIsOpened) {
-      return Container();
+      if(Platform.isIOS) {
+        int currentNode = 0;
+        if (nodes[0].hasFocus)
+          currentNode = 0;
+        else if (nodes[1].hasFocus)
+          currentNode = 1;
+        else if (nodes[2].hasFocus) currentNode = 2;
+        return Positioned(
+          bottom: 0,
+          height: 40,
+          child: Container(
+            alignment: Alignment.centerRight,
+            width: size.width,
+            height: 40,
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(240, 240, 240, 1),
+                border: Border(top: BorderSide(
+                    color: Colors.grey.withOpacity(0.4), width: 1))
+            ),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                nodes[currentNode].unfocus();
+                if (currentNode == 0 || currentNode == 1) {
+                  FocusScope.of(context).requestFocus(nodes[currentNode + 1]);
+                }
+              },
+              child: Container(
+                  height: 20,
+                  child: FittedBox(
+                    fit: BoxFit.fitHeight,
+                    child: (currentNode == 2) ? Text(
+                      "완료", style: TextStyle(color: Colors.blueAccent),) : Text(
+                        "다음", style: TextStyle(color: Colors.blueAccent)),
+                  )
+              ),
+            ),
+          ),
+        );
+      }else return Container();
     }else{
       return (index != _selectedItem.length-1)
           ?BottomPositionedBox("다음",(){
@@ -518,7 +573,7 @@ class _InitNextState extends State<InitNext> {
 
             }else{
               Fluttertoast.showToast(
-                  msg: "목표치를 확인해주세요",
+                  msg: "목표치는 평소보다 작게 설정해주세요",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
@@ -600,7 +655,7 @@ class _InitNextState extends State<InitNext> {
               }
             }else{//목표량이 현재보다 높은경우
               Fluttertoast.showToast(
-                  msg: "목표치를 확인해주세요",
+                  msg: "목표치는 평소보다 작게 설정해주세요",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
