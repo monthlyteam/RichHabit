@@ -6,6 +6,7 @@ import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/main_page.dart';
 import 'package:richhabit/screens/init.dart';
 import 'package:provider/provider.dart';
+import 'package:richhabit/screens/start_guide.dart';
 import 'package:richhabit/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -138,7 +139,7 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.notoSansTextTheme(
         Theme.of(context).textTheme,
       )),
-      home: isEmpty ? Init(isFirst: true) : MainPage(),
+      home: isEmpty ? StartGuide() : MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }
