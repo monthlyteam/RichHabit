@@ -162,62 +162,61 @@ class _CompoundInterestState extends State<CompoundInterest> {
                       ),
                     ),
                     SizedBox(height: kPadding),
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: kIvoryColor,
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "누적 절약 금액",
-                                style: TextStyle(
-                                    fontSize: 16.0, color: kPurpleColor),
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                "${context.watch<HabitProvider>().cumSaving(addedTimeID).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    color: kDarkPurpleColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CompoundInterestDetail(
+                                  addedTimeID: addedTimeID)),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: kIvoryColor,
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.asset(
-                                  "assets/images/coin_1.png",
-                                  height: 52.0,
+                                Text(
+                                  "누적 절약 금액",
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: kPurpleColor),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CompoundInterestDetail(
-                                                  addedTimeID: addedTimeID)),
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: kPurpleColor,
-                                  ),
-                                )
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  "${context.watch<HabitProvider>().cumSaving(addedTimeID).toStringAsFixed(1).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원",
+                                  style: TextStyle(
+                                      fontSize: 25.0,
+                                      color: kDarkPurpleColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
-                          )
-                        ],
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/coin_1.png",
+                                    height: 52.0,
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: kPurpleColor,
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: kPadding),
@@ -329,7 +328,8 @@ class _CompoundInterestState extends State<CompoundInterest> {
                             height: 100.0,
                           ),
                           Text(
-                            "정보가 충분히 쌓이지 않았습니다.",
+                            "정보를 일주일 이상 쌓아주세요!",
+                            textAlign: TextAlign.center,
                             style:
                                 TextStyle(color: kPurpleColor, fontSize: 14.0),
                           )
@@ -720,7 +720,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                     child: Text(
                                       "취소",
                                       style: TextStyle(
-                                          fontSize: kSubTitleFontSize,
+                                          fontSize: 16.0,
                                           fontWeight: FontWeight.bold,
                                           color: kIvoryColor),
                                     ),
@@ -746,7 +746,7 @@ class _CompoundInterestState extends State<CompoundInterest> {
                                   child: Text(
                                     "저장",
                                     style: TextStyle(
-                                        fontSize: kSubTitleFontSize,
+                                        fontSize: 16.0,
                                         color: kSelectedColor,
                                         fontWeight: FontWeight.bold),
                                   ),
