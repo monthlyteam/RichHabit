@@ -24,17 +24,17 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
   List<List<dynamic>> triggersRough =
       new List<List<dynamic>>(); //[name,icon,isSelceted]
 
-  final textFieldController = TextEditingController();
-  AnimationController controller;
-  Animation<double> offsetAnimation;
+//  final textFieldController = TextEditingController();
+//  AnimationController controller;
+//  Animation<double> offsetAnimation;
   TextStyle txtstyle;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500),
-        vsync: this); //SingleTickerProviderSteteMixin과 연관이있는데 잘모르겠다
+//    controller = AnimationController(
+//        duration: const Duration(milliseconds: 500),
+//        vsync: this); //SingleTickerProviderSteteMixin과 연관이있는데 잘모르겠다
 
     txtstyle = TextStyle(color: kPurpleColor, fontWeight: FontWeight.w600);
     for (var i = 0; i < triggerList.length; i++) {
@@ -60,14 +60,14 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
   }
   @override
   Widget build(BuildContext context) {
-    offsetAnimation = Tween(begin: 0.0, end: 10.0)
-        .chain(CurveTween(curve: Curves.elasticIn))
-        .animate(controller)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              controller.reverse();
-            }
-          });
+//    offsetAnimation = Tween(begin: 0.0, end: 10.0)
+//        .chain(CurveTween(curve: Curves.elasticIn))
+//        .animate(controller)
+//          ..addStatusListener((status) {
+//            if (status == AnimationStatus.completed) {
+//              controller.reverse();
+//            }
+//          });
     return FutureBuilder<double>(
       future: whenNotZero(Stream<double>.periodic(Duration(microseconds: 100),
               (x) => MediaQuery.of(context).size.width)),
@@ -176,7 +176,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
                                                         "assets/images/check.svg",
                                                         height: 80,
                                                         width: 80,
-                                                        color: kPurpleColor),
+                                                        color: kWhiteIvoryColor),
                                                     height: 160,
                                                     width: 160,
                                                     alignment: Alignment.center)

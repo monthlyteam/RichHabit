@@ -55,6 +55,13 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
     //}
   }
 
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   Future<double> whenNotZero(Stream<double> source) async {
     await for (double value in source) {
       if (value > 0) return value;
