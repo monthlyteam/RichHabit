@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/habit.dart';
 import 'package:richhabit/habit_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +23,9 @@ class Init extends StatefulWidget {
 }
 
 class InitState extends State<Init> with SingleTickerProviderStateMixin {
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<List<dynamic>> habitsRough =
       new List<List<dynamic>>(); //[name,icon,isSelceted]
 
@@ -31,7 +33,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> offsetAnimation;
   TextStyle txtstyle;
-
+  List<bool> _isSnackbarActive = new List<bool>.generate(2, (index) => false); // 0: 하나이상! 1: 이미추가!
   @override
   void initState() {
     super.initState();
@@ -91,6 +93,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
             return Scaffold(
               backgroundColor: kPurpleColor,
               resizeToAvoidBottomPadding: true,
+              key: scaffoldKey,
               body: WillPopScope(
                 onWillPop: () async {
                   widget.isFirst
@@ -144,15 +147,19 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                                             if (_isExisting(
                                                 habitName: habitsRough[index]
                                                     [0])) {
-                                              Fluttertoast.showToast(
-                                                  msg: "이미 추가한 습관이에요.",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.CENTER,
-                                                  timeInSecForIosWeb: 1,
-                                                  backgroundColor: Colors.grey,
-                                                  textColor: Colors.white,
-                                                  fontSize: 16.0);
+                                              if(_isSnackbarActive[1] == false) {
+                                                scaffoldKey.currentState.removeCurrentSnackBar();
+                                                _isSnackbarActive[1] = true;
+                                                scaffoldKey.currentState.showSnackBar(
+                                                    SnackBar(
+                                                      content: Text("이미 추가한 습관이에요!"),
+                                                      duration: Duration(milliseconds: 1300),
+                                                    )
+                                                ).closed
+                                                    .then((SnackBarClosedReason reason) {
+                                                  _isSnackbarActive[1] = false;
+                                                });
+                                              }
                                             } else {
                                               setState(() {
                                                 habitsRough[index][2] =
@@ -241,14 +248,19 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                         }
                       }
                       if (isAnythingSelected == false) {
-                        Fluttertoast.showToast(
-                            msg: "새로운 습관을 한개 이상 선택해주세요!",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
+                        if(_isSnackbarActive[0] == false) {
+                          scaffoldKey.currentState.removeCurrentSnackBar();
+                          _isSnackbarActive[0] = true;
+                          scaffoldKey.currentState.showSnackBar(
+                              SnackBar(
+                                content: Text("새로운 습관을 한개 이상 선택해주세요!"),
+                                duration: Duration(milliseconds: 1300),
+                              )
+                          ).closed
+                              .then((SnackBarClosedReason reason) {
+                            _isSnackbarActive[0] = false;
+                          });
+                        }
                       } else {
                         Navigator.push(
                             context,
@@ -258,7 +270,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                                         _selectedListGenerator(habitsRough),
                                     isFirst: widget.isFirst)));
                       }
-                    })
+                    }),
                   ],
                 ),
               ),
