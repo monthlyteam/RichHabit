@@ -37,6 +37,8 @@ class _InitNextState extends State<InitNext> {
   List<FocusNode> nodes;
   bool whereFocus=false; //false:1번 true: 2번
   bool keyboardIsOpened;
+  bool _isSnackbarActive=false;
+
   @override
   void initState() {
     super.initState();
@@ -462,7 +464,7 @@ class _InitNextState extends State<InitNext> {
               ),
             ],
           ),
-          bottomWidget(index)
+          bottomWidget(index,context)
         ],
       ),
     );
@@ -497,7 +499,7 @@ class _InitNextState extends State<InitNext> {
     else return 0;
   }
 
-  Widget bottomWidget(int index){
+  Widget bottomWidget(int index, context){
     if(keyboardIsOpened) {
       if(Platform.isIOS) {
         int currentNode = 0;
@@ -585,15 +587,21 @@ class _InitNextState extends State<InitNext> {
           ?BottomPositionedBox("다음",(){
         try{
           if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
-            Fluttertoast.showToast(
-                msg: "정보를 빠짐없이 입력해주세요!",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.grey,
-                textColor: Colors.white,
-                fontSize: 16.0
-            );
+            if(_isSnackbarActive ==false) {
+              _isSnackbarActive = true;
+              Scaffold
+                  .of(context)
+                  .showSnackBar(
+                    SnackBar(
+                      content: Text("정보를 빠짐없이 입력해주세요!"),
+                      duration: Duration(milliseconds: 1000),
+                    )
+                  )
+                  .closed
+                  .then((SnackBarClosedReason reason) {
+                _isSnackbarActive = false;
+              });
+            }
           }else if(int.parse(controllers[0].text)>0&&double.parse(controllers[1].text)>0&&int.parse(controllers[2].text)>=0){//목표량이 현재보다 낮은경우
             if (int.parse(controllers[2].text)*pow(7,boolToInt(!goalIsWeek))<int.parse(controllers[0].text)*pow(7,boolToInt(!usualIsWeek))) {
               habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": double.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
@@ -612,28 +620,41 @@ class _InitNextState extends State<InitNext> {
               }
 
             }else{
-              Fluttertoast.showToast(
-                  msg: "목표치는 평소보다 작게 설정해주세요",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey,
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
+              if(_isSnackbarActive ==false) {
+                _isSnackbarActive = true;
+                Scaffold
+                    .of(context)
+                    .showSnackBar(
+                    SnackBar(
+                      content: Text("목표치는 평소보다 작게 설정해주세요."),
+                      duration: Duration(milliseconds: 1000),
+                    )
+                )
+                    .closed
+                    .then((SnackBarClosedReason reason) {
+                  _isSnackbarActive = false;
+                });
+              }
             }
           }else{
-            Fluttertoast.showToast(
-                msg: "올바른 값을 입력해주세요!",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.grey,
-                textColor: Colors.white,
-                fontSize: 16.0
-            );
+            if(_isSnackbarActive ==false) {
+              _isSnackbarActive = true;
+              Scaffold
+                  .of(context)
+                  .showSnackBar(
+                  SnackBar(
+                    content: Text("올바른 값을 입력해주세요!"),
+                    duration: Duration(milliseconds: 1000),
+                  )
+              )
+                  .closed
+                  .then((SnackBarClosedReason reason) {
+                _isSnackbarActive = false;
+              });
+            }
           }
         }catch(e){
+          print(e);
           Fluttertoast.showToast(
               msg: "올바른 값을 입력해주세요.\n숫자만 입력할 수 있습니다.",
               toastLength: Toast.LENGTH_SHORT,
