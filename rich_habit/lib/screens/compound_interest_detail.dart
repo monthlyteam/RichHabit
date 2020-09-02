@@ -96,7 +96,7 @@ class _CompoundInterestDetailState extends State<CompoundInterestDetail> {
                             height: 100.0,
                           ),
                           Text(
-                            "정보가 충분히 쌓이지 않았습니다.",
+                            "정보를 1주일 이상 쌓아주세요!",
                             style:
                                 TextStyle(color: kPurpleColor, fontSize: 14.0),
                           )

@@ -60,6 +60,12 @@ class _BuyOrNotState extends State<BuyOrNot> {
       });
 
   void _calPrice() {
+    if (maintainController.text.toString() == "") {
+      maintainController.text = "0";
+    }
+    if (priceController.text.toString() == "") {
+      priceController.text = "0";
+    }
     double money = double.parse(priceController.text.toString());
     double maintainInput = double.parse(maintainController.text.toString());
     double maintain;
@@ -94,10 +100,15 @@ class _BuyOrNotState extends State<BuyOrNot> {
 
   @override
   Widget build(BuildContext context) {
+    priceController.selection = TextSelection.fromPosition(
+        TextPosition(offset: priceController.text.length));
+    maintainController.selection = TextSelection.fromPosition(
+        TextPosition(offset: maintainController.text.length));
     return SafeArea(
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
+          _calPrice();
         },
         child: CustomScrollView(
           slivers: [
@@ -291,6 +302,11 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                                 fontWeight: FontWeight.bold),
                                             onChanged: (text) {
                                               if (text != null) {
+                                                if (text.startsWith("0")) {
+                                                  priceController.text =
+                                                      priceController.text
+                                                          .split("0")[1];
+                                                }
                                                 _calPrice();
                                               }
                                             },
@@ -425,9 +441,15 @@ class _BuyOrNotState extends State<BuyOrNot> {
                                                 fontWeight: FontWeight.bold),
                                             onChanged: (text) {
                                               if (text != null) {
+                                                if (text.startsWith("0")) {
+                                                  maintainController.text =
+                                                      maintainController.text
+                                                          .split("0")[1];
+                                                }
                                                 _calPrice();
                                               }
                                             },
+                                            onSubmitted: (_) => _calPrice(),
                                           ),
                                         ),
                                       ),
