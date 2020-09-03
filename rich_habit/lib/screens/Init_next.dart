@@ -11,7 +11,8 @@ import 'package:richhabit/widget/bottom_positioned_box.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 import 'dart:io' show Platform;
-import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
+
 
 class InitNext extends StatefulWidget{
 
@@ -27,6 +28,8 @@ class _InitNextState extends State<InitNext>{
 
   List<List<dynamic>> _selectedItem; //List<String,String>
 
+  AutoScrollController _autoScrollController = new AutoScrollController();
+
   PageController pageController;
   List<TextEditingController> controllers = new List<TextEditingController>(3);
   bool goalIsWeek = false;
@@ -34,7 +37,6 @@ class _InitNextState extends State<InitNext>{
   List<Map> habitList;
   List<int> saveAmount;
   List<FocusNode> nodes;
-  bool whereFocus=false; //false:1번 true: 2번
   bool keyboardIsOpened;
   List<bool> _isSnackbarActive = new List<bool>.generate(4, (index) => false); //빠작올숫
 
@@ -60,21 +62,44 @@ class _InitNextState extends State<InitNext>{
     super.dispose();
   }
 
+  Future _scrollToIndex(int index) async {
+    await _autoScrollController.scrollToIndex(index,
+        preferPosition: AutoScrollPosition.end);
+  }
+
+  Widget _wrapScrollTag({int index, Widget child}) {
+    return AutoScrollTag(
+      key: ValueKey(index),
+      controller: _autoScrollController,
+      index: index,
+      child: child,
+      highlightColor: Colors.black.withOpacity(0.1),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    nodes[0].addListener(() {
-      setState(() {
-      });
+    nodes[0].addListener(()async {
+      if(nodes[0].hasFocus) {
+        _scrollToIndex(0);
+        setState(() {});
+      }
     });
-    nodes[1].addListener(() {
-      setState(() {
-      });
+    nodes[1].addListener(()async {
+      if(nodes[1].hasFocus) {
+        _scrollToIndex(1);
+        setState(() {});
+      }
     });
-    nodes[2].addListener(() {
-      setState(() {
-      });
+    nodes[2].addListener(()async {
+      if(nodes[2].hasFocus) {
+        _scrollToIndex(2);
+        setState(() {});
+      }
     });
+
     keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
+
     return Container(
       color: Colors.red,
       height: 500,
@@ -121,6 +146,7 @@ class _InitNextState extends State<InitNext>{
           children: [
             CustomScrollView(
               shrinkWrap: false,
+              controller: _autoScrollController,
               slivers: <Widget>[
                 SliverToBoxAdapter(
                   child: Container(
@@ -355,9 +381,12 @@ class _InitNextState extends State<InitNext>{
                                               SizedBox(
                                                 width: 5.5,height: 1,
                                               ),
-                                              Text(
-                                                "원",
-                                                style: TextStyle(color: kPurpleColor),
+                                              _wrapScrollTag(
+                                                index: 0,
+                                                child: Text(
+                                                  "원",
+                                                  style: TextStyle(color: kPurpleColor),
+                                                ),
                                               )
                                             ],
                                           ),
@@ -465,9 +494,12 @@ class _InitNextState extends State<InitNext>{
                                                   SizedBox(
                                                     width: 5.5,height: 1,
                                                   ),
-                                                  Text(
-                                                    "회",
-                                                    style: TextStyle(color: kPurpleColor),
+                                                  _wrapScrollTag(
+                                                    index:1,
+                                                    child: Text(
+                                                      "회",
+                                                      style: TextStyle(color: kPurpleColor),
+                                                    ),
                                                   )
                                                 ],
                                               ),
@@ -481,6 +513,9 @@ class _InitNextState extends State<InitNext>{
                                           children: [
                                             Text("\"평소 습관 보다 매달 약 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                             Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
+                                            _wrapScrollTag(
+                                                index: 2,
+                                                child: SizedBox(height:100))
                                           ],
                                         )
                                     ),
@@ -531,7 +566,7 @@ class _InitNextState extends State<InitNext>{
 
   Widget bottomWidget(int index,BuildContext context){
     if(keyboardIsOpened) {
-      if(true) {
+      if(Platform.isIOS) {
         int currentNode = 0;
         if (nodes[0].hasFocus)
           currentNode = 0;
