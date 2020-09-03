@@ -174,6 +174,7 @@ class _TriggerNextState extends State<TriggerNext> {
             "iconURL": _selectedItem[index][1],
             "isTrigger": true
           });
+          pageController.dispose();
           if(!widget.isFirst){
             DateTime _today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
             context.read<HabitProvider>().triggerHabit[_today].clear();
