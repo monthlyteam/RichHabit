@@ -43,6 +43,7 @@ flutter:
     - assets/images/icon/
     - assets/markdowns/
     - assets/example/
+    - assets/guide/
   # fonts:
   #   - family: Schyler
   #     fonts:
