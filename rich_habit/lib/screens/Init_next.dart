@@ -23,7 +23,7 @@ class InitNext extends StatefulWidget{
   State createState() => _InitNextState();
 }
 
-class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin{
+class _InitNextState extends State<InitNext>{
 
   List<List<dynamic>> _selectedItem; //List<String,String>
 
@@ -37,8 +37,6 @@ class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin
   bool whereFocus=false; //false:1번 true: 2번
   bool keyboardIsOpened;
   List<bool> _isSnackbarActive = new List<bool>.generate(4, (index) => false); //빠작올숫
-  AnimationController _controller;
-  Animation _animation;
 
   @override
   void initState() {
@@ -51,13 +49,11 @@ class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin
     nodes = List<FocusNode>.generate(3, (index) => FocusNode());
     pageController = new PageController();
 
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
 
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     for(var i = 0 ; i < nodes.length;i++) nodes[i].dispose();
     for(var i = 0 ; i < controllers.length;i++) controllers[i].dispose();
     pageController.dispose();
@@ -66,34 +62,15 @@ class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    _animation = Tween(begin: 80.0, end: 0.0).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
     nodes[0].addListener(() {
-      if (nodes[0].hasFocus) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
       setState(() {
       });
     });
     nodes[1].addListener(() {
-      if (nodes[1].hasFocus) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
       setState(() {
       });
     });
     nodes[2].addListener(() {
-      if (nodes[2].hasFocus) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
       setState(() {
       });
     });
@@ -178,7 +155,6 @@ class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin
                                   }),
                             ),
                           ),
-                          SizedBox(height: _animation.value/3),
                           Center(
                             child: Container(
                               height: 150,
@@ -214,7 +190,6 @@ class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin
                               width: 33,
                             ),
                           ),
-                          SizedBox(height: _animation.value/3),
                           SizedBox(
                             height: 8,
                           ),
@@ -227,7 +202,6 @@ class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: _animation.value/3),
                                     Text(
                                       "①  평소 얼마나 자주 소비하십니까?",
                                       style: TextStyle(color: kPurpleColor, fontSize: 16),
@@ -507,7 +481,6 @@ class _InitNextState extends State<InitNext> with SingleTickerProviderStateMixin
                                           children: [
                                             Text("\"평소 습관 보다 매달 약 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                             Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
-                                            SizedBox(height: 80.0-_animation.value,)
                                           ],
                                         )
                                     ),
