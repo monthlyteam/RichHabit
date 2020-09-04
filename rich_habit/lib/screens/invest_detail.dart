@@ -16,8 +16,10 @@ class InvestDetail extends StatelessWidget {
         appBar: AppBar(
             title: Text(
               title,
-              style:
-                  TextStyle(color: kPurpleColor, fontSize: kSubTitleFontSize),
+              style: TextStyle(
+                  color: kPurpleColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
             backgroundColor: kIvoryColor,
             brightness: Brightness.light,
@@ -25,7 +27,6 @@ class InvestDetail extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               color: kPurpleColor,
-              iconSize: kSubTitleFontSize,
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -42,6 +43,20 @@ class InvestDetail extends StatelessWidget {
                       controller: markdownController,
                       selectable: true,
                       shrinkWrap: false,
+                      styleSheet:
+                          MarkdownStyleSheet.fromTheme(Theme.of(context))
+                              .copyWith(
+                                  p: Theme.of(context)
+                                      .textTheme
+                                      .body1
+                                      .copyWith(fontSize: 18.0),
+                                  h3: Theme.of(context)
+                                      .textTheme
+                                      .body1
+                                      .copyWith(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: kDarkPurpleColor)),
                     )),
               );
             } else {

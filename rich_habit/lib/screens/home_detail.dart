@@ -33,7 +33,6 @@ class HomeDetail extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      iconSize: 20.0,
                       padding: EdgeInsets.all(0.0),
                       icon: Icon(
                         Icons.arrow_back_ios,

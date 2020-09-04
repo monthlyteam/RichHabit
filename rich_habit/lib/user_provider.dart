@@ -88,7 +88,7 @@ class UserProvider with ChangeNotifier {
         Time(pushAlarmTime.hour, pushAlarmTime.minute, pushAlarmTime.second);
 
     var android = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
+        'RichHabit', '습관 입력하기', '주기적으로 습관 입력을 돕는 알림입니다.',
         importance: Importance.Max,
         priority: Priority.High,
         icon: '@mipmap/ic_launcher',
