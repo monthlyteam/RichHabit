@@ -59,6 +59,7 @@ class _InitNextState extends State<InitNext>{
     for(var i = 0 ; i < nodes.length;i++) nodes[i].dispose();
     for(var i = 0 ; i < controllers.length;i++) controllers[i].dispose();
     pageController.dispose();
+    _autoScrollController.dispose();
     super.dispose();
   }
 
@@ -123,11 +124,13 @@ class _InitNextState extends State<InitNext>{
   }
 
   WillPopScope _buildPage(BuildContext context, int index) {
+    _autoScrollController = new AutoScrollController();
     return WillPopScope(
       onWillPop: () async{
         if (index == 0) {
           Navigator.of(context).pop();
         } else {
+          _autoScrollController.dispose();
           pageController.animateToPage(index - 1,
               duration: Duration(milliseconds: 400),
               curve: Curves.easeInOut);
@@ -652,6 +655,7 @@ class _InitNextState extends State<InitNext>{
     }else{
       return (index != _selectedItem.length-1)
           ?BottomPositionedBox("다음",(){
+            _autoScrollController.dispose();
         try{
           if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
             if(_isSnackbarActive[0] ==false) {
