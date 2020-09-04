@@ -217,14 +217,14 @@ class _InitNextState extends State<InitNext>{
                             ),
                           ),
                           SizedBox(
-                            height: 8,
+                            height: 20,
                           ),
                           Container(
                               decoration: BoxDecoration(
                                   borderRadius:
                                   BorderRadius.vertical(top: Radius.circular(25)),
                                   color: kWhiteIvoryColor),
-                              padding: EdgeInsets.fromLTRB(20, 10, 20, 100),
+                              padding: EdgeInsets.fromLTRB(20, 30, 20, 100),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -350,7 +350,7 @@ class _InitNextState extends State<InitNext>{
                                           SizedBox(
                                             height: 19.5,
                                           ),
-                                          Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 12),),
+                                          Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 14),),
                                           SizedBox(height: 2.5,),
                                           Row(
                                             children: [
@@ -515,8 +515,10 @@ class _InitNextState extends State<InitNext>{
                                             Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                             _wrapScrollTag(
                                                 index: 2,
-                                                child: SizedBox(height:100))
+                                                child: SizedBox(height:50)),
+                                            SizedBox(height: 50,),
                                           ],
+
                                         )
                                     ),
                                   ]
@@ -566,7 +568,7 @@ class _InitNextState extends State<InitNext>{
 
   Widget bottomWidget(int index,BuildContext context){
     if(keyboardIsOpened) {
-      if(Platform.isIOS) {
+      if(Platform.isAndroid) {
         int currentNode = 0;
         if (nodes[0].hasFocus)
           currentNode = 0;
