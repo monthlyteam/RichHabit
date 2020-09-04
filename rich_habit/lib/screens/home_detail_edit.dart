@@ -214,6 +214,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                                   fontSize: 12.0,
                                                   color: kPurpleColor),
                                             ),
+                                            SizedBox(height: 2.0),
                                             Row(
                                               children: [
                                                 widget.habit.goalIsWeek
@@ -307,6 +308,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                                 )
                                               ],
                                             ),
+                                            SizedBox(height: 2.0),
                                             Row(
                                               children: [
                                                 Container(
@@ -352,6 +354,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                                                   fontSize: 12.0,
                                                   color: kPurpleColor),
                                             ),
+                                            SizedBox(height: 2.0),
                                             Row(
                                               children: [
                                                 Container(
@@ -394,7 +397,7 @@ class _HomeDetailEditState extends State<HomeDetailEdit> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 60.0)
+                          SizedBox(height: 80.0)
                         ],
                       ),
                     ],
