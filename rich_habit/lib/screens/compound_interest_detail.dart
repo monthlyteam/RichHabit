@@ -38,7 +38,6 @@ class _CompoundInterestDetailState extends State<CompoundInterestDetail> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               color: kWhiteIvoryColor,
-              iconSize: kSubTitleFontSize,
               onPressed: () {
                 Navigator.pop(context);
               },

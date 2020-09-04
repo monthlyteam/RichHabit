@@ -32,11 +32,9 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
           backgroundColor: kPurpleColor,
           elevation: 0,
           leading: IconButton(
-              padding: EdgeInsets.only(left: 20),
               icon: Icon(
                 Icons.arrow_back_ios,
                 color: kWhiteIvoryColor,
-                size: 25,
               ),
               onPressed: () {
                 Navigator.of(context).pop();
