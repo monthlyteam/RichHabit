@@ -39,7 +39,7 @@ class _StartGuideState extends State<StartGuide> {
             children: <Widget>[
               Center(
                 child: Container(
-                  height: 500,
+                  height: 0.6 * MediaQuery.of(context).size.height,
                   child: PageView.builder(
                     onPageChanged: (value) {
                       setState(() {
@@ -48,8 +48,8 @@ class _StartGuideState extends State<StartGuide> {
                     },
                     itemCount: splashData.length,
                     itemBuilder: (context, index) => SplashContent(
-                      image: splashData[index]["image"],
-                      text: splashData[index]['text'],
+                      image: splashData[currentPage]["image"],
+                      text: splashData[currentPage]['text'],
                     ),
                   ),
                 ),
@@ -77,7 +77,7 @@ class _StartGuideState extends State<StartGuide> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: kDarkPurpleColor.withOpacity(0.2),
+                            color: kDarkPurpleColor.withOpacity(0.1),
                             spreadRadius: 1,
                             blurRadius: 15,
                             offset: Offset(0, 3), // changes position of shadow
@@ -96,7 +96,7 @@ class _StartGuideState extends State<StartGuide> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: kDarkPurpleColor,
-                                  fontSize: 15),
+                                  fontSize: 16),
                             ),
                             SizedBox(
                               width: 10,
@@ -127,6 +127,13 @@ class _StartGuideState extends State<StartGuide> {
 
   AnimatedContainer buildDot({int index}) {
     return AnimatedContainer(
+      child: FlatButton(
+        onPressed: () {
+          setState(() {
+            currentPage = index;
+          });
+        },
+      ),
       duration: Duration(milliseconds: 200),
       margin: EdgeInsets.only(right: 5),
       height: 6,
@@ -152,14 +159,14 @@ class SplashContent extends StatelessWidget {
     return Column(
       children: <Widget>[
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         Text(
           text,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: kDarkPurpleColor,
-            fontSize: 15,
+            fontSize: 16,
           ),
         ),
         SizedBox(
@@ -169,7 +176,7 @@ class SplashContent extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: kPurpleColor.withOpacity(0.2),
+                color: kPurpleColor.withOpacity(0.3),
                 spreadRadius: 5,
                 blurRadius: 15,
                 offset: Offset(0, 3), // changes position of shadow
@@ -178,6 +185,7 @@ class SplashContent extends StatelessWidget {
           ),
           child: Image.asset(
             image,
+            height: 0.45 * MediaQuery.of(context).size.height,
           ),
         ),
       ],
