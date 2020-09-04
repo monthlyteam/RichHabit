@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/main_page.dart';
-import 'package:richhabit/screens/init.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/screens/start_guide.dart';
 import 'package:richhabit/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'habit.dart';
-import 'test_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,17 +17,6 @@ void main() async {
   //Get Local DB data
   SharedPreferences sp = await SharedPreferences.getInstance();
   bool isEmpty = sp.getKeys().isEmpty;
-
-  //TODO: Must Erase Test Data after debug
-  //testData Start
-  /*
-  if (isEmpty) {
-    TestData.getData(sp);
-    isEmpty = false;
-    print("main.dart: Get TestData DONE");
-  }
-   */
-  //TestData Finish
 
   Map<DateTime, List<Habit>> triggerHabit = Map<DateTime, List<Habit>>();
   Map<DateTime, List<Habit>> dailyHabit = Map<DateTime, List<Habit>>();

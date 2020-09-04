@@ -34,8 +34,9 @@ class _StartGuideState extends State<StartGuide> {
     return Scaffold(
       backgroundColor: kWhiteIvoryColor,
       body: WillPopScope(
-        onWillPop: (){
+        onWillPop: () {
           exit(0);
+          return;
         },
         child: SafeArea(
           child: SizedBox(
@@ -86,7 +87,8 @@ class _StartGuideState extends State<StartGuide> {
                               color: kDarkPurpleColor.withOpacity(0.1),
                               spreadRadius: 1,
                               blurRadius: 15,
-                              offset: Offset(0, 3), // changes position of shadow
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
                             ),
                           ],
                         ),
@@ -135,6 +137,7 @@ class _StartGuideState extends State<StartGuide> {
   AnimatedContainer buildDot({int index}) {
     return AnimatedContainer(
       child: FlatButton(
+        child: Container(),
         onPressed: () {
           setState(() {
             currentPage = index;

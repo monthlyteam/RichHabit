@@ -40,7 +40,7 @@ class Profile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 50),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -265,7 +265,7 @@ class Profile extends StatelessWidget {
                                 child: Text(
                                   "정말 초기화 하시겠습니까?",
                                   style: TextStyle(
-                                      color: kPurpleColor,
+                                    color: kPurpleColor,
                                   ),
                                 ),
                               ),
@@ -338,7 +338,8 @@ class Profile extends StatelessWidget {
                                         fontSize: 16.0);
                                     Navigator.of(context, rootNavigator: true)
                                         .pushReplacement(MaterialPageRoute(
-                                            builder: (context) => StartGuide()));
+                                            builder: (context) =>
+                                                StartGuide()));
                                   },
                                   child: Center(
                                     child: Text(
