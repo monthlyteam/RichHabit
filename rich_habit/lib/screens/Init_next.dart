@@ -568,7 +568,7 @@ class _InitNextState extends State<InitNext>{
 
   Widget bottomWidget(int index,BuildContext context){
     if(keyboardIsOpened) {
-      if(Platform.isAndroid) {
+      if(Platform.isIOS) {
         int currentNode = 0;
         if (nodes[0].hasFocus)
           currentNode = 0;
