@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:richhabit/constants.dart';
 import 'package:richhabit/screens/init.dart';
@@ -31,94 +33,99 @@ class _StartGuideState extends State<StartGuide> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kWhiteIvoryColor,
-      body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: Container(
-                  height: 0.6 * MediaQuery.of(context).size.height,
-                  child: PageView.builder(
-                    onPageChanged: (value) {
-                      setState(() {
-                        currentPage = value;
-                      });
-                    },
-                    itemCount: splashData.length,
-                    itemBuilder: (context, index) => SplashContent(
-                      image: splashData[currentPage]["image"],
-                      text: splashData[currentPage]['text'],
+      body: WillPopScope(
+        onWillPop: (){
+          exit(0);
+        },
+        child: SafeArea(
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                  child: Container(
+                    height: 0.6 * MediaQuery.of(context).size.height,
+                    child: PageView.builder(
+                      onPageChanged: (value) {
+                        setState(() {
+                          currentPage = value;
+                        });
+                      },
+                      itemCount: splashData.length,
+                      itemBuilder: (context, index) => SplashContent(
+                        image: splashData[currentPage]["image"],
+                        text: splashData[currentPage]['text'],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      splashData.length,
-                      (index) => buildDot(index: index),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: kDarkPurpleColor.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 15,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
+                SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        splashData.length,
+                        (index) => buildDot(index: index),
                       ),
-                      child: FlatButton(
-                        color: kIvoryColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "리치해빗 바로 시작하기",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: kDarkPurpleColor,
-                                  fontSize: 16),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              Icons.arrow_forward,
-                              size: 19,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: Container(
+                        height: 60,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: kDarkPurpleColor.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 15,
+                              offset: Offset(0, 3), // changes position of shadow
                             ),
                           ],
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Init(isFirst: true)));
-                        },
+                        child: FlatButton(
+                          color: kIvoryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "리치해빗 바로 시작하기",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: kDarkPurpleColor,
+                                    fontSize: 16),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                Icons.arrow_forward,
+                                size: 19,
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Init(isFirst: true)));
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

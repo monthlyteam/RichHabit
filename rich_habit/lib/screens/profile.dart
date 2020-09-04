@@ -5,6 +5,7 @@ import 'package:richhabit/screens/init.dart';
 import 'package:richhabit/screens/set_alarm.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';
+import 'package:richhabit/screens/start_guide.dart';
 import 'package:richhabit/user_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
@@ -337,9 +338,7 @@ class Profile extends StatelessWidget {
                                         fontSize: 16.0);
                                     Navigator.of(context, rootNavigator: true)
                                         .pushReplacement(MaterialPageRoute(
-                                            builder: (context) => Init(
-                                                  isFirst: true,
-                                                )));
+                                            builder: (context) => StartGuide()));
                                   },
                                   child: Center(
                                     child: Text(

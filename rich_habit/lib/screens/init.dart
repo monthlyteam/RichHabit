@@ -104,10 +104,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
               body: WillPopScope(
                 onWillPop: () async {
                   widget.isFirst
-                      ? Future.delayed(const Duration(milliseconds: 1000), () {
-                          SystemChannels.platform
-                              .invokeMethod('SystemNavigator.pop');
-                        })
+                      ? Navigator.of(context).pop()
                       : Navigator.of(context, rootNavigator: true)
                           .pushReplacement(MaterialPageRoute(
                               builder: (context) => MainPage()));
@@ -496,22 +493,20 @@ class InitPageHeader implements SliverPersistentHeaderDelegate {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
 //              SizedBox(height: 50),
-          isFirst
-              ? SizedBox(
-                  height: 40,
-                )
-              : Padding(
-                  padding: EdgeInsets.only(top: 60, bottom: 10),
-                  child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      child:
-                          Icon(Icons.arrow_back_ios, color: txtColor, size: 25),
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushReplacement(MaterialPageRoute(
-                                builder: (context) => MainPage()));
-                      }),
-                ),
+          Padding(
+            padding: EdgeInsets.only(top: 60, bottom: 10),
+            child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child:
+                    Icon(Icons.arrow_back_ios, color: txtColor, size: 25),
+                onTap: () {
+                  isFirst
+                      ?Navigator.of(context).pop()
+                      :Navigator.of(context, rootNavigator: true)
+                      .pushReplacement(MaterialPageRoute(
+                          builder: (context) => MainPage()));
+                }),
+          ),
           SizedBox(
             height: 20,
           ),
