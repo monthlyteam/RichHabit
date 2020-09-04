@@ -42,6 +42,19 @@ class InvestDetail extends StatelessWidget {
                       controller: markdownController,
                       selectable: true,
                       shrinkWrap: false,
+                      styleSheet:
+                          MarkdownStyleSheet.fromTheme(Theme.of(context))
+                              .copyWith(
+                                  p: Theme.of(context)
+                                      .textTheme
+                                      .body1
+                                      .copyWith(fontSize: 15.0),
+                                  h3: Theme.of(context)
+                                      .textTheme
+                                      .body1
+                                      .copyWith(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold)),
                     )),
               );
             } else {
