@@ -27,8 +27,8 @@ dependencies:
   shared_preferences: ^0.5.8
   google_fonts: ^1.1.0
   url_launcher: ^5.5.0
-  keyboard_actions: ^3.3.0
   scroll_to_index: ^1.0.6
+  flutter_keyboard_visibility: ^3.2.2
 
 dev_dependencies:
   flutter_test:

@@ -57,7 +57,6 @@ class _SetAlarmPageState extends State<SetAlarmPage> {
             } else {
               context.read<UserProvider>().resetNotification();
             }
-            print("aaaa");
           }, 0),
         ],
       ),

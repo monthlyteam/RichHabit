@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-  import 'package:richhabit/constants.dart';
+import 'package:richhabit/constants.dart';
 import 'package:richhabit/habit.dart';
 import 'package:richhabit/habit_provider.dart';
 import 'package:richhabit/main_page.dart';
@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'dart:math';
 import 'dart:io' show Platform;
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 
 class InitNext extends StatefulWidget{
@@ -28,7 +29,7 @@ class _InitNextState extends State<InitNext>{
 
   List<List<dynamic>> _selectedItem; //List<String,String>
 
-  AutoScrollController _autoScrollController = new AutoScrollController();
+  List<AutoScrollController> _autoScrollController;
 
   PageController pageController;
   List<TextEditingController> controllers = new List<TextEditingController>(3);
@@ -39,18 +40,42 @@ class _InitNextState extends State<InitNext>{
   List<FocusNode> nodes;
   bool keyboardIsOpened;
   List<bool> _isSnackbarActive = new List<bool>.generate(4, (index) => false); //빠작올숫
+  bool _keyboardState;
 
   @override
   void initState() {
     super.initState();
     this._selectedItem = widget.selectedItem;
     habitList = new List<Map>(_selectedItem.length);
-
     saveAmount = List<int>.generate(_selectedItem.length, (index) => 0);
     controllers = List<TextEditingController>.generate(3, (index) => TextEditingController());
     nodes = List<FocusNode>.generate(3, (index) => FocusNode());
     pageController = new PageController();
 
+    _autoScrollController = new List<AutoScrollController>.generate(_selectedItem.length, (index) => new AutoScrollController());
+
+    _keyboardState = KeyboardVisibility.isVisible;
+    KeyboardVisibility.onChange.listen((bool visible) {
+      if(visible){
+        if(nodes[0].hasFocus){
+          Future.delayed(Duration(milliseconds: 200),(){_scrollToIndex(0);});
+        }else if(nodes[1].hasFocus) {
+          Future.delayed(Duration(milliseconds: 200),(){_scrollToIndex(1);});
+        }else if(nodes[2].hasFocus){
+          Future.delayed(Duration(milliseconds: 200),(){_scrollToIndex(2);});
+        }
+
+      }
+    });
+
+    for(var i  =0;i<3;i++) {
+      nodes[i].addListener(() {
+        if(nodes[i].hasFocus) {
+          _scrollToIndex(i);
+          setState(() {});
+        }
+      });
+    }
 
   }
 
@@ -59,78 +84,48 @@ class _InitNextState extends State<InitNext>{
     for(var i = 0 ; i < nodes.length;i++) nodes[i].dispose();
     for(var i = 0 ; i < controllers.length;i++) controllers[i].dispose();
     pageController.dispose();
-    _autoScrollController.dispose();
+    for(var i = 0 ; i < _autoScrollController.length;i++) _autoScrollController[i].dispose();
+
     super.dispose();
   }
 
   Future _scrollToIndex(int index) async {
-    await _autoScrollController.scrollToIndex(index,
+    await _autoScrollController[pageController.page.toInt()].scrollToIndex(index,
         preferPosition: AutoScrollPosition.end);
   }
 
-  Widget _wrapScrollTag({int index, Widget child}) {
-    return AutoScrollTag(
-      key: ValueKey(index),
-      controller: _autoScrollController,
-      index: index,
-      child: child,
-      highlightColor: Colors.black.withOpacity(0.1),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    nodes[0].addListener(()async {
-      if(nodes[0].hasFocus) {
-        _scrollToIndex(0);
-        setState(() {});
-      }
-    });
-    nodes[1].addListener(()async {
-      if(nodes[1].hasFocus) {
-        _scrollToIndex(1);
-        setState(() {});
-      }
-    });
-    nodes[2].addListener(()async {
-      if(nodes[2].hasFocus) {
-        _scrollToIndex(2);
-        setState(() {});
-      }
-    });
+
 
     keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
-    return Container(
-      color: Colors.red,
-      height: 500,
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: kIvoryColor,
-        body: PageView(
-          children: [
-            PageView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, position) {
-                return _buildPage(context, position);
-              },
-              itemCount: _selectedItem.length,
-              controller: pageController,
-            ),
-          ],
-        ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: kIvoryColor,
+      body: PageView(
+        children: [
+          PageView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, position) {
+              return _buildPage(context, position);
+            },
+            itemCount: _selectedItem.length,
+            controller: pageController,
+          ),
+        ],
       ),
     );
   }
 
   WillPopScope _buildPage(BuildContext context, int index) {
-    _autoScrollController = new AutoScrollController();
     return WillPopScope(
       onWillPop: () async{
         if (index == 0) {
           Navigator.of(context).pop();
         } else {
-          _autoScrollController.dispose();
           pageController.animateToPage(index - 1,
               duration: Duration(milliseconds: 400),
               curve: Curves.easeInOut);
@@ -149,7 +144,7 @@ class _InitNextState extends State<InitNext>{
           children: [
             CustomScrollView(
               shrinkWrap: false,
-              controller: _autoScrollController,
+              controller: _autoScrollController[index],
               slivers: <Widget>[
                 SliverToBoxAdapter(
                   child: Container(
@@ -220,14 +215,14 @@ class _InitNextState extends State<InitNext>{
                             ),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 8,
                           ),
                           Container(
                               decoration: BoxDecoration(
                                   borderRadius:
                                   BorderRadius.vertical(top: Radius.circular(25)),
                                   color: kWhiteIvoryColor),
-                              padding: EdgeInsets.fromLTRB(20, 30, 20, 100),
+                              padding: EdgeInsets.fromLTRB(20, 10, 20, 100),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -319,26 +314,25 @@ class _InitNextState extends State<InitNext>{
                                                 width: 152,
                                                 height: 23,
                                                 child : CupertinoTextField(
-                                                    maxLength: 2,
-                                                    onChanged: (text){
-                                                      setState(() {
-                                                        _onInputChanged(index);
-                                                        },
-                                                      );
-                                                    },
-                                                    onEditingComplete: (){
-                                                      nodes[0].unfocus();
-                                                      FocusScope.of(context).requestFocus(nodes[1]);
-                                                    },
-                                                    textInputAction: TextInputAction.next,
-                                                    controller: controllers[0],
-                                                    padding: EdgeInsets.symmetric(
-                                                        vertical: 2, horizontal: 2),
-                                                    textAlign: TextAlign.end,
-                                                    maxLines: 1,
-                                                    keyboardType: TextInputType.numberWithOptions(),
-                                                    focusNode: nodes[0],
-                                                  ),
+                                                  maxLength: 2,
+                                                  onChanged: (text){
+                                                    setState(() {
+                                                      _onInputChanged(index);
+                                                    },);
+                                                  },
+                                                  onEditingComplete: (){
+                                                    nodes[0].unfocus();
+                                                    FocusScope.of(context).requestFocus(nodes[1]);
+                                                  },
+                                                  textInputAction: TextInputAction.next,
+                                                  controller: controllers[0],
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 2, horizontal: 2),
+                                                  textAlign: TextAlign.end,
+                                                  maxLines: 1,
+                                                  keyboardType: TextInputType.numberWithOptions(),
+                                                  focusNode: nodes[0],
+                                                ),
                                               ),
                                               SizedBox(
                                                 width: 5.5,
@@ -353,45 +347,46 @@ class _InitNextState extends State<InitNext>{
                                           SizedBox(
                                             height: 19.5,
                                           ),
-                                          Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 14),),
+                                          Text("${_selectedItem[index][0]} 1회당 얼마를 쓰십니까?",style: TextStyle(color: kPurpleColor,fontSize: 12),),
                                           SizedBox(height: 2.5,),
                                           Row(
-                                            children: [
-                                              Container(
-                                                width: 152,
-                                                height: 23,
-                                                child: CupertinoTextField(
-                                                  maxLength: 8,
-                                                  focusNode: nodes[1],
-                                                  controller: controllers[1],
-                                                  onChanged: (text){
-                                                    setState(() {
-                                                      _onInputChanged(index);
-                                                    },
-                                                    );
-                                                  },onEditingComplete: (){
-                                                  nodes[1].unfocus();
-                                                  FocusScope.of(context).requestFocus(nodes[2]);}
-                                                  ,
-                                                  textInputAction: TextInputAction.next,
-                                                  maxLines: 1,
-                                                  padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
-                                                  textAlign: TextAlign.end,
-                                                  keyboardType:
-                                                  TextInputType.numberWithOptions(),
+                                              children: [
+                                                Container(
+                                                  width: 152,
+                                                  height: 23,
+                                                  child: CupertinoTextField(
+                                                    maxLength: 8,
+                                                    focusNode: nodes[1],
+                                                    controller: controllers[1],
+                                                    onChanged: (text){
+                                                      setState(() {
+                                                        _onInputChanged(index);
+                                                      },
+                                                      );
+                                                    },onEditingComplete: (){
+                                                    nodes[1].unfocus();
+                                                    FocusScope.of(context).requestFocus(nodes[2]);},
+                                                    textInputAction: TextInputAction.next,
+                                                    maxLines: 1,
+                                                    padding: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+                                                    textAlign: TextAlign.end,
+                                                    keyboardType:
+                                                    TextInputType.numberWithOptions(),
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: 5.5,height: 1,
-                                              ),
-                                              _wrapScrollTag(
-                                                index: 0,
-                                                child: Text(
-                                                  "원",
-                                                  style: TextStyle(color: kPurpleColor),
+                                                SizedBox(
+                                                  width: 5.5,height: 1,
                                                 ),
-                                              )
-                                            ],
+                                                AutoScrollTag(
+                                                  key: ValueKey(0),
+                                                  controller: _autoScrollController[index],
+                                                  index: 0,
+                                                  child: Text(
+                                                    "원",
+                                                    style: TextStyle(color: kPurpleColor),
+                                                  ),
+                                                ),
+                                              ]
                                           ),
                                         ],
                                       ),
@@ -418,8 +413,7 @@ class _InitNextState extends State<InitNext>{
                                                         Icon(Icons.radio_button_unchecked,color: Colors.grey,size: 16,)
                                                             :goalIsWeek?
                                                         Icon(Icons.radio_button_unchecked,color: kPurpleColor,size: 16,)
-                                                            :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,)
-                                                        ,
+                                                            :Icon(Icons.radio_button_checked,color: kPurpleColor,size: 16,),
                                                         SizedBox(width:5.5,height:1),
                                                         Text("매일", style: TextStyle(
                                                             color: usualIsWeek?Colors.grey:kPurpleColor,
@@ -497,13 +491,15 @@ class _InitNextState extends State<InitNext>{
                                                   SizedBox(
                                                     width: 5.5,height: 1,
                                                   ),
-                                                  _wrapScrollTag(
-                                                    index:1,
+                                                  AutoScrollTag(
+                                                    key: ValueKey(1),
+                                                    controller: _autoScrollController[index],
+                                                    index: 1,
                                                     child: Text(
                                                       "회",
                                                       style: TextStyle(color: kPurpleColor),
                                                     ),
-                                                  )
+                                                  ),
                                                 ],
                                               ),
                                               SizedBox(height: 50),
@@ -516,12 +512,15 @@ class _InitNextState extends State<InitNext>{
                                           children: [
                                             Text("\"평소 습관 보다 매달 약 ${saveAmount[index].toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원을",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
                                             Text("절약하는 목표입니다.\"",style: TextStyle(fontSize: 18, color: kPurpleColor,fontWeight: FontWeight.w100 ),),
-                                            _wrapScrollTag(
-                                                index: 2,
-                                                child: SizedBox(height:50)),
-                                            SizedBox(height: 50,),
+                                            AutoScrollTag(
+                                              key: ValueKey(2),
+                                              controller: _autoScrollController[index],
+                                              index: 2,
+                                              child: SizedBox(
+                                                height: 100,
+                                              ),
+                                            ),
                                           ],
-
                                         )
                                     ),
                                   ]
@@ -571,7 +570,7 @@ class _InitNextState extends State<InitNext>{
 
   Widget bottomWidget(int index,BuildContext context){
     if(keyboardIsOpened) {
-      if(Platform.isIOS||Platform.isAndroid) {
+      if(Platform.isIOS) {
         int currentNode = 0;
         if (nodes[0].hasFocus)
           currentNode = 0;
@@ -621,8 +620,8 @@ class _InitNextState extends State<InitNext>{
                   child: Container(
                       height: 34,
                       child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Icon(Icons.keyboard_arrow_down,color: (currentNode == 2) ? Colors.grey.withOpacity(0.6):Colors.blueAccent)
+                          fit: BoxFit.fitHeight,
+                          child: Icon(Icons.keyboard_arrow_down,color: (currentNode == 2) ? Colors.grey.withOpacity(0.6):Colors.blueAccent)
                       )
                   ),
                 ),
@@ -655,7 +654,6 @@ class _InitNextState extends State<InitNext>{
     }else{
       return (index != _selectedItem.length-1)
           ?BottomPositionedBox("다음",(){
-            _autoScrollController.dispose();
         try{
           if(controllers[0].text.trim().isEmpty||controllers[1].text.trim().isEmpty||controllers[2].text.trim().isEmpty){
             if(_isSnackbarActive[0] ==false) {
@@ -663,11 +661,11 @@ class _InitNextState extends State<InitNext>{
               Scaffold
                   .of(context)
                   .showSnackBar(
-                    SnackBar(
-                      content: Text("정보를 빠짐없이 입력해주세요!"),
-                      duration: Duration(milliseconds: 1300),
-                    )
+                  SnackBar(
+                    content: Text("정보를 빠짐없이 입력해주세요!"),
+                    duration: Duration(milliseconds: 1300),
                   )
+              )
                   .closed
                   .then((SnackBarClosedReason reason) {
                 _isSnackbarActive[0] = false;
@@ -678,7 +676,6 @@ class _InitNextState extends State<InitNext>{
               habitList[index] = ({"name": _selectedItem[index][0], "iconURL": _selectedItem[index][1], "price": int.parse(controllers[1].text),"usualIsWeek": usualIsWeek, "usualAmount": int.parse(controllers[0].text), "goalIsWeek": goalIsWeek, "goalAmount": int.parse(controllers[2].text),"isTrigger":false});
               goalIsWeek = false;
               usualIsWeek = false;
-              nodes[0].requestFocus();
               pageController.animateToPage(index+1,duration: Duration(milliseconds: 400),curve: Curves.easeInOut);
               if(habitList[index+1] != null){
                 controllers[0]..text = habitList[index+1]['usualAmount'].toString();
@@ -851,13 +848,3 @@ class _InitNextState extends State<InitNext>{
   }
 
 }
-
-//https://github.com/flutter/flutter/issues/18846
-//https://medium.com/flutterpub/flutter-keyboard-actions-and-next-focus-field-3260dc4c694
-// Todo
-// 오토포커싱
-// 입력값 체크하는거 함수화
-
-//건의사항
-//usual 매주여도 goal 매일 할수있도록
-// 절약금 매일 말고 매달로 표시
