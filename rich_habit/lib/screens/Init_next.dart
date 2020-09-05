@@ -40,7 +40,6 @@ class _InitNextState extends State<InitNext>{
   List<FocusNode> nodes;
   bool keyboardIsOpened;
   List<bool> _isSnackbarActive = new List<bool>.generate(4, (index) => false); //빠작올숫
-  bool _keyboardState;
 
   @override
   void initState() {
@@ -54,7 +53,6 @@ class _InitNextState extends State<InitNext>{
 
     _autoScrollController = new List<AutoScrollController>.generate(_selectedItem.length, (index) => new AutoScrollController());
 
-    _keyboardState = KeyboardVisibility.isVisible;
     KeyboardVisibility.onChange.listen((bool visible) {
       if(visible){
         if(nodes[0].hasFocus){
@@ -67,16 +65,6 @@ class _InitNextState extends State<InitNext>{
 
       }
     });
-
-    for(var i  =0;i<3;i++) {
-      nodes[i].addListener(() {
-        if(nodes[i].hasFocus) {
-          _scrollToIndex(i);
-          setState(() {});
-        }
-      });
-    }
-
   }
 
   @override
@@ -99,7 +87,14 @@ class _InitNextState extends State<InitNext>{
   @override
   Widget build(BuildContext context) {
 
-
+    for(var i  =0;i<3;i++) {
+      nodes[i].addListener(() {
+        if(nodes[i].hasFocus) {
+          setState(() {});
+          _scrollToIndex(i);
+        }
+      });
+    }
     keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
     return Scaffold(
@@ -136,7 +131,7 @@ class _InitNextState extends State<InitNext>{
           controllers[2]
             ..text = habitList[index - 1]['goalAmount'].toString();
         }
-        return true;
+        return false;
       },
       child: GestureDetector(
         onTap: (){FocusScope.of(context).requestFocus(new FocusNode());},

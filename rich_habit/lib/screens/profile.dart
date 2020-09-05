@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:richhabit/constants.dart';
-import 'package:richhabit/screens/init.dart';
 import 'package:richhabit/screens/set_alarm.dart';
 import 'package:provider/provider.dart';
 import 'package:richhabit/habit_provider.dart';

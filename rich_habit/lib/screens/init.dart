@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/src/rendering/sliver_persistent_header.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -108,7 +107,7 @@ class InitState extends State<Init> with SingleTickerProviderStateMixin {
                       : Navigator.of(context, rootNavigator: true)
                           .pushReplacement(MaterialPageRoute(
                               builder: (context) => MainPage()));
-                  return true;
+                  return false;
                 },
                 child: Stack(
                   children: [

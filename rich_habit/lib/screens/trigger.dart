@@ -87,7 +87,7 @@ class _TriggerState extends State<Trigger> with SingleTickerProviderStateMixin {
                     .pushReplacement(MaterialPageRoute(
                     builder: (context) => MainPage()));
               }
-              return true;
+              return false;
             },
             child: Stack(
               children: [
