@@ -1,3 +1,6 @@
+//Youngthly Second Project: RichHabit
+//version: 1.0.0
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
